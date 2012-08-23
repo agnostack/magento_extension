@@ -1,0 +1,212 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+-->
+<config>
+    <modules>
+        <Zendesk_Zendesk>
+            <version>1.0.0</version>
+        </Zendesk_Zendesk>
+    </modules>
+    <global>
+        <models>
+            <zendesk>
+                <class>Zendesk_Zendesk_Model</class>
+            </zendesk>
+        </models>
+        <helpers>
+            <zendesk>
+                <class>Zendesk_Zendesk_Helper</class>
+            </zendesk>
+        </helpers>
+        <blocks>
+            <zendesk>
+                <class>Zendesk_Zendesk_Block</class>
+            </zendesk>
+            <adminhtml>
+                <rewrite>
+                    <sales_order_view>Zendesk_Zendesk_Block_Adminhtml_Order_View</sales_order_view>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+        <resources>
+            <zendesk_setup>
+                <setup>
+                    <module>Zendesk_Zendesk</module>
+                </setup>
+                <connection>
+                    <use>directory_setup</use>
+                </connection>
+            </zendesk_setup>
+            <zendesk_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </zendesk_write>
+            <zendesk_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </zendesk_read>
+        </resources>
+    </global>
+    <frontend>
+        <routers>
+            <zendesk>
+                <use>standard</use>
+                <args>
+                    <module>Zendesk_Zendesk</module>
+                    <frontName>zendesk</frontName>
+                </args>
+            </zendesk>
+        </routers>
+        <layout>
+            <updates>
+                <zendesk>
+                    <file>zendesk.xml</file>
+                </zendesk>
+            </updates>
+        </layout>
+    </frontend>
+    <admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                        <Zendesk_Zendesk before="Mage_Adminhtml">Zendesk_Zendesk_Adminhtml</Zendesk_Zendesk>
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+    </admin>
+    <adminhtml>
+        <layout>
+            <updates>
+                <zendesk>
+                    <file>zendesk.xml</file>
+                </zendesk>
+            </updates>
+        </layout>
+        <translate>
+            <modules>
+                <translations>
+                    <files>
+                        <default>Zendesk_Zendesk.csv</default>
+                    </files>
+                </translations>
+            </modules>
+        </translate>
+        <events>
+            <core_block_abstract_prepare_layout_after>
+                <observers>
+                    <zendesk>
+                        <class>zendesk/observer</class>
+                        <method>setHook</method>
+                    </zendesk>
+                </observers>
+            </core_block_abstract_prepare_layout_after>
+            <core_block_abstract_to_html_after>
+                <observers>
+                    <zendesk>
+                        <class>zendesk/observer</class>
+                        <method>insertBlock</method>
+                    </zendesk>
+                </observers>
+            </core_block_abstract_to_html_after>
+            <admin_system_config_changed_section_zendesk>
+                <observers>
+                    <zendesk>
+                        <class>zendesk/observer</class>
+                        <method>saveConfig</method>
+                    </zendesk>
+                </observers>
+            </admin_system_config_changed_section_zendesk>
+        </events>
+        <menu>
+            <zendesk translate="title" module="zendesk">
+                <title>Zendesk</title>
+                <sort_order>99999</sort_order>
+                <children>
+                    <zendesk_dashboard module="zendesk">
+                        <title>Dashboard</title>
+                        <action>adminhtml/zendesk</action>
+                        <sort_order>1</sort_order>
+                    </zendesk_dashboard>
+                    <zendesk_create module="zendesk">
+                        <title>Create</title>
+                        <action>adminhtml/zendesk/create</action>
+                        <sort_order>2</sort_order>
+                    </zendesk_create>
+                    <zendesk_launch module="zendesk">
+                        <title>Launch</title>
+                        <action>adminhtml/zendesk/launch</action>
+                        <sort_order>3</sort_order>
+                    </zendesk_launch>
+                    <zendesk_settings module="zendesk">
+                        <title>Settings</title>
+                        <action>adminhtml/system_config/edit/section/zendesk</action>
+                        <sort_order>4</sort_order>
+                    </zendesk_settings>
+                </children>
+            </zendesk>
+        </menu>
+        <acl>
+            <resources>
+                <admin>
+                    <children>
+                        <zendesk>
+                            <children>
+                                <zendesk_dashboard translate="title" module="zendesk">
+                                    <title>Dashboard</title>
+                                </zendesk_dashboard>
+                                <zendesk_create translate="title" module="zendesk">
+                                    <title>Create</title>
+                                </zendesk_create>
+                                <zendesk_launch translate="title" module="zendesk">
+                                    <title>Launch</title>
+                                </zendesk_launch>
+                                <zendesk_settings translate="title" module="zendesk">
+                                    <title>Settings</title>
+                                </zendesk_settings>
+                            </children>
+                        </zendesk>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <zendesk translate="title" module="zendesk">
+                                            <title>Zendesk</title>
+                                        </zendesk>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+    </adminhtml>
+    <default>
+        <zendesk>
+            <features>
+                <show_on_dashboard>1</show_on_dashboard>
+                <show_on_customer>1</show_on_customer>
+                <show_on_order>1</show_on_order>
+                <feedback_tab_code_active>0</feedback_tab_code_active>
+                <contact_us>0</contact_us>
+            </features>
+        </zendesk>
+    </default>
+</config>

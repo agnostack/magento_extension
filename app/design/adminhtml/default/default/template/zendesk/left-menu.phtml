@@ -1,0 +1,38 @@
+<?php
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+?>
+<h3>Zendesk</h3>
+<ul class="tabs">
+    <li>
+        <a href="<?php echo $this->getUrl('*/*/index'); ?>" class="tab-item-link<?php if($this->getActiveItem() == "dashboard") echo ' active'; ?>">
+            <span><?php echo $this->__('Dashboard'); ?></span>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->getUrl('*/*/create'); ?>" class="tab-item-link<?php if($this->getActiveItem() == "create") echo ' active'; ?>">
+            <span><?php echo $this->__('Create Ticket'); ?></span>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->getUrl(); ?>" target="_blank" class="tab-item-link">
+            <span><?php echo $this->__('Launch Zendesk'); ?></span>
+        </a>
+    </li>
+    <li>
+        <a href="<?php echo $this->getUrl('adminhtml/system_config/edit/section/zendesk'); ?>" class="tab-item-link">
+            <span><?php echo $this->__('Settings'); ?></span>
+        </a>
+    </li>
+</ul>

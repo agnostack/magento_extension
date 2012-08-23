@@ -1,0 +1,155 @@
+<?php
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+
+class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstract
+{
+    public function get($id, $sideload = false)
+    {
+        if(!$id) {
+            throw new InvalidArgumentException('Ticket ID not valid');
+        }
+
+        $include = '';
+        if($sideload) {
+            $include = '?include=' . implode(',', array('users', 'groups'));
+        }
+
+        $response = $this->_call('tickets/' . $id . '.json' . $include);
+        $ticket = $response['ticket'];
+
+        if($sideload) {
+            // Sideload user information
+            if(isset($response['users'])) {
+                // Generate the list of user IDs from the users provided
+                $users = array();
+                foreach($response['users'] as $user) {
+                    $users[$user['id']] = $user;
+                }
+
+                // Use the list of generated users to attach additional details to the ticket
+                if(isset($ticket['requester_id'])) {
+                    if(isset($users[$ticket['requester_id']])) {
+                        $ticket['requester'] = $users[$ticket['requester_id']];
+                    }
+                }
+
+                if(isset($ticket['submitter_id'])) {
+                    if(isset($users[$ticket['submitter_id']])) {
+                        $ticket['submitter'] = $users[$ticket['submitter_id']];
+                    }
+                }
+
+                if(isset($ticket['assignee_id'])) {
+                    if(isset($users[$ticket['assignee_id']])) {
+                        $ticket['assignee'] = $users[$ticket['assignee_id']];
+                    }
+                }
+            }
+
+            // Sideload group information
+            if(isset($response['groups'])) {
+                // Generate the list of group IDs from the users provided
+                $groups = array();
+                foreach($response['groups'] as $group) {
+                    $groups[$group['id']] = $group;
+                }
+
+                // Use the list of generated groups to attach additional details to the ticket
+                if(isset($ticket['group_id'])) {
+                    if(isset($groups[$ticket['group_id']])) {
+                        $ticket['group'] = $groups[$ticket['group_id']];
+                    }
+                }
+            }
+        }
+
+        return $ticket;
+    }
+
+    public function recent()
+    {
+        $response = $this->_call('tickets/recent.json');
+
+        return $response['tickets'];
+    }
+
+    public function forOrder($orderIncrementId)
+    {
+        if(!$orderIncrementId) {
+            throw new InvalidArgumentException('Order Increment ID not valid');
+        }
+
+        $response = $this->_call('search.json',
+            array(
+                 'query' => 'type:ticket ' . $orderIncrementId,
+                 'sort_order' => 'desc',
+                 'sort_by' => 'updated_at',
+            )
+        );
+
+        // Now check through the tickets to make sure the appropriate field has been filled out with the order number
+        $tickets = array();
+        $fieldId = Mage::getStoreConfig('zendesk/features/order_field_id');
+
+        if(!$fieldId) {
+            return false;
+        }
+
+        foreach($response['results'] as $ticket) {
+            foreach($ticket['fields'] as $field) {
+                if($field['id'] == $fieldId) {
+                    // Check if the value matches our order number
+                    if($field['value'] == $orderIncrementId) {
+                        $tickets[] = $ticket;
+                    }
+
+                    // Regardless of whether the value matches, this is the correct field, so move to the next ticket
+                    continue;
+                }
+            }
+        }
+
+        if(count($tickets)) {
+            return $tickets;
+        } else {
+            return false;
+        }
+    }
+
+    public function forRequester($customerEmail)
+    {
+        if(!$customerEmail || strlen(trim($customerEmail)) === 0) {
+            throw new InvalidArgumentException('Customer email address not valid');
+        }
+
+        $response = $this->_call('search.json',
+            array(
+                 'query' => 'type:ticket ' . $customerEmail,
+                 'sort_order' => 'desc',
+                 'sort_by' => 'updated_at',
+            )
+        );
+
+        return $response['results'];
+    }
+
+    public function create($data)
+    {
+        $response = $this->_call('tickets.json', null, 'POST', $data);
+
+        return $response['ticket'];
+    }
+
+}
