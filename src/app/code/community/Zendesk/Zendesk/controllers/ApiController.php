@@ -65,9 +65,9 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
 
         $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
         $orderId = $sections[3];
-        
+
         $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
-        
+
         if(!$order && !$order->getId()) {
             $this->getResponse()
                 >setBody(json_encode(array('success' => false, 'message' => 'Order does not exist')))
@@ -75,9 +75,9 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
                 ->setHeader('Content-type', 'application/json', true);
             return $this;
         }
-        
+
         $info = Mage::helper('zendesk')->getOrderDetail($order);
-        
+
         $this->getResponse()
             ->setBody(json_encode($info))
             ->setHttpResponseCode(200)
@@ -85,7 +85,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         return $this;
     }
 
-    
+
     public function customersAction()
     {
         if(!$this->_authorise()) {
@@ -94,7 +94,6 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
 
         $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
         $email = $sections[3];
-        $website = $sections[4];
 
         // Get a list of all orders for the given email address
         // This is used to determine if a missing customer is a guest or if they really aren't a customer at all
@@ -108,20 +107,8 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         }
 
         // Try to load a corresponding customer object for the provided email address
-        $customer = null;
-        
-        if(Mage::getModel('customer/customer')->getSharingConfig()->isWebsiteScope()) {
-            // Customer email address can be used in multiple websites so we need to
-            // explicitly scope it
-            $customer = Mage::getModel('customer/customer')
-                ->setWebsiteId($website)
-                ->loadByEmail($email);
-        } else {
-            // Customer email is global, so no scoping issues
-            $customer = Mage::getModel('customer/customer')
-                ->loadByEmail($email);
-        }
-        
+        $customer = Mage::helper('zendesk')->loadCustomer($email);
+
         if($customer && $customer->getId()) {
             $info = array(
                 'guest' => false,
@@ -333,7 +320,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         }
 
         // Clear the provisioning token so it can't be used any further
-        Mage::getModel('core/config')->saveConfig('zendesk/authentication/provision_token', '', 'default');
+        Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', null, 'default');
 
         $this->getResponse()
             ->setBody(json_encode(array('success' => true)))

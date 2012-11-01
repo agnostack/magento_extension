@@ -48,10 +48,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         // Grab any existing token from the admin scope
         $token = Mage::getStoreConfig('zendesk/api/token', 0);
 
-        if(!$token && $generate) {
-            // If no token exists currently, then generate a new one
-            $token = md5(time());
-            Mage::getModel('core/config')->saveConfig('zendesk/api/token', $token, 'default');
+        if( (!$token || strlen(trim($token)) == 0) && $generate) {
+            $token = $this->setApiToken();
         }
 
         return $token;
@@ -67,14 +65,29 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         return $token;
     }
 
+    /**
+     * Returns the provisioning endpoint for new setups.
+     *
+     * This uses the config/zendesk/provision_url XML path to retrieve the setting, with a default value set in
+     * the extension config.xml file. This can be overridden in your website's local.xml file.
+     * @return null|string URL or null on failure
+     */
+    public function getProvisionUrl()
+    {
+        $config = Mage::getConfig();
+        $data = $config->getNode('zendesk/provision_url');
+        if(!$data) {
+            return null;
+        }
+        return (string)$data;
+    }
+
     public function getProvisionToken($generate = false)
     {
         $token = Mage::getStoreConfig('zendesk/hidden/provision_token', 0);
 
-        if(!$token && $generate) {
-            // If no token exists currently, then generate a new one
-            $token = md5(time());
-            Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', $token, 'default');
+        if( (!$token || strlen(trim($token)) == 0) && $generate) {
+            $token = $this->setProvisionToken();
         }
 
         return $token;
@@ -128,4 +141,35 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $email;
     }
-} 
+
+    public function loadCustomer($email, $website = null)
+    {
+        $customer = null;
+
+        if(Mage::getModel('customer/customer')->getSharingConfig()->isWebsiteScope()) {
+            // Customer email address can be used in multiple websites so we need to
+            // explicitly scope it
+            if($website) {
+                // We've been given a specific website, so try that
+                $customer = Mage::getModel('customer/customer')
+                    ->setWebsiteId($website)
+                    ->loadByEmail($email);
+            } else {
+                // No particular website, so load all customers with the given email and then return a single object
+                $customers = Mage::getModel('customer/customer')
+                    ->getCollection()
+                    ->addFieldToFilter('email', array('eq' => array($email)));
+                if($customers->getSize()) {
+                    $id = $customers->getLastItem()->getId();
+                    $customer = Mage::getModel('customer/customer')->load($id);
+                }
+            }
+
+        } else {
+            // Customer email is global, so no scoping issues
+            $customer = Mage::getModel('customer/customer')->loadByEmail($email);
+        }
+
+        return $customer;
+    }
+}

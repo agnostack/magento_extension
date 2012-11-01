@@ -44,8 +44,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Config_Buttons_Signup extends Mage_Adminht
 
     public function getPostUrl()
     {
-        $url = 'https://signup.' . 'localhost' . '.com/provisioning/magento/welcome';
-        return $url;
+        return Mage::helper('zendesk')->getProvisionUrl();
     }
 
     public function getPostInfo()

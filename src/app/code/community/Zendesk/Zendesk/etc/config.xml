@@ -17,9 +17,12 @@
 <config>
     <modules>
         <Zendesk_Zendesk>
-            <version>1.0.0</version>
+            <version>1.0.4</version>
         </Zendesk_Zendesk>
     </modules>
+    <zendesk>
+        <provision_url>https://signup.zendesk.com/provisioning/magento/welcome</provision_url>
+    </zendesk>
     <global>
         <models>
             <zendesk>
