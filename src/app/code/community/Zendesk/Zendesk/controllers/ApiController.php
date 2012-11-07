@@ -291,7 +291,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         }
 
         if(isset($data['single_sign_on'])) {
-
+            $configUpdates['zendesk/sso/enabled'] = ($data['single_sign_on'] == 'true');
         }
 
         if(isset($data['magento_footer_link'])) {
@@ -302,7 +302,21 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
             $configUpdates['zendesk/features/contact_us'] = ($data['email_forwarding'] == 'true');
 
             // Process this now, since it otherwise won't be triggered until the config page is saved
+            // Unlike in the observer, we only need to deal with the case where the setting is enabled
+            if($configUpdates['zendesk/features/contact_us']) {
 
+                $currentEmail = Mage::getStoreConfig('contacts/email/recipient_email');
+                $zendeskEmail = 'support@' . $configUpdates['zendesk/general/domain'];
+
+                // If the email is already set, then do nothing
+                if($currentEmail !== $zendeskEmail) {
+                    // Ensure the email address value exists and is valid
+                    if(Zend_Validate::is($zendeskEmail, 'EmailAddress')) {
+                        Mage::getModel('core/config')->saveConfig('zendesk/hidden/contact_email_old', $currentEmail);
+                        Mage::getModel('core/config')->saveConfig('contacts/email/recipient_email', $zendeskEmail);
+                    }
+                }
+            }
         }
 
         if(isset($data['feedback_tab'])) {
