@@ -1,4 +1,4 @@
-Zendesk Magento Integration
+Zendesk Extension for Magento
 ===========================
 
 ## API Usage
@@ -45,3 +45,15 @@ If placed at the end of the file, this will result in something like this:
             <provision_url>https://signup.localhost.com/provisioning/magento/welcome</provision_url>
         </zendesk>
     </config>
+
+## Packaging for Magento Connect
+
+Once you have a Magento enviornment setup with the extension installed you can create a package.
+
+1. Copy Zendesk.xml.example into Magento's `/var/connect/` directory as Zendesk.xml
+2. Navigate to `System > Magento Connect > Package Extensions`
+3. Go to `Load Local Package` and select `Zendesk`
+4. Update release notes and version number
+5. Save Data and Create Package
+6. The package will place it in Magento's `/var/connect/` directory
+7. Log-in to Magento Connect and upload a new version of the extension
