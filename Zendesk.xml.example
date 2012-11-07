@@ -1,0 +1,97 @@
+<_>
+   <form_key>OW5TH4VHyTPB47AA</form_key>
+   <_create/>
+   <name>zendesk</name>
+   <channel>community</channel>
+   <version_ids>
+      <version_ids>2</version_ids>
+   </version_ids>
+   <summary>Zendesk helps you deliver the best customer support to your customers.</summary>
+   <description>&lt;strong&gt;Zendesk&lt;/strong&gt; is the market leader of smart, agile and convenient cloud-based customer support software. For growing organizations, Zendesk is the fastest way to enable great customer service.&lt;br /&gt;&lt;br /&gt;
+
+This extension makes Zendesk work seamlessly with Magento to enable stores to deliver great customer support. &lt;br /&gt;&lt;br /&gt;
+
+&lt;strong&gt;Features include:&lt;/strong&gt;&lt;br /&gt;
+- Enable Single Sign-on with Zendesk&lt;br /&gt;
+- Create support tickets without leaving Magento&lt;br /&gt;
+- Display relevant support tickets on order &amp; customer dashboards&lt;br /&gt;
+- Create support tickets from Contact Us requests&lt;br /&gt;
+- Easily add a feedback tab to your site</description>
+   <license>Apache Software License v2</license>
+   <license_uri>http://www.apache.org/licenses/LICENSE-2.0.html</license_uri>
+   <version>1.0.4</version>
+   <stability>stable</stability>
+   <notes>Initial public release</notes>
+   <authors>
+      <name>
+         <name>Jason Smale</name>
+         <name>Fontis</name>
+      </name>
+      <user>
+         <user>zendesk</user>
+         <user>fontis</user>
+      </user>
+      <email>
+         <email>jsmale@zendesk.com</email>
+         <email>chris.norton@fontis.com.au</email>
+      </email>
+   </authors>
+   <depends_php_min>5.2.0</depends_php_min>
+   <depends_php_max>6.0.0</depends_php_max>
+   <depends>
+      <package>
+         <name>
+            <name/>
+         </name>
+         <channel>
+            <channel/>
+         </channel>
+         <min>
+            <min/>
+         </min>
+         <max>
+            <max/>
+         </max>
+         <files>
+            <files>        </files>
+         </files>
+      </package>
+      <extension>
+         <name>
+            <name>Core</name>
+         </name>
+         <min>
+            <min/>
+         </min>
+         <max>
+            <max/>
+         </max>
+      </extension>
+   </depends>
+   <contents>
+      <target>
+         <target>magelocal</target>
+         <target>magelocal</target>
+      </target>
+      <path>
+         <path/>
+         <path/>
+      </path>
+      <type>
+         <type>file</type>
+         <type>file</type>
+      </type>
+      <include>
+         <include/>
+         <include/>
+      </include>
+      <ignore>
+         <ignore/>
+         <ignore/>
+      </ignore>
+   </contents>
+   <page>1</page>
+   <limit>200</limit>
+   <folder/>
+   <package/>
+</_>
