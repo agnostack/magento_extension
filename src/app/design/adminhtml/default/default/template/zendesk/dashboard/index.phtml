@@ -1,0 +1,42 @@
+<?php
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+?>
+<?php if($this->getIsZendeskDashboard() || Mage::getStoreConfig('zendesk/features/show_on_dashboard')): ?>
+    <?php if($this->getIsZendeskDashboard()): ?>
+        <div class="content-header">
+            <table cellspacing="0">
+                <tr>
+                    <td><h3 class="head-dashboard"><?php echo $this->__('Dashboard') ?></h3></td>
+                </tr>
+            </table>
+        </div>
+    <?php endif; ?>
+    <div class="zendesk_dashboard_container">
+        <?php echo $this->getChildHtml('zendesk_dashboard_grids') ?>
+        <div id="tickets_grid_tab_content"></div>
+
+        <?php if(!$this->getIsZendeskDashboard()): ?>
+            <div class="a-right" style="margin: 6px 0;">
+                <button style="" onclick="setLocation('<?php echo $this->getUrl('adminhtml/zendesk/create'); ?>');" class="scalable" type="button" id="zendesk-create-ticket">
+                    <span><?php echo $this->__('New Support Ticket'); ?></span>
+                </button>
+                <button style="" onclick="setLocation('<?php echo Mage::helper('zendesk')->getUrl(); ?>');" class="scalable" type="button" id="zendesk-view-all">
+                    <span><?php echo $this->__('View All Tickets'); ?></span>
+                </button>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php echo $this->getChildHtml('zendesk_dashboard_empty'); ?>
+<?php endif; ?>

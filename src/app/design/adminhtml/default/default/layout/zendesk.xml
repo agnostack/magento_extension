@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+ -->
+<layout>
+	<adminhtml_system_config_edit>
+		<reference name="head">
+			<action method="addCss"><stylesheet>zendesk/zendesk.css</stylesheet></action>
+		</reference>
+	</adminhtml_system_config_edit>
+
+    <adminhtml_sales_order_view>
+        <reference name="head">
+            <action method="addCss"><stylesheet>zendesk/zendesk.css</stylesheet></action>
+        </reference>
+        <reference name="content">
+            <block type="zendesk/adminhtml_order_view_tickets" name="zendesk_order_view_tickets" after="sales_order_edit"/>
+        </reference>
+    </adminhtml_sales_order_view>
+
+    <adminhtml_customer_edit>
+        <reference name="customer_edit_tab_view">
+            <block type="adminhtml/template" after="-" name="zendesk.tickets" template="zendesk/customer/tickets.phtml"/>
+        </reference>
+    </adminhtml_customer_edit>
+    
+    <adminhtml_zendesk_index>
+        <reference name="left">
+            <block type="zendesk/adminhtml_menu" name="adminhtml.left.menu">
+                <action method="setActiveItem"><params>dashboard</params></action>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="zendesk/adminhtml_dashboard" name="zendesk_dashboard">
+                <block type="zendesk/adminhtml_dashboard_grids" name="zendesk_dashboard_grids" />
+            </block>
+        </reference>
+    </adminhtml_zendesk_index>
+
+    <adminhtml_zendesk_create>
+        <reference name="left">
+            <block type="zendesk/adminhtml_menu" name="adminhtml.left.menu">
+                <action method="setActiveItem"><params>create</params></action>
+            </block>
+        </reference>
+        <reference name="content">
+            <block type="zendesk/adminhtml_create_edit" name="create"/>
+        </reference>
+    </adminhtml_zendesk_create>
+</layout>

@@ -1,0 +1,331 @@
+<?php
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+
+class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
+{
+
+    public function _authorise()
+    {
+        // Perform some basic checks before running any of the API methods
+        // Note that authorisation will accept either the provisioning or the standard API token, which facilitates API
+        // methods being called during the setup process
+        $tokenString = $this->getRequest()->getHeader('authorization');
+
+        $token = null;
+        $matches = array();
+        if(preg_match('/Token token="([a-z0-9]+)"/', $tokenString, $matches)) {
+            $token = $matches[1];
+        }
+
+        $apiToken = Mage::helper('zendesk')->getApiToken(false);
+        $provisionToken = Mage::helper('zendesk')->getProvisionToken(false);
+
+        // Provisioning tokens are always accepted, hence why they are deleted after the initial process
+        if(!$provisionToken || $token != $provisionToken) {
+            // Use of the provisioning token "overrides" the configuration for the API, so we check this after
+            // confirming the provisioning token has not been sent
+            if(!Mage::getStoreConfig('zendesk/api/enabled')) {
+                $this->getResponse()
+                    ->setBody(json_encode(array('success' => false, 'message' => 'API access disabled')))
+                    ->setHttpResponseCode(403)
+                    ->setHeader('Content-type', 'application/json', true);
+                return false;
+            }
+
+            // If the API is enabled then check the token
+            if(!$token || $token != $apiToken) {
+                $this->getResponse()
+                    ->setBody(json_encode(array('success' => false, 'message' => 'Not authorised')))
+                    ->setHttpResponseCode(401)
+                    ->setHeader('Content-type', 'application/json', true);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public function ordersAction($orderId)
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
+        $orderId = $sections[3];
+
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+
+        if(!$order && !$order->getId()) {
+            $this->getResponse()
+                >setBody(json_encode(array('success' => false, 'message' => 'Order does not exist')))
+                ->setHttpResponseCode(404)
+                ->setHeader('Content-type', 'application/json', true);
+            return $this;
+        }
+
+        $info = Mage::helper('zendesk')->getOrderDetail($order);
+
+        $this->getResponse()
+            ->setBody(json_encode($info))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+        return $this;
+    }
+
+
+    public function customersAction()
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
+        $email = $sections[3];
+
+        // Get a list of all orders for the given email address
+        // This is used to determine if a missing customer is a guest or if they really aren't a customer at all
+        $orderCollection = Mage::getModel('sales/order')->getCollection()
+            ->addFieldToFilter('customer_email', array('eq' => array($email)));
+        $orders = array();
+        if($orderCollection->getSize()) {
+            foreach($orderCollection as $order) {
+                $orders[] = Mage::helper('zendesk')->getOrderDetail($order);
+            }
+        }
+
+        // Try to load a corresponding customer object for the provided email address
+        $customer = Mage::helper('zendesk')->loadCustomer($email);
+
+        if($customer && $customer->getId()) {
+            $info = array(
+                'guest' => false,
+                'id' => $customer->getId(),
+                'name' => $customer->getName(),
+                'email' => $customer->getEmail(),
+                'active' => (bool)$customer->getIsActive(),
+                'admin_url' => Mage::helper('adminhtml')->getUrl('adminhtml/zendesk/redirect', array('id' => $customer->getId(), 'type' => 'customer')),
+                'created' => $customer->getCreatedAt(),
+                'dob' => $customer->getDob(),
+                'addresses' => array(),
+                'orders' => $orders,
+            );
+
+            if($billing = $customer->getDefaultBillingAddress()) {
+                $info['addresses']['billing'] = $billing->format('text');
+            }
+
+            if($shipping = $customer->getDefaultShippingAddress()) {
+                $info['addresses']['shipping'] = $shipping->format('text');
+            }
+
+        } else {
+            if(count($orders) == 0) {
+                // The email address doesn't even correspond with a guest customer
+                $this->getResponse()
+                    ->setBody(json_encode(array('success' => false, 'message' => 'Customer does not exist')))
+                    ->setHttpResponseCode(404)
+                    ->setHeader('Content-type', 'application/json', true);
+                return $this;
+            }
+
+            $info = array(
+                'guest' => true,
+                'orders' => $orders,
+            );
+        }
+
+        $this->getResponse()
+            ->setBody(json_encode($info))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+        return $this;
+    }
+
+    public function usersAction()
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
+        $users = array();
+
+        if(isset($sections[3])) {
+            // Looking for a specific user
+            $userId = $sections[3];
+
+            $user = Mage::getModel('admin/user')->load($userId);
+
+            if(!$user && !$user->getId()) {
+                $this->getResponse()
+                    ->setBody(json_encode(array('success' => false, 'message' => 'User does not exist')))
+                    ->setHttpResponseCode(404)
+                    ->setHeader('Content-type', 'application/json', true);
+                return $this;
+            }
+
+            $users[] = array(
+                'id' => $user->getId(),
+                'given_name' => $user->getFirstname(),
+                'family_name' => $user->getLastname(),
+                'username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'active' => (bool)$user->getIsActive(),
+                'role' => $user->getRole()->getRoleName(),
+            );
+
+        } else {
+            // Looking for a list of users
+            $offset = $this->getRequest()->getParam('offset', 0);
+            $page_size = $this->getRequest()->getParam('page_size', 100);
+            $sort = $this->getRequest()->getParam('sort', 'firstname');
+
+            switch($sort) {
+                case 'given_name':
+                case 'givenname':
+                case 'first_name':
+                    $sort = 'firstname';
+                    break;
+
+                case 'family_name':
+                case 'familyname':
+                case 'last_name':
+                    $sort = 'lastname';
+                    break;
+            }
+
+            $userCol = Mage::getModel('admin/user')->getCollection();
+            $userCol->getSelect()->limit($page_size, ($offset * $page_size))->order($sort);
+
+            foreach($userCol as $user) {
+                $users[] = array(
+                    'id' => $user->getId(),
+                    'given_name' => $user->getFirstname(),
+                    'family_name' => $user->getLastname(),
+                    'username' => $user->getUsername(),
+                    'email' => $user->getEmail(),
+                    'active' => (bool)$user->getIsActive(),
+                    'role' => $user->getRole()->getRoleName(),
+                );
+            }
+        }
+
+        $this->getResponse()
+            ->setBody(json_encode(array('users' => $users)))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+
+        return $this;
+    }
+
+    public function finaliseAction()
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $data = $this->getRequest()->getPost();
+
+        $missingFields = array();
+        $configUpdates = array();
+
+        // Required fields
+        if(!isset($data['zendesk_domain'])) {
+            $missingFields[] = 'zendesk_domain';
+        } else {
+            $configUpdates['zendesk/general/domain'] = $data['zendesk_domain'];
+        }
+
+        if(!isset($data['agent_email'])) {
+            $missingFields[] = 'agent_email';
+        } else {
+            $configUpdates['zendesk/general/email'] = $data['agent_email'];
+        }
+
+        if(!isset($data['agent_token'])) {
+            $missingFields[] = 'agent_token';
+        } else {
+            $configUpdates['zendesk/general/password'] = $data['agent_token'];
+        }
+
+        if(!isset($data['order_field_id'])) {
+            $missingFields[] = 'order_field_id';
+        } else {
+            $configUpdates['zendesk/features/order_field_id'] = $data['order_field_id'];
+        }
+
+        // Check that the required fields were provided and send back an error if not
+        if(count($missingFields)) {
+            $this->getResponse()
+                ->setBody(
+                    json_encode(
+                        array(
+                             'success' => false,
+                             'message' => 'Missing fields: ' . implode(',', $missingFields)
+                        )
+                    )
+                )
+                ->setHttpResponseCode(400)
+                ->setHeader('Content-type', 'application/json', true);
+            return $this;
+        }
+
+        // Optional fields
+        if(!isset($data['zendesk_remote_auth_token'])) {
+            $missingFields[] = 'zendesk_remote_auth_token';
+        } else {
+            $configUpdates['zendesk/sso/token'] = $data['zendesk_remote_auth_token'];
+        }
+
+        if(isset($data['single_sign_on'])) {
+
+        }
+
+        if(isset($data['magento_footer_link'])) {
+
+        }
+
+        if(isset($data['email_forwarding'])) {
+            $configUpdates['zendesk/features/contact_us'] = ($data['email_forwarding'] == 'true');
+
+            // Process this now, since it otherwise won't be triggered until the config page is saved
+
+        }
+
+        if(isset($data['feedback_tab'])) {
+            $configUpdates['zendesk/features/feedback_tab_code_active'] = ($data['feedback_tab'] === 'true');
+        }
+
+        if(isset($data['feedback_tab_html'])) {
+            $configUpdates['zendesk/features/feedback_tab_code'] = $data['feedback_tab_html'];
+        }
+
+
+        // Save all of the details sent
+        foreach($configUpdates as $path => $value) {
+            Mage::getModel('core/config')->saveConfig($path, $value, 'default');
+        }
+
+        // Clear the provisioning token so it can't be used any further
+        Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', null, 'default');
+
+        $this->getResponse()
+            ->setBody(json_encode(array('success' => true)))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+        return $this;
+    }
+}

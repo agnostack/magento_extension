@@ -1,0 +1,72 @@
+<?php
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+?>
+<?php
+
+if(!Mage::getStoreConfig('zendesk/features/show_on_customer')) {
+    return;
+}
+
+$tickets = null;
+if($customer = Mage::registry('current_customer')) {
+    try {
+        $tickets = Mage::getModel('zendesk/api_tickets')->forRequester($customer->getEmail());
+    } catch(Exception $e) {
+        // Don't do anything, just don't show the tickets
+    }
+
+}
+?>
+<?php if($tickets): ?>
+    <div class="clear"></div>
+    <br/>
+    <div class="entry-edit">
+        <div class="entry-edit-head">
+            <h4 class="icon-head head-account"><?php echo Mage::helper('zendesk')->__('Support Tickets') ?></h4>
+        </div>
+        <div class="grid">
+            <div class="hor-scroll">
+                <table cellspacing="0" class="data order-tables">
+                    <thead>
+                        <tr class="headings">
+                            <th><?php echo Mage::helper('zendesk')->__('Priority') ?></th>
+                            <th><?php echo Mage::helper('zendesk')->__('Subject') ?></th>
+                            <th><?php echo Mage::helper('zendesk')->__('Requested') ?></th>
+                            <th><?php echo Mage::helper('zendesk')->__('Updated') ?></th>
+                            <th><?php echo Mage::helper('zendesk')->__('Status') ?></th>
+                            <th><?php echo Mage::helper('zendesk')->__('Group') ?></th>
+                            <th><?php echo Mage::helper('zendesk')->__('Assignee') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody class="odd">
+                        <?php foreach($tickets as $ticket): ?>
+                        <?php $t = Mage::getModel('zendesk/api_tickets')->get($ticket['id'], true); ?>
+                        <tr class="border">
+                            <td><?php echo ucwords($ticket['priority']); ?></td>
+                            <td><a href="<?php echo Mage::helper('zendesk')->getUrl('ticket', $ticket['id']); ?>" target="_blank"><?php echo $ticket['subject']; ?></a></td>
+                            <td><?php echo Mage::helper('core')->formatDate($ticket['created_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
+                            <td><?php echo Mage::helper('core')->formatDate($ticket['updated_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
+                            <td><?php echo ucwords($ticket['status']); ?></td>
+                            <td><?php echo ($ticket['group_id']) ? $t['group']['name'] : ''; ?></td>
+                            <td><?php echo ($ticket['assignee_id']) ? $t['assignee']['name'] : ''; ?></td>
+                        </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+<?php endif; ?>

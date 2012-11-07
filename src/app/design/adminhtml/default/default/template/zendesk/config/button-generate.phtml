@@ -1,0 +1,18 @@
+<?php
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+?>
+<button style="" onclick="setLocation('<?php echo $this->getUrl('adminhtml/zendesk/generate'); ?>');" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
+    <span><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
+</button>

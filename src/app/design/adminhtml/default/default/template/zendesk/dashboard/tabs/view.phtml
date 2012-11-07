@@ -1,0 +1,138 @@
+<?php
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license   http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+?>
+<?php
+$view = $this->getView();
+
+if($view) {
+    try {
+        $execute = Mage::getModel('zendesk/api_views')->execute($view['id']);
+
+        $columns = $execute['columns'];
+        $rows = $execute['rows'];
+
+        $isScoped = Mage::getModel('customer/customer')->getSharingConfig()->isWebsiteScope();
+
+        $users = array();
+        $magentoUsers = array();
+
+        if(isset($execute['users'])) {
+            foreach($execute['users'] as $user) {
+                $users[$user['id']] = $user['name'];
+
+                // TODO: Re-enable once the results can be cached, to reduce the significant performance impact
+//                if(!$isScoped && !isset($magentoUsers[$user['id']])) {
+//                    $info = Mage::getModel('zendesk/api_users')->get($user['id']);
+//                    $customer = Mage::getModel('customer/customer')->loadByEmail($info['email']);
+//
+//                    if($customer && $customer->getId()) {
+//                        $magentoUsers[$user['id']] = $customer->getId();
+//                    } else {
+//                        $magentoUsers[$user['id']] = false;
+//                    }
+//                }
+            }
+        }
+
+        if(isset($execute['groups'])) {
+            $groups = array();
+            foreach($execute['groups'] as $group) {
+                $groups[$group['id']] = $group['name'];
+            }
+        }
+    } catch(Exception $e) {
+        // Most likely the Zendesk domain has not been configured, so just don't show anything here.
+        $view = null;
+    }
+}
+?>
+<?php if($view): ?>
+<div class="grid np">
+    <table cellspacing="0" class="data order-tables">
+        <thead>
+            <tr class="headings">
+                <?php foreach($columns as $col): ?>
+                    <?php if($col['id'] === 'score') continue; ?>
+                    <th class="<?php echo $col['id']; ?>"><?php echo Mage::helper('zendesk')->__($col['title']); ?></th>
+                <?php endforeach; ?>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($rows): ?>
+                <?php $i = 0; ?>
+                <?php foreach ($rows as $row): ?>
+                    <tr class="border <?php echo (++$i % 2) ? 'even' : 'odd'; ?>">
+                        <?php foreach($columns as $col): ?>
+                            <?php
+                                if($col['id'] === 'score') continue;
+
+                                $value = $row[$col['id']];
+
+                                if($value === null) {
+                                    // Attempt to match on a modified column name, which might happen for users in
+                                    // particular
+                                    $value = $row[$col['id'] . '_id'];
+                                }
+
+                                switch($col['id']) {
+                                    case 'subject':
+                                        if(isset($row['ticket']) && isset($row['ticket']['id'])) {
+                                            $url = Mage::helper('zendesk')->getUrl('ticket', $row['ticket']['id']);
+                                            $value = '<a href="' . $url . '" target="_blank">' . $value . '</a>';
+                                        }
+                                        break;
+
+                                    case 'requester':
+                                    case 'assignee':
+                                        $name = $value;
+
+                                        if(isset($users[$value])) {
+                                            $name = $users[$value];
+                                        }
+
+                                        if(isset($magentoUsers[$value]) && $magentoUsers[$value] !== false) {
+                                            $url = $this->getUrl('adminhtml/customer/edit', array('id' => $magentoUsers[$value]));
+                                            $value = '<a href="' . $url . '">' . $name . '</a>';
+                                        } else {
+                                            $value = $name;
+                                        }
+                                        break;
+
+                                    case 'created':
+                                    case 'updated':
+                                        $value = Mage::helper('core')->formatDate($value, Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true);
+                                        break;
+
+                                    case 'group':
+                                        if(isset($groups[$value])) {
+                                            $value = $groups[$value];
+                                        }
+                                        break;
+                                }
+                            ?>
+                            <td><?php echo $value; ?></td>
+                        <?php endforeach; ?>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td class="empty-text a-center" colspan="100"><?php echo Mage::helper('zendesk')->__('No tickets found'); ?></td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<div class="clear"></div>
+<?php endif; ?>

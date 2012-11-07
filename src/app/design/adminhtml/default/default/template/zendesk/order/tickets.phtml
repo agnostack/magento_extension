@@ -1,0 +1,67 @@
+<?php
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+?>
+<?php
+
+if(!Mage::getStoreConfig('zendesk/features/show_on_order')) {
+    return;
+}
+
+$_order = $this->getOrder();
+$tickets = null;
+
+try {
+    $tickets = Mage::getModel('zendesk/api_tickets')->forOrder($_order->getIncrementId());
+} catch(Exception $e) {
+    // Don't do anything, just don't show the tickets
+}
+
+?>
+<?php if($tickets): ?>
+    <div class="box-left">
+        <div class="entry-edit">
+            <div class="entry-edit-head">
+                <h4 class="icon-head head-account"><?php echo Mage::helper('zendesk')->__('Support Tickets') ?></h4>
+                <div class="tools"><?php echo $this->getAccountEditLink() ?></div>
+            </div>
+            <div class="grid np">
+                <div class="hor-scroll">
+                    <table cellspacing="0" class="data order-tables">
+                        <col width="1" />
+                        <col width="1" />
+                        <col width="1" />
+                        <thead>
+                            <tr class="headings">
+                                <th><?php echo $this->helper('zendesk')->__('Subject') ?></th>
+                                <th><?php echo $this->helper('zendesk')->__('Updated') ?></th>
+                                <th><?php echo $this->helper('zendesk')->__('Status') ?></th>
+                            </tr>
+                        </thead>
+                        <tbody class="odd">
+                            <?php foreach($tickets as $ticket): ?>
+                            <tr class="border">
+                                <td><a href="<?php echo Mage::helper('zendesk')->getUrl('ticket', $ticket['id']); ?>" target="_blank"><?php echo $ticket['subject']; ?></a></td>
+                                <td><?php echo Mage::helper('core')->formatDate($ticket['updated_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
+                                <td><?php echo $ticket['status']; ?></td>
+                            </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clear"></div>
+<?php endif; ?>

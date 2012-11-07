@@ -1,0 +1,48 @@
+/**
+ * Zendesk Magento integration
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to The MIT License (MIT) that is bundled with
+ * this package in the file LICENSE.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/mit-license.php
+ *
+ * @copyright Copyright (c) 2012 Zendesk (www.zendesk.com)
+ * @license http://opensource.org/licenses/mit-license.php The MIT License (MIT)
+ */
+
+ul.tabs a.zendesk-section,
+ul.tabs a.zendesk-section:hover {
+    border-bottom: 1px solid #BEBEBE;
+    padding: 0.5em 0.5em 0 1.5em;
+    text-indent: -9999px;
+}
+
+ul.tabs a.zendesk-section.active, 
+ul.tabs a.zendesk-section.active:hover {
+    background: none repeat scroll 0 0 white;
+}
+
+ul.tabs a.zendesk-section span,
+ul.tabs a.zendesk-section:hover span { 
+    background:url(zendesk-tab.png) no-repeat 0 0;
+    overflow:hidden; 
+    padding:0; 
+    width:120px; 
+    height:22px;
+}
+
+h3.zendesk-header {
+    background: url(http://cdn.zendesk.com/images/zendesk-logo.png) no-repeat scroll 0 0 transparent;
+    height: 65px;
+    overflow: hidden;
+    padding: 0;
+    text-indent: -9999px;
+    width: 200px;
+}
+
+button.zendesk span {
+    background-image: url("button.png");
+    padding-left: 16px;
+}
