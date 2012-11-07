@@ -1,12 +1,11 @@
 <_>
-   <form_key>OW5TH4VHyTPB47AA</form_key>
-   <_create/>
+   <form_key>c8iIw2WszXuRzUoZ</form_key>
    <name>zendesk</name>
    <channel>community</channel>
    <version_ids>
       <version_ids>2</version_ids>
    </version_ids>
-   <summary>Zendesk helps you deliver the best customer support to your customers.</summary>
+   <summary>Zendesk helps deliver the best customer support to your customers.</summary>
    <description>&lt;strong&gt;Zendesk&lt;/strong&gt; is the market leader of smart, agile and convenient cloud-based customer support software. For growing organizations, Zendesk is the fastest way to enable great customer service.&lt;br /&gt;&lt;br /&gt;
 
 This extension makes Zendesk work seamlessly with Magento to enable stores to deliver great customer support. &lt;br /&gt;&lt;br /&gt;
@@ -19,9 +18,9 @@ This extension makes Zendesk work seamlessly with Magento to enable stores to de
 - Easily add a feedback tab to your site</description>
    <license>Apache Software License v2</license>
    <license_uri>http://www.apache.org/licenses/LICENSE-2.0.html</license_uri>
-   <version>1.0.4</version>
-   <stability>stable</stability>
-   <notes>Initial public release</notes>
+   <version>1.0.5</version>
+   <stability>beta</stability>
+   <notes>First release of the Zendesk extension.</notes>
    <authors>
       <name>
          <name>Jason Smale</name>
@@ -33,7 +32,7 @@ This extension makes Zendesk work seamlessly with Magento to enable stores to de
       </user>
       <email>
          <email>jsmale@zendesk.com</email>
-         <email>chris.norton@fontis.com.au</email>
+         <email>magento@fontis.com.au</email>
       </email>
    </authors>
    <depends_php_min>5.2.0</depends_php_min>
@@ -53,7 +52,7 @@ This extension makes Zendesk work seamlessly with Magento to enable stores to de
             <max/>
          </max>
          <files>
-            <files>        </files>
+            <files>                         </files>
          </files>
       </package>
       <extension>
@@ -71,27 +70,53 @@ This extension makes Zendesk work seamlessly with Magento to enable stores to de
    <contents>
       <target>
          <target>magelocal</target>
-         <target>magelocal</target>
+         <target>mageetc</target>
+         <target>magecommunity</target>
+         <target>magelocale</target>
+         <target>magedesign</target>
+         <target>magedesign</target>
+         <target>magedesign</target>
+         <target>mageskin</target>
       </target>
       <path>
          <path/>
-         <path/>
+         <path>modules/Zendesk_Zendesk.xml</path>
+         <path>Zendesk/Zendesk</path>
+         <path>en_US/Zendesk_Zendesk.csv</path>
+         <path>adminhtml/default/default/layout/zendesk.xml</path>
+         <path>adminhtml/default/default/template/zendesk</path>
+         <path>frontend/base/default/layout/zendesk.xml</path>
+         <path>adminhtml/default/default/zendesk</path>
       </path>
       <type>
          <type>file</type>
          <type>file</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>file</type>
+         <type>dir</type>
+         <type>file</type>
+         <type>dir</type>
       </type>
       <include>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
+         <include/>
          <include/>
          <include/>
       </include>
       <ignore>
          <ignore/>
          <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
+         <ignore/>
       </ignore>
    </contents>
-   <page>1</page>
-   <limit>200</limit>
-   <folder/>
-   <package/>
 </_>
