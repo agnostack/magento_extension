@@ -16,6 +16,9 @@
 -->
 <layout>
     <default>
+        <reference name="footer_links">
+            <action method="addLink" translate="label title" module="contacts" ifconfig="zendesk/features/footer_link_enabled"><label>Helpdesk</label><url>zendesk</url><title>Helpdesk</title><prepare>true</prepare></action>
+        </reference>
         <reference name="before_body_end">
             <block type="zendesk/supporttab" name="zendesk_support_tab"/>
         </reference>

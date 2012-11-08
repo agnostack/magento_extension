@@ -295,7 +295,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         }
 
         if(isset($data['magento_footer_link'])) {
-
+            $configUpdates['zendesk/features/footer_link_enabled'] = ($data['magento_footer_link'] == 'true');
         }
 
         if(isset($data['email_forwarding'])) {
