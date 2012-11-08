@@ -34,6 +34,7 @@ Show support tickets on order view,Show support tickets on order view
 Status,Status
 Subject,Subject
 Successfully generated new API token,Successfully generated new API token
+Support,Support
 Support Tickets,Support Tickets
 Ticket #%s Created.,Ticket #%s Created.
 "To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk.","To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk."
