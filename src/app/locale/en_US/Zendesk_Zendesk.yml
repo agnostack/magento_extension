@@ -1,0 +1,333 @@
+title: "Magento"
+
+parts:
+
+  # Configuration Form
+  - translation:
+      key: "txt.integrations.magento.config.general.title"
+      title: "Configuration form: title for the group of general configuration options"
+      value: "General"
+  - translation:
+      key: "txt.integrations.magento.config.general.description"
+      title: "Configuration form: description for the general section"
+      value: "General settings that are required to connect Zendesk and Magento."
+  - translation:
+      key: "txt.integrations.magento.config.general.domain"
+      title: "Configuration form: label for their Zendesk Domain"
+      value: "Zendesk Domain"
+  - translation:
+      key: "txt.integrations.magento.config.general.email"
+      title: "Configuration form: label for a Zendesk agent email address"
+      value: "Agent Email Address"
+  - translation:
+      key: "txt.integrations.magento.config.general.token"
+      title: "Configuration form: label for a Zendesk agent token"
+      value: "Agent Token"
+  - translation:
+      key: "txt.integrations.magento.config.general.token_hint"
+      title: "Configuration form: helper text to show them where to generate a token in Zendesk"
+      value: "To generate a token, login to Zendesk then go to Zendesk > Manage > Channels > API > Token"
+  - translation:
+      key: "txt.integrations.magento.config.sso.title"
+      title: "Configuration form: title for Single Sign-on section"
+      value: "Single Sign-on"
+  - translation:
+      key: "txt.integrations.magento.config.sso.description"
+      title: "Configuration form: description for the single sign-on section"
+      value: "Use Magento to manage user authentication."
+  - translation:
+      key: "txt.integrations.magento.config.general.remote_auth"
+      title: "Configuration form: label for the Zendesk remote authentication token"
+      value: "Remote Authentication Token"
+  - translation:
+      key: "txt.integrations.magento.config.features.title"
+      title: "Configuration form: title for features section"
+      value: "Features"
+  - translation:
+      key: "txt.integrations.magento.config.features.description"
+      title: "Configuration form: description for the features section"
+      value: "Decide which features you would like turned on in your Magento store."
+  - translation:
+      key: "txt.integrations.magento.config.features.show_support_on_dashboard"
+      title: "Configuration form: label asking if they would like to have a feature turned on or off"
+      value: "Show support tickets on admin dashboard."
+  - translation:
+      key: "txt.integrations.magento.config.features.views_to_display"
+      title: "Configuration form: label asking which Zendesk Views they would like to display"
+      value: "Views to show on dashboards"
+  - translation:
+      key: "txt.integrations.magento.config.features.show_support_on_customer"
+      title: "Configuration form: label asking if they would like to have a feature turned on or off"
+      value: "Show support tickets on customer view"
+  - translation:
+      key: "txt.integrations.magento.config.features.show_support_on_order"
+      title: "Configuration form: label asking if they would like to have a feature turned on or off"
+      value: "Show support tickets on order view"
+  - translation:
+      key: "txt.integrations.magento.config.features.create_tickets"
+      title: "Configuration form: label asking if they would like to have a feature turned on or off"
+      value: "Create tickets from Contact Us form"
+  - translation:
+      key: "txt.integrations.magento.config.features.feedback_tab"
+      title: "Configuration form: label asking if they would like to display a feedback tab"
+      value: "Code to display feedback tab"
+  - translation:
+      key: "txt.integrations.magento.config.features.feedback_tab_customize"
+      title: "Configuration form: link to let them customize their feedback tab"
+      value: "Customize Feedback Tab"
+  - translation:
+      key: "txt.integrations.magento.config.features.order_field_id"
+      title: "Configuration form: label asking for their Zendesk order number custom field ID"
+      value: "Zendesk Order Number field ID"
+  - translation:
+      key: "txt.integrations.magento.config.features.order_field_id_hint"
+      title: "Configuration form: hint text describing why the field is required"
+      value: "Used to link order in Magento with tickets in Zendesk"
+  - translation:
+      key: "txt.integrations.magento.config.api_details.title"
+      title: "Configuration form: title for API Details section"
+      value: "API Details"
+  - translation:
+      key: "txt.integrations.magento.config.api_details.description"
+      title: "Configuration form: description for the API details section"
+      value: "Required for Magento App inside Zendesk to work."
+  - translation:
+      key: "txt.integrations.magento.config.api_details.enabled"
+      title: "Configuration form: label asking if they would like the API to be enabled"
+      value: "API Enabled"
+  - translation:
+        key: "txt.integrations.magento.config.api_details.token"
+        title: "Configuration form: label for their API Token"
+        value: "API Token"
+  - translation:
+        key: "txt.integrations.magento.config.api_details.generate"
+        title: "Configuration form: button to generate an API token"
+        value: "Generate"
+  - translation:
+        key: "txt.integrations.magento.config.api_details.generate_success"
+        title: "Configuration form: message after a token has been successfully generated"
+        value: "Successfully generated a new API token"
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.title"
+        title: "Configuration form: title for the support channels section"
+        value: "Support Channels"
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.description"
+        title: "Configuration form: description for the support channels section"
+        value: "Zendesk allows your customers to contact you using the methods they prefer. Use the links below to configure the channels you would like to use."
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.description"
+        title: "Configuration form: description for the support channels section"
+        value: "Zendesk allows your customers to contact you using the methods they prefer. Use the links below to configure the channels you would like to use."
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.voice"
+        title: "Configuration form: label for a link to our voice channel"
+        value: "Voice"
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.feedback_tab"
+        title: "Configuration form: label for a link to our feedback tab channel"
+        value: "Feedback Tab"
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.api"
+        title: "Configuration form: label for a link to our API channel"
+        value: "API"
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.facebook"
+        title: "Configuration form: label for a link to our Facebook channel"
+        value: "Facebook"
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.chat"
+        title: "Configuration form: label for a link to our chat channel"
+        value: "Chat"
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.web_portal"
+        title: "Configuration form: label for a link to our web portal channel"
+        value: "Web Portal"
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.twitter"
+        title: "Configuration form: label for a link to our twitter channel"
+        value: "Twitter"
+  - translation:
+        key: "txt.integrations.magento.config.support_channels.email"
+        title: "Configuration form: label for a link to our email channel"
+        value: "Email"
+  - translation:
+        key: "txt.integrations.magento.config.setup.title"
+        title: "Configuration form: title for the setup section"
+        value: "Setup"
+  - translation:
+        key: "txt.integrations.magento.config.setup.description"
+        title: "Configuration form: description for the setup section"
+        value: "Haven't setup Zendesk yet? Follow our easy setup guide to start using Zendesk to support your customers."
+  - translation:
+        key: "txt.integrations.magento.config.setup.guide"
+        title: "Configuration form: button linking to the setup guide"
+        value: "Setup guide"
+
+  # Tickets
+  - translation:
+        key: "txt.integrations.magento.tickets.assignee"
+        title: "The Zendesk assignee for a ticket"
+        value: "Assignee"
+  - translation:
+        key: "txt.integrations.magento.tickets.create_ticket"
+        title: "Create a Zendesk ticket"
+        value: "Create Ticket"
+  - translation:
+        key: "txt.integrations.magento.tickets.group"
+        title: "A Zendesk group"
+        value: "Group"
+  - translation:
+        key: "txt.integrations.magento.tickets.new_ticket"
+        title: "Create a new support ticket"
+        value: "New Support Ticket"
+  - translation:
+        key: "txt.integrations.magento.tickets.no_tickets"
+        title: "No tickets could be found"
+        value: "No tickets found"
+  - translation:
+        key: "txt.integrations.magento.tickets.priority"
+        title: "The priority of a ticket"
+        value: "Priority"
+  - translation:
+        key: "txt.integrations.magento.tickets.priority_low"
+        title: "Low priority of a ticket"
+        value: "Low"
+  - translation:
+        key: "txt.integrations.magento.tickets.priority_normal"
+        title: "Normal priority of a ticket"
+        value: "Normal"
+  - translation:
+        key: "txt.integrations.magento.tickets.priority_high"
+        title: "High priority of a ticket"
+        value: "High"
+  - translation:
+        key: "txt.integrations.magento.tickets.priority_urgent"
+        title: "Urgent priority of a ticket"
+        value: "Urgent"
+  - translation:
+        key: "txt.integrations.magento.tickets.requester_email"
+        title: "The label for the requester's email address"
+        value: "Requester Email"
+  - translation:
+        key: "txt.integrations.magento.tickets.requester_name"
+        title: "The label for the requester's name"
+        value: "Requester Name"
+  - translation:
+        key: "txt.integrations.magento.tickets.requester_website"
+        title: "The label for the requester's website"
+        value: "Requester Website"
+  - translation:
+        key: "txt.integrations.magento.tickets.subject"
+        title: "Subject of the ticket"
+        value: "Subject"
+  - translation:
+        key: "txt.integrations.magento.tickets.status"
+        title: "Status of the ticket"
+        value: "Status"
+  - translation:
+        key: "txt.integrations.magento.tickets.status_new"
+        title: "New status of ticket"
+        value: "New"
+  - translation:
+        key: "txt.integrations.magento.tickets.status_open"
+        title: "Open status of ticket"
+        value: "Open"
+  - translation:
+        key: "txt.integrations.magento.tickets.status_pending"
+        title: "Pending status of ticket"
+        value: "Pending"
+  - translation:
+        key: "txt.integrations.magento.tickets.status_on_hold"
+        title: "On hold status of ticket"
+        value: "On hold"
+  - translation:
+        key: "txt.integrations.magento.tickets.status_solved"
+        title: "Solved status of ticket"
+        value: "Solved"
+  - translation:
+        key: "txt.integrations.magento.tickets.type"
+        title: "Type of the ticket"
+        value: "Type"
+  - translation:
+        key: "txt.integrations.magento.tickets.type_problem"
+        title: "Problem type of ticket"
+        value: "Problem"
+  - translation:
+        key: "txt.integrations.magento.tickets.type_incident"
+        title: "Incident type of ticket"
+        value: "Incident"
+  - translation:
+        key: "txt.integrations.magento.tickets.type_question"
+        title: "Question type of ticket"
+        value: "Question"
+  - translation:
+        key: "txt.integrations.magento.tickets.type_task"
+        title: "Task type of ticket"
+        value: "Task"
+  - translation:
+        key: "txt.integrations.magento.tickets.order_number"
+        title: "Label for order number field"
+        value: "Order number"
+  - translation:
+        key: "txt.integrations.magento.tickets.description"
+        title: "Label for the description of a ticket"
+        value: "Description"
+  - translation:
+        key: "txt.integrations.magento.tickets.update"
+        title: "When a ticket was last updated"
+        value: "Updated"
+  - translation:
+        key: "txt.integrations.magento.tickets.ticket_created"
+        title: "Ticket # %s Created"
+        value: "Ticket #%s Created"
+
+  # General
+  - translation:
+        key: "txt.integrations.magento.general.dashboard"
+        title: "Display the dashboard"
+        value: "Dashboard"
+  - translation:
+        key: "txt.integrations.magento.general.launch"
+        title: "Open Zendesk"
+        value: "Launch Zendesk"
+  - translation:
+        key: "txt.integrations.magento.general.no_views_selected"
+        title: "No views have been selected to display. Please select one or more from the settings page."
+        value: "No views selected. Please select one or more from the settings page."
+  - translation:
+        key: "txt.integrations.magento.general.launch"
+        title: "Open Zendesk"
+        value: "Launch Zendesk"
+  - translation:
+        key: "txt.integrations.magento.general.sso_token_not_set"
+        title: "Zendesk SSO token has not been set. Please add this to the settings page"
+        value: "Zendesk SSO token not been set. Please add this to the settings page."
+  - translation:
+        key: "txt.integrations.magento.general.domain_not_set"
+        title: "Zendesk domain has not set. Please add this to the settings page"
+        value: "Zendesk domain not set. Please add this to the settings page."
+  - translation:
+        key: "txt.integrations.magento.general.domain_not_set"
+        title: "Zendesk domain has not set. Please add this to the settings page"
+        value: "Zendesk domain not set. Please add this to the settings page."
+  - translation:
+        key: "txt.integrations.magento.general.view_ticket_in_zendesk"
+        title: "View the ticket in Zendesk"
+        value: "View ticket in Zendesk"
+  - translation:
+        key: "txt.integrations.magento.general.view_ticket_in_zendesk"
+        title: "View the ticket in Zendesk"
+        value: "View ticket in Zendesk"
+  - translation:
+        key: "txt.integrations.magento.general.view_all_tickets"
+        title: "View all the tickets"
+        value: "View all tickets"
+  - translation:
+        key: "txt.integrations.magento.general.view_all_tickets"
+        title: "View all the tickets"
+        value: "View all tickets"
+  - translation:
+        key: "txt.integrations.magento.general.support_tickets"
+        title: "Title for a section display support tickets"
+        value: "Support Tickets"
