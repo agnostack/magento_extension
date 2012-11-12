@@ -100,6 +100,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', $token, 'default');
+        Mage::getConfig()->removeCache();
 
         return $token;
     }
