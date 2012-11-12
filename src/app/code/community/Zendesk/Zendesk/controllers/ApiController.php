@@ -336,6 +336,8 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         // Clear the provisioning token so it can't be used any further
         Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', null, 'default');
 
+        Mage::getConfig()->removeCache();
+
         $this->getResponse()
             ->setBody(json_encode(array('success' => true)))
             ->setHttpResponseCode(200)
