@@ -26,7 +26,7 @@ parts:
   - translation:
       key: "txt.integrations.magento.config.general.token_hint"
       title: "Configuration form: helper text to show them where to generate a token in Zendesk"
-      value: "To generate a token, login to Zendesk then go to Zendesk > Manage > Channels > API > Token"
+      value: "To generate a token, log in to Zendesk then select Manage > Channels > API > Token"
   - translation:
       key: "txt.integrations.magento.config.sso.title"
       title: "Configuration form: title for Single Sign-on section"
@@ -70,7 +70,7 @@ parts:
   - translation:
       key: "txt.integrations.magento.config.features.feedback_tab"
       title: "Configuration form: label asking if they would like to display a feedback tab"
-      value: "Code to display feedback tab"
+      value: "Code to display Feedback Tab"
   - translation:
       key: "txt.integrations.magento.config.features.feedback_tab_customize"
       title: "Configuration form: link to let them customize their feedback tab"
@@ -239,8 +239,8 @@ parts:
         value: "Pending"
   - translation:
         key: "txt.integrations.magento.tickets.status_on_hold"
-        title: "On hold status of ticket"
-        value: "On hold"
+        title: "On-hold status of ticket"
+        value: "On-hold"
   - translation:
         key: "txt.integrations.magento.tickets.status_solved"
         title: "Solved status of ticket"
