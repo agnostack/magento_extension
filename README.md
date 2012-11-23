@@ -1,16 +1,24 @@
-Zendesk Extension for Magento
-===========================
+# Zendesk Extension for Magento
 
-## API Usage
+This extension makes Zendesk work seamlessly with Magento to enable stores to deliver great customer support. **Features include:**
 
-The extension provides its own custom RESTful API, which is intended to be used by the Magento app in the Zendesk store. The custom API allows for a consistent interface across all Magento versions, regardless of whether they support XML-RPC, SOAP or REST interfaces, and provides exactly the data that the app requires.
+- Enable Single Sign-on with Zendesk
+- Create support tickets without leaving Magento
+- Display relevant support tickets on order & customer dashboards
+- Create support tickets from Contact Us requests
+- Easily add a feedback tab to your site
+
+The latest stable version of the extension can be installed via the [Magento Connect](http://www.magentocommerce.com/magento-connect/catalog/product/view/id/15129/) marketplace.
+
+## API
+
+The extension provides its own custom RESTful API, which is intended to be used by the Magento Zendesk App. The custom API allows for a consistent interface across all Magento versions, regardless of whether they support XML-RPC, SOAP or REST interfaces, and provides exactly the data that the app requires.
 
 The API can be enabled in the Zendesk settings page in the Magento admin panel. Using it requires a token to be generated and be sent to the API in an `Authorization` header like so:
 
     Authorization: Token token="your token goes here"
 
 The base URL of the API is `http://your_site_base_url/zendesk/api/`.
-
 
 ## Local Development
 
@@ -20,40 +28,14 @@ During development you may wish to clear out the configuration for the Magento e
 
     DELETE FROM `core_config_data` WHERE `path` LIKE 'zendesk/%';
 
-### Using a different provisioning URL
+## Contribution
 
-To override the provisioning URL for development, you can set a new URL in your local.xml file (under app/etc). Simply add the following inside the main <config> tag:
+Improvements to the extension are always welcome. To contribute please submit detailed Pull Requests.
 
-    <zendesk>
-        <provision_url>https://signup.localhost.com/provisioning/magento/welcome</provision_url>
-    </zendesk>
+## Bugs
 
-If placed at the end of the file, this will result in something like this:
+Please submit bug reports to <a href="https://support.zendesk.com/requests/new">Zendesk</a>.
 
-    <config>
-        *snip*
-        <admin>
-            <routers>
-                <adminhtml>
-                    <args>
-                        <frontName><![CDATA[admin]]></frontName>
-                    </args>
-                </adminhtml>
-            </routers>
-        </admin>
-        <zendesk>
-            <provision_url>https://signup.localhost.com/provisioning/magento/welcome</provision_url>
-        </zendesk>
-    </config>
+## Copyright and License
 
-## Packaging for Magento Connect
-
-Once you have a Magento enviornment setup with the extension installed you can create a package.
-
-1. Copy Zendesk.xml.example into Magento's `/var/connect/` directory as Zendesk.xml
-2. Navigate to `System > Magento Connect > Package Extensions`
-3. Go to `Load Local Package` and select `Zendesk`
-4. Update release notes and version number
-5. Save Data and Create Package
-6. The package will place it in Magento's `/var/connect/` directory
-7. Log-in to Magento Connect and upload a new version of the extension
+Copyright 2012, Zendesk Inc. Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License Version 2.0</a>.
