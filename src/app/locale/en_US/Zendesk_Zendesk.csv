@@ -5,7 +5,7 @@ API Details,API Details
 API Enabled,API Enabled
 API Token,API Token
 Assignee,Assignee
-Code to display feedback tab,Code to display feedback tab
+Code to display feedback tab,Code to display Feedback Tab
 Create Ticket,Create Ticket
 Create tickets from Contact Us form,Create tickets from Contact Us form
 Customise Feedback Tab,Customise Feedback Tab
@@ -38,7 +38,7 @@ Support,Support
 Support Tickets,Support Tickets
 Ticket #%s Created.,Ticket #%s Created.
 "To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk.","To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk."
-"To generate a token, login to Zendesk then go to Zendesk > Manage > Channels > API > Token","To generate a token, login to Zendesk then go to Zendesk > Manage > Channels > API > Token"
+"To generate a token, login to Zendesk then go to Zendesk > Manage > Channels > API > Token","To generate a token, log in to Zendesk then select Manage > Channels > API > Token"
 Updated,Updated
 Use Magento to manage user authentication.,Use Magento to manage user authentication.
 Used to link orders in Magento with tickets in Zendesk,Used to link orders in Magento with tickets in Zendesk
