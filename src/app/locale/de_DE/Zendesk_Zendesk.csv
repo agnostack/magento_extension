@@ -12,7 +12,7 @@
 "Zendesk Order Number field ID","Zendesk-Bestellnummerfeld-ID"
 "Used to link order in Magento with tickets in Zendesk","Dient zur Verknüpfung der Bestellung in Magento mit Tickets in Zendesk"
 "Show support tickets on customer view","Supporttickets in Kundenansicht anzeigen"
-"Show support tickets on admin dashboard.","Supporttickets in Admin-Dashboard anzeigen"
+"Show support tickets on admin dashboard","Supporttickets in Admin-Dashboard anzeigen"
 "Show support tickets on order view","Supporttickets in Bestellansicht anzeigen"
 "Features","Funktionen"
 "Views to show on dashboards","Ansichten, die in Dashboards erscheinen sollen"

@@ -38,7 +38,7 @@
         		<general translate="label comment">
                     <expanded>1</expanded>
                     <label>General</label>
-                    <comment>General settings that are required to connect your Zendesk with Magento.</comment>
+                    <comment>General settings that are required to connect Zendesk and Magento.</comment>
                     <frontend_type>text</frontend_type>
                     <sort_order>10</sort_order>
                     <show_in_default>1</show_in_default>

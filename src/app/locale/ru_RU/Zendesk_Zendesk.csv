@@ -12,7 +12,7 @@
 "Zendesk Order Number field ID","Код поля номера заказа Zendesk"
 "Used to link order in Magento with tickets in Zendesk","Используется для связи заказа в Magento с тикетами в Zendesk"
 "Show support tickets on customer view","Показывать тикеты поддержки в окне пользователей"
-"Show support tickets on admin dashboard.","Показывать тикеты поддержки на панели администратора"
+"Show support tickets on admin dashboard","Показывать тикеты поддержки на панели администратора"
 "Show support tickets on order view","Показывать тикеты поддержки в окне заказов"
 "Features","Функции"
 "Views to show on dashboards","Виды для отображения на панелях"

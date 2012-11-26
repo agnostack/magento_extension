@@ -12,7 +12,7 @@
 "Zendesk Order Number field ID","Zendesk 주문 번호 필드 ID"
 "Used to link order in Magento with tickets in Zendesk","Magento의 주문과 Zendesk의 티켓 연결에 사용됩니다."
 "Show support tickets on customer view","고객 보기에서 지원 티켓 표시"
-"Show support tickets on admin dashboard.","관리자 대시보드에서 지원 티켓 표시"
+"Show support tickets on admin dashboard","관리자 대시보드에서 지원 티켓 표시"
 "Show support tickets on order view","주문 보기에서 지원 티켓 표시"
 "Features","기능"
 "Views to show on dashboards","대시보드에 표시할 보기"

@@ -12,7 +12,7 @@
 "Zendesk Order Number field ID","Id van Zendesk-ordernummerveld"
 "Used to link order in Magento with tickets in Zendesk","Gebruikt om order in Magento te koppelen aan tickets in Zendesk"
 "Show support tickets on customer view","Ondersteuningstickets weergeven in klantweergave"
-"Show support tickets on admin dashboard.","Ondersteuningstickets weergeven in Administrator-dashboard."
+"Show support tickets on admin dashboard","Ondersteuningstickets weergeven in Administrator-dashboard"
 "Show support tickets on order view","Ondersteuningstickets weergeven in orderweergave"
 "Features","Kenmerken"
 "Views to show on dashboards","Weergaven voor dashboards"

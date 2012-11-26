@@ -50,7 +50,7 @@ parts:
   - translation:
       key: "txt.integrations.magento.config.features.show_support_on_dashboard"
       title: "Configuration form: label asking if they would like to have a feature turned on or off"
-      value: "Show support tickets on admin dashboard."
+      value: "Show support tickets on admin dashboard"
   - translation:
       key: "txt.integrations.magento.config.features.views_to_display"
       title: "Configuration form: label asking which Zendesk Views they would like to display"

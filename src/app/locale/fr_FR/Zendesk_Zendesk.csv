@@ -12,7 +12,7 @@
 "Zendesk Order Number field ID","ID de champ du numéro de commande Zendesk"
 "Used to link order in Magento with tickets in Zendesk","Utilisé pour lier la commande dans Magento aux tickets dans Zendesk"
 "Show support tickets on customer view","Afficher les tickets d’assistance dans la vue client"
-"Show support tickets on admin dashboard.","Afficher les tickets d’assistance dans le tableau de bord d’administration"
+"Show support tickets on admin dashboard","Afficher les tickets d’assistance dans le tableau de bord d’administration"
 "Show support tickets on order view","Afficher les tickets d’assistance dans la vue commande"
 "Features","Fonctionnalités"
 "Views to show on dashboards","Vues à afficher dans les tableaux de bord"

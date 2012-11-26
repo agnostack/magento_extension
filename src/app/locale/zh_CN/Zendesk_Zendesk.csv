@@ -12,7 +12,7 @@
 "Zendesk Order Number field ID","Zendesk 订单号字段 ID"
 "Used to link order in Magento with tickets in Zendesk","用于链接 Magento 订单与 Zendesk 工单"
 "Show support tickets on customer view","在客户视图中显示支持工单"
-"Show support tickets on admin dashboard.","在管理员面板中显示支持工单。"
+"Show support tickets on admin dashboard","在管理员面板中显示支持工单"
 "Show support tickets on order view","在订单视图中显示支持工单"
 "Features","功能"
 "Views to show on dashboards","在面板上显示的视图"

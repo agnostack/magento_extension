@@ -12,7 +12,7 @@
 "Zendesk Order Number field ID","Zendesk注文番号フィールドID"
 "Used to link order in Magento with tickets in Zendesk","Magentoでの注文をZendeskのチケットにリンクさせるために使用"
 "Show support tickets on customer view","カスタマービューにサポートチケットを表示"
-"Show support tickets on admin dashboard.","adminダッシュボードにサポートチケットを表示します。"
+"Show support tickets on admin dashboard","adminダッシュボードにサポートチケットを表示します"
 "Show support tickets on order view","オーダービューにサポートチケットを表示"
 "Features","機能"
 "Views to show on dashboards","ダッシュボードに表示するビュー"
