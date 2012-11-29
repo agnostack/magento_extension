@@ -69,7 +69,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment><![CDATA[To generate a token, login to Zendesk then go to Zendesk > Manage > Channels > API > Token]]></comment>
+                            <comment><![CDATA[To generate a token, log in to Zendesk then select Manage > Channels > API > Token]]></comment>
                         </password>
                     </fields>
                 </general>
@@ -159,7 +159,7 @@
                             <show_in_store>1</show_in_store>
                         </contact_us>
                         <feedback_tab_code_active translate="label">
-                            <label>Code to display feedback tab</label>
+                            <label>Code to display Feedback Tab</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>6</sort_order>
@@ -199,14 +199,14 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </footer_link_enabled>
-                        <order_field_id translate="label">
-                            <label>Zendesk Order ID field ID</label>
+                        <order_field_id translate="label comment">
+                            <label>Zendesk Order Number field ID</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>10</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <comment><![CDATA[Used to link orders in Magento with tickets in Zendesk]]></comment>
+                            <comment><![CDATA[Used to link order in Magento with tickets in Zendesk]]></comment>
                         </order_field_id>
                     </fields>
                 </features>

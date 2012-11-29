@@ -105,8 +105,8 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Edit_form extends Mage_Adminhtml_Bl
         
         $fieldset->addField('order', 'text', array(
             'name'     => 'order',
-            'label'    => Mage::helper('zendesk')->__('Order Number'),
-            'title'    => Mage::helper('zendesk')->__('Order Number'),
+            'label'    => Mage::helper('zendesk')->__('Order number'),
+            'title'    => Mage::helper('zendesk')->__('Order number'),
             'required' => false
         ));
 

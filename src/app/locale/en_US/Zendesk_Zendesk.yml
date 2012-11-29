@@ -32,6 +32,10 @@ parts:
       title: "Configuration form: title for Single Sign-on section"
       value: "Single Sign-on"
   - translation:
+      key: "txt.integrations.magento.config.sso.title"
+      title: "Configuration form: label for single sign-on feature"
+      value: "Single Sign-on Enabled"
+  - translation:
       key: "txt.integrations.magento.config.sso.description"
       title: "Configuration form: description for the single sign-on section"
       value: "Use Magento to manage user authentication."
@@ -75,6 +79,10 @@ parts:
       key: "txt.integrations.magento.config.features.feedback_tab_customize"
       title: "Configuration form: link to let them customize their feedback tab"
       value: "Customize Feedback Tab"
+  - translation:
+      key: "txt.integrations.magento.config.features.feedback_tab_customize"
+      title: "Configuration form: link to let them toggle the display of a link to Zendesk in the footer"
+      value: "Display link to Zendesk in Magento footer"
   - translation:
       key: "txt.integrations.magento.config.features.order_field_id"
       title: "Configuration form: label asking for their Zendesk order number custom field ID"
@@ -163,6 +171,10 @@ parts:
         key: "txt.integrations.magento.config.setup.guide"
         title: "Configuration form: button linking to the setup guide"
         value: "Setup guide"
+  - translation:
+        key: "txt.integrations.magento.config.save"
+        title: "Configuration form: button to save the form"
+        value: "Save Config"
 
   # Tickets
   - translation:
@@ -205,6 +217,14 @@ parts:
         key: "txt.integrations.magento.tickets.priority_urgent"
         title: "Urgent priority of a ticket"
         value: "Urgent"
+  - translation:
+        key: "txt.integrations.magento.tickets.requester"
+        title: "The label for the requester of a ticket"
+        value: "Requester"
+  - translation:
+        key: "txt.integrations.magento.tickets.requested"
+        title: "The label for when a ticket was requested"
+        value: "Requested"
   - translation:
         key: "txt.integrations.magento.tickets.requester_email"
         title: "The label for the requester's email address"
@@ -288,6 +308,10 @@ parts:
         title: "Display the dashboard"
         value: "Dashboard"
   - translation:
+        key: "txt.integrations.magento.general.settings"
+        title: "Display the settings for the Zendesk extension"
+        value: "Settings"
+  - translation:
         key: "txt.integrations.magento.general.launch"
         title: "Open Zendesk"
         value: "Launch Zendesk"
@@ -308,25 +332,13 @@ parts:
         title: "Zendesk domain has not set. Please add this to the settings page"
         value: "Zendesk domain not set. Please add this to the settings page."
   - translation:
-        key: "txt.integrations.magento.general.domain_not_set"
-        title: "Zendesk domain has not set. Please add this to the settings page"
-        value: "Zendesk domain not set. Please add this to the settings page."
-  - translation:
-        key: "txt.integrations.magento.general.view_ticket_in_zendesk"
-        title: "View the ticket in Zendesk"
-        value: "View ticket in Zendesk"
-  - translation:
         key: "txt.integrations.magento.general.view_ticket_in_zendesk"
         title: "View the ticket in Zendesk"
         value: "View ticket in Zendesk"
   - translation:
         key: "txt.integrations.magento.general.view_all_tickets"
         title: "View all the tickets"
-        value: "View all tickets"
-  - translation:
-        key: "txt.integrations.magento.general.view_all_tickets"
-        title: "View all the tickets"
-        value: "View all tickets"
+        value: "View All Tickets"
   - translation:
         key: "txt.integrations.magento.general.support_tickets"
         title: "Title for a section display support tickets"

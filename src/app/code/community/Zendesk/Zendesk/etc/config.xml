@@ -150,12 +150,12 @@
                         <sort_order>1</sort_order>
                     </zendesk_dashboard>
                     <zendesk_create module="zendesk">
-                        <title>Create</title>
+                        <title>Create Ticket</title>
                         <action>adminhtml/zendesk/create</action>
                         <sort_order>2</sort_order>
                     </zendesk_create>
                     <zendesk_launch module="zendesk">
-                        <title>Launch</title>
+                        <title>Launch Zendesk</title>
                         <action>adminhtml/zendesk/launch</action>
                         <sort_order>3</sort_order>
                     </zendesk_launch>
@@ -177,10 +177,10 @@
                                     <title>Dashboard</title>
                                 </zendesk_dashboard>
                                 <zendesk_create translate="title" module="zendesk">
-                                    <title>Create</title>
+                                    <title>Create Ticket</title>
                                 </zendesk_create>
                                 <zendesk_launch translate="title" module="zendesk">
-                                    <title>Launch</title>
+                                    <title>Launch Zendesk</title>
                                 </zendesk_launch>
                                 <zendesk_settings translate="title" module="zendesk">
                                     <title>Settings</title>

@@ -20,33 +20,39 @@ Launch Zendesk,Launch Zendesk
 New Support Ticket,New Support Ticket
 No tickets found,No tickets found
 No views selected. Please select one or more from the settings page.,No views selected. Please select one or more from the settings page.
+Order number, Order number
 Priority,Priority
 Remote Authentication,Remote Authentication
 Remote Authentication Token,Remote Authentication Token
 Requested,Requested
+Requester,Requester
 Required for Magento App inside Zendesk to work.,Required for Magento App inside Zendesk to work.
+Save Config, Save Config
 Settings,Settings
 Setup,Setup
 Setup Guide,Setup Guide
 Show support tickets on admin dashboard,Show support tickets on admin dashboard
 Show support tickets on customer view,Show support tickets on customer view
 Show support tickets on order view,Show support tickets on order view
+Single Sign-on, Single Sign-on
+Single Sign-on Enabled, Single Sign-on Enabled
 Status,Status
 Subject,Subject
 Successfully generated new API token,Successfully generated new API token
 Support,Support
 Support Tickets,Support Tickets
+Settings,Settings
 Ticket #%s Created.,Ticket #%s Created.
 "To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk.","To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk."
-"To generate a token, login to Zendesk then go to Zendesk > Manage > Channels > API > Token","To generate a token, log in to Zendesk then select Manage > Channels > API > Token"
+"To generate a token, log in to Zendesk then select Manage > Channels > API > Token","To generate a token, log in to Zendesk then select Manage > Channels > API > Token"
 Updated,Updated
 Use Magento to manage user authentication.,Use Magento to manage user authentication.
-Used to link orders in Magento with tickets in Zendesk,Used to link orders in Magento with tickets in Zendesk
+Used to link order in Magento with tickets in Zendesk,Used to link order in Magento with tickets in Zendesk
 View All Tickets,View All Tickets
 View ticket in Zendesk,View ticket in Zendesk
 Views to show on dashboards,Views to show on dashboards
 Zendesk allows your customers to contact you using the methods they prefer. Use the links below to configure the channels you would like to use.,Zendesk allows your customers to contact you using the methods they prefer. Use the links below to configure the channels you would like to use.
 Zendesk Domain,Zendesk Domain
 Zendesk domain not set. Please add this to the settings page.,Zendesk domain not set. Please add this to the settings page.
-Zendesk Order ID field ID,Zendesk Order ID field ID
+Zendesk Order Number field ID,Zendesk Order Number field ID
 Zendesk SSO token not set. Please add this to the settings page.,Zendesk SSO token not set. Please add this to the settings page.
