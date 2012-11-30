@@ -30,7 +30,7 @@ During development you may wish to clear out the configuration for the Magento e
 
 ## Contribution
 
-Improvements to the extension are always welcome. To contribute please submit detailed Pull Requests.
+Improvements to the extension are always welcome. To contribute, please submit detailed Pull Requests.
 
 ## Bugs
 
