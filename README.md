@@ -12,9 +12,9 @@ The latest stable version of the extension can be installed via the [Magento Con
 
 ## API
 
-The extension provides its own custom RESTful API, which is intended to be used by the Magento Zendesk App. The custom API allows for a consistent interface across all Magento versions, regardless of whether they support XML-RPC, SOAP or REST interfaces, and provides exactly the data that the app requires.
+The extension provides its own custom RESTful API, which is intended to be used by the [Magento Zendesk App](https://github.com/zendesk/magento_app). The custom API allows for a consistent interface across all Magento versions, regardless of whether they support XML-RPC, SOAP or REST interfaces, and provides exactly the data that the app requires.
 
-The API can be enabled in the Zendesk settings page in the Magento admin panel. Using it requires a token to be generated and be sent to the API in an `Authorization` header like so:
+The API can be enabled in the Zendesk settings page in the Magento admin panel. Using it requires a token to be generated and be sent to the API in an `Authorization` header:
 
     Authorization: Token token="your token goes here"
 
