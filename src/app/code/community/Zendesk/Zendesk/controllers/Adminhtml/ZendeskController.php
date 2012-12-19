@@ -51,6 +51,10 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
     }
 
+    /**
+     * Used by the Zendesk single sign on functionality to authenticate users.
+     * Currently only works for admin panel users, not for customers.
+     */
     public function authenticateAction()
     {
         if(!Mage::getStoreConfig('zendesk/sso/enabled')) {
@@ -105,6 +109,15 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $this->_title($this->__('Zendesk Create Ticket'));
         $this->loadLayout();
         $this->_setActiveMenu('zendesk/zendesk_create');
+
+        // Add the custom JavaScript for the customer autocomplete
+        $block = $this->getLayout()->createBlock(
+            'Mage_Core_Block_Template',
+            'customer_email_autocomplete',
+            array('template' => 'zendesk/autocomplete.phtml')
+        );
+        $this->getLayout()->getBlock('js')->append($block);
+
         $this->renderLayout();
     }
 
@@ -232,5 +245,31 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
 
         $this->_redirect('adminhtml/system_config/edit/section/zendesk');
+    }
+
+    /*
+     * Sends back an HTML unordered list for use in the Scriptaculous Autcomplete call.
+     */
+    public function autocompleteAction()
+    {
+        $query = $this->getRequest()->getParam('requester');
+
+        $customers = Mage::getModel('customer/customer')
+            ->getCollection()
+            ->addNameToSelect()
+            ->addFieldToFilter('email', array('like' => '%' . $query . '%'));
+
+        $output = '<ul>';
+        if($customers->getSize()) {
+            foreach($customers as $customer) {
+                $id = $customer->getId();
+                $name = $customer->getName();
+                $email = $customer->getEmail();
+                $output .= '<li id="customer-' . $id . '" data-email="' . $email . '" data-name="' . $name . '">' . $name . ' &lt;' . $email . '&gt;</li>';
+            }
+        }
+        $output .= '</ul>';
+
+        $this->getResponse()->setBody($output);
     }
 }
