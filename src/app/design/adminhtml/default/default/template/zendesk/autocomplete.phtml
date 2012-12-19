@@ -1,0 +1,39 @@
+<style type="text/css">
+    div.autocomplete {
+        position:absolute;
+        width:250px;
+        background-color:white;
+        border:1px solid #888;
+        margin:0;
+        padding:0;
+    }
+    div.autocomplete ul {
+        list-style-type:none;
+        margin:0;
+        padding:0;
+    }
+    div.autocomplete ul li.selected {
+        background-color: #ffb;
+    }
+    div.autocomplete ul li {
+        list-style-type:none;
+        display:block;
+        margin:0;
+        padding:2px;
+        cursor:pointer;
+    }
+</style>
+<script type="text/javascript">
+    function updateRequester(text, item) {
+        $('requester').value = item.dataset.email;
+        $('requester_name').value = item.dataset.name;
+    }
+
+    var autocomplete_requester = new Element("div", { id: "autocomplete_requester", class: "autocomplete" });
+    $("requester").parentNode.appendChild(autocomplete_requester);
+
+    var completer = new Ajax.Autocompleter("requester", "autocomplete_requester", "<?php echo $this->getUrl('*/*/autocomplete'); ?>", {
+        afterUpdateElement: updateRequester,
+        minChars: 3
+    });
+</script>
