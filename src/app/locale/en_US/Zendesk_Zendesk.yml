@@ -32,7 +32,7 @@ parts:
       title: "Configuration form: title for Single Sign-on section"
       value: "Single Sign-on"
   - translation:
-      key: "txt.integrations.magento.config.sso.title"
+      key: "txt.integrations.magento.config.sso.label"
       title: "Configuration form: label for single sign-on feature"
       value: "Single Sign-on Enabled"
   - translation:
@@ -80,7 +80,7 @@ parts:
       title: "Configuration form: link to let them customize their feedback tab"
       value: "Customize Feedback Tab"
   - translation:
-      key: "txt.integrations.magento.config.features.feedback_tab_customize"
+      key: "txt.integrations.magento.config.features.display_link_to_zendesk"
       title: "Configuration form: link to let them toggle the display of a link to Zendesk in the footer"
       value: "Display link to Zendesk in Magento footer"
   - translation:
@@ -119,10 +119,6 @@ parts:
         key: "txt.integrations.magento.config.support_channels.title"
         title: "Configuration form: title for the support channels section"
         value: "Support Channels"
-  - translation:
-        key: "txt.integrations.magento.config.support_channels.description"
-        title: "Configuration form: description for the support channels section"
-        value: "Zendesk allows your customers to contact you using the methods they prefer. Use the links below to configure the channels you would like to use."
   - translation:
         key: "txt.integrations.magento.config.support_channels.description"
         title: "Configuration form: description for the support channels section"
@@ -311,10 +307,6 @@ parts:
         key: "txt.integrations.magento.general.settings"
         title: "Display the settings for the Zendesk extension"
         value: "Settings"
-  - translation:
-        key: "txt.integrations.magento.general.launch"
-        title: "Open Zendesk"
-        value: "Launch Zendesk"
   - translation:
         key: "txt.integrations.magento.general.no_views_selected"
         title: "No views have been selected to display. Please select one or more from the settings page."
