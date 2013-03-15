@@ -80,7 +80,7 @@ if($view) {
                             <?php
                                 if($col['id'] === 'score') continue;
 
-                                $value = $row[$col['id']];
+                                $value = isset($row[$col['id']]) ? $row[$col['id']] : null;
 
                                 if($value === null) {
                                     // Attempt to match on a modified column name, which might happen for users in
