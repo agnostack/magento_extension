@@ -138,7 +138,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
 
         $response = $this->_call('search.json',
             array(
-                 'query' => 'type:ticket ' . $customerEmail,
+                 'query' => 'requester:' . $customerEmail . ' type:ticket',
                  'sort_order' => 'desc',
                  'sort_by' => 'updated_at',
             )
