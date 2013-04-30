@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-require_once(plugin_dir_path( __FILE__ ) . '../Helper/JWT.php');
+require_once( Mage::getModuleDir('base'). 'community/Zendesk/Zendesk/Helper/JWT.php');
 
 class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Controller_Action
 {
