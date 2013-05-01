@@ -93,9 +93,13 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
           "external_id" => $externalId
         );
 
+        Mage::log(var_export($payload, true), null, 'zendesk.log');
+
         $jwt = JWT::encode($payload, $token);
 
-        $url = "http://".$domain."/access/jwt/?jwt=" . $jwt;
+        $url = "http://".$domain."/access/jwt?jwt=" . $jwt;
+
+        Mage::log(var_export($url, true), null, 'zendesk.log');
 
         $this->_redirectUrl($url);
     }
