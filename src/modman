@@ -1,0 +1,7 @@
+app/etc/modules/*                                  app/etc/modules
+app/code/community/Zendesk                         app/code/community/Zendesk
+app/design/frontend/base/default/layout/*          app/design/frontend/base/default/layout/
+app/design/adminhtml/default/default/layout/*      app/design/adminhtml/default/default/layout/
+app/design/adminhtml/default/default/template/*    app/design/adminhtml/default/default/template/
+app/locale/en_US/*                                 app/locale/en_US
+skin/adminhtml/default/default/*                   skin/adminhtml/default/default/
