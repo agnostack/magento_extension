@@ -1,6 +1,6 @@
 src/app/code/community/Zendesk/Zendesk                            app/code/community/Zendesk/Zendesk
-src/app/design/adminhtml/default/default/layout/zendesk.xml       app/design/adminhtml/default/default/layout/
-src/app/design/adminhtml/default/default/template/zendesk         app/design/adminhtml/default/default/template/
+src/app/design/adminhtml/default/default/layout/zendesk.xml       app/design/adminhtml/default/default/layout/zendesk.xml
+src/app/design/adminhtml/default/default/template/zendesk         app/design/adminhtml/default/default/template/zendesk
 src/app/design/frontend/base/default/layout/zendesk.xml           app/design/frontend/base/default/layout/zendesk.xml
 src/app/etc/modules/Zendesk_Zendesk.xml                           app/etc/modules/Zendesk_Zendesk.xml
 src/app/locale/de_DE/Zendesk_Zendesk.csv                          app/locale/de_DE/Zendesk_Zendesk.csv
