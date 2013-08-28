@@ -164,6 +164,11 @@
                         <action>adminhtml/system_config/edit/section/zendesk</action>
                         <sort_order>4</sort_order>
                     </zendesk_settings>
+                    <zendesk_log module="zendesk">
+                        <title>Log Viewer</title>
+                        <action>adminhtml/zendesk/log</action>
+                        <sort_order>5</sort_order>
+                    </zendesk_log>
                 </children>
             </zendesk>
         </menu>

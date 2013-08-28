@@ -61,4 +61,11 @@
             <block type="zendesk/adminhtml_create_edit" name="create"/>
         </reference>
     </adminhtml_zendesk_create>
+
+    <adminhtml_zendesk_log>
+        <remove name="left" />
+        <reference name="content">
+            <block type="zendesk/adminhtml_log" name="zendesk_log" />
+        </reference>
+    </adminhtml_zendesk_log>
 </layout>

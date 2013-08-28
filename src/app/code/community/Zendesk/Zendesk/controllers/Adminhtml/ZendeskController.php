@@ -287,4 +287,27 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
         $this->getResponse()->setBody($output);
     }
+
+    public function logAction()
+    {
+        $path = Mage::helper('zendesk/log')->getLogPath();
+
+        if(!file_exists($path)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('The Zendesk log file has not been created. Please check that logging has been enabled.'));
+        }
+
+        if(Mage::helper('zendesk/log')->isLogTooLarge()) {
+            Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('zendesk')->__("File size too large - only showing last %s lines. Click download to retrieve the whole file.", Mage::helper('zendesk/log')->getTailSize()));
+        }
+
+        $this->_title($this->__('Zendesk Log Viewer'));
+        $this->loadLayout();
+        $this->_setActiveMenu('zendesk/zendesk_log');
+        $this->renderLayout();
+    }
+
+    public function downloadAction()
+    {
+        $this->_prepareDownloadResponse('zendesk.log', Mage::helper('zendesk/log')->getLogContents(false));
+    }
 }
