@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2012 Zendesk.
+ * Copyright 2013 Zendesk.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -309,5 +309,19 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     public function downloadAction()
     {
         $this->_prepareDownloadResponse('zendesk.log', Mage::helper('zendesk/log')->getLogContents(false));
+    }
+
+    public function checkOutboundAction()
+    {
+        try {
+            // Try to retrieve a user with ID 1, which should always exist as a user account is needed to set up
+            // the API credentials in the first place.
+            $user = Mage::getModel('zendesk/api_users')->all();
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zendesk')->__('Connection to Zendesk API successful'));
+        } catch(Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Connection to Zendesk API failed') . '<br />' . $e->getCode() . ': ' . $e->getMessage());
+        }
+
+        $this->_redirect('adminhtml/system_config/edit/section/zendesk');
     }
 }
