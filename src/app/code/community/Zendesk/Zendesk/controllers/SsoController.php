@@ -82,6 +82,8 @@ class Zendesk_Zendesk_SsoController extends Mage_Core_Controller_Front_Action
 
     public function logoutAction()
     {
-
+        // The logout method should already be doing standard checks for whether the customer is already logged in
+        Mage::getSingleton('customer/session')->logout();
+        $this->_redirect('/');
     }
 }

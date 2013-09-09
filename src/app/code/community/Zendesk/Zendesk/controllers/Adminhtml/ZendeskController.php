@@ -311,6 +311,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $this->_prepareDownloadResponse('zendesk.log', Mage::helper('zendesk/log')->getLogContents(false));
     }
 
+    public function clearLogAction()
+    {
+        Mage::helper('zendesk/log')->clear();
+        $this->_redirect('*/*/log');
+    }
+
     public function checkOutboundAction()
     {
         try {

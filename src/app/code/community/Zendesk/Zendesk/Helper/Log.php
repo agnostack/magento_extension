@@ -82,6 +82,12 @@ class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
         return false;
     }
 
+    public function clear()
+    {
+        @unlink($this->getLogPath());
+        touch($this->getLogPath());
+    }
+
     /**
      * Runs a tail operation to retrieve the last lines of a file.
      * @param string $file  Path to the file to tail

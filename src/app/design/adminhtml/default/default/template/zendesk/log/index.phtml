@@ -21,6 +21,9 @@
         <button id="download-log" title="Download" type="button" class="scalable" onclick="setLocation('<?php echo $this->getUrl('adminhtml/zendesk/download'); ?>');">
             <span>Download Log</span>
         </button>
+        <button id="clear-log" title="Clear Log" type="button" class="scalable delete" onclick="confirmSetLocation('<?php echo $this->__('Are you sure you want to clear the entire Zendesk log?'); ?>', '<?php echo $this->getUrl('adminhtml/zendesk/clearLog'); ?>');">
+            <span>Clear Log</span>
+        </button>
     </p>
 </div>
 <div class="zendesk_log_container">
