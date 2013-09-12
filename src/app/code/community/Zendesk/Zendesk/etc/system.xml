@@ -111,7 +111,7 @@
                         </token>
                     </fields>
                 </sso>
-                <sso_frontend>
+                <sso_frontend translate="label comment">
                     <expanded>1</expanded>
                     <label>Single Sign-on - End-users</label>
                     <comment>Use Magento to manage end-user authentication.</comment>

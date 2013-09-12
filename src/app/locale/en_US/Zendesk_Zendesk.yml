@@ -32,8 +32,12 @@ parts:
       value: "To generate a token, log in to Zendesk then select Manage > Channels > API > Token"
   - translation:
       key: "txt.integrations.magento.config.sso.title"
-      title: "Configuration form: title for Single Sign-on section"
-      value: "Single Sign-on"
+      title: "Configuration form: title for agent Single Sign-on section"
+      value: "Single Sign-on - Admins &amp; Agents"
+  - translation:
+      key: "txt.integrations.magento.config.sso.comment"
+      title: "Configuration form: description for agent Single Sign-on section"
+      value: "Use Magento to manage admin and agent authentication."
   - translation:
       key: "txt.integrations.magento.config.sso.label"
       title: "Configuration form: label for single sign-on feature"
@@ -174,6 +178,43 @@ parts:
         key: "txt.integrations.magento.config.save"
         title: "Configuration form: button to save the form"
         value: "Save Config"
+  - translation:
+        key: "text.integrations.magento.config.test_connection"
+        title: "Configuration form: buttons to test API connections"
+        value: "Test Connection"
+  - translation:
+        key: "text.integrations.magento.config.sso_frontend.title"
+        title: "Configuration form: title for frontend SSO settings"
+        value: "Single Sign-on - End-users"
+  - translation:
+        key: "text.integrations.magento.config.sso_frontend.comment"
+        title: "Configuration form: description of frontend SSO"
+        value: "Use Magento to manage end-user authentication."
+  - translation:
+        key: "text.integrations.magento.config.sso_frontend.enabled"
+        title: "Configuration form: select box for enabling SSO for frontend users"
+        value: "Single Sign-on Enabled"
+  - translation:
+        key: "text.integrations.magento.config.sso_frontend.token"
+        title: "Configuration form: shared secret for SSO support"
+        value: "Remote Authentication Token"
+  - translation:
+        key: "text.integrations.magento.config.test_connection.inbound.success"
+        title: "Configuration message: connection to the Magento API succeeded"
+        value: "API test connection successful"
+  - translation:
+        key: "text.integrations.magento.config.test_connection.outbound.success"
+        title: "Configuration message: connection to the Zendesk API succeeded"
+        value: "Connection to Zendesk API successful"
+  - translation:
+        key: "text.integrations.magento.config.test_connection.inbound.failure"
+        title: "Configuration message: connection to the Magento API failed"
+        value: "API test connection failed"
+  - translation:
+        key: "text.integrations.magento.config.test_connection.outbound.failure"
+        title: "Configuration message: connection to the Zendesk API failed"
+        value: "Connection to Zendesk API failed"
+
 
   # Tickets
   - translation:
@@ -300,6 +341,24 @@ parts:
         key: "txt.integrations.magento.tickets.ticket_created"
         title: "Ticket # %s Created"
         value: "Ticket #%s Created"
+
+# Log Viewer
+  - translation:
+          key: "txt.integrations.magento.log_viewer.title"
+          title: "Log viewer page title"
+          value: "Zendesk Log Viewer"
+  - translation:
+        key: "txt.integrations.magento.log_viewer.clear_confirmation"
+        title: "Confirmation message for clearing the log file"
+        value: "Are you sure you want to clear the entire Zendesk log?"
+  - translation:
+        key: "txt.integrations.magento.log_viewer.message.no_file"
+        title: "Error message if log file does not exist"
+        value: "The Zendesk log file has not been created. Please check that logging has been enabled."
+  - translation:
+        key: "txt.integrations.magento.log_viewer.message.file_too_large"
+        title: "Warning message shown if log file is too large to show all of it on screen"
+        value: "File size too large - only showing last %s lines. Click download to retrieve the whole file."
 
   # General
   - translation:
