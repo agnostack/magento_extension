@@ -55,7 +55,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     /**
      * Used by the Zendesk single sign on functionality to authenticate users.
-     * Currently only works for admin panel users, not for customers.
+     * Only works for admin panel users, not for customers.
      */
     public function authenticateAction()
     {
@@ -102,6 +102,29 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         Mage::log('Admin URL: ' . $url, null, 'zendesk.log');
 
         $this->_redirectUrl($url);
+    }
+
+    /**
+     * Wrapper for the existing authenticate action. Mirrors the login/logout actions available for customers.
+     */
+    public function loginAction()
+    {
+        $this->authenticateAction();
+    }
+
+    /**
+     * Log out action for SSO support.
+     */
+    public function logoutAction()
+    {
+        // Admin sessions do not currently have an explicit "logout" method (unlike customer sessions) so do this
+        // manually with the session object
+        $adminSession = Mage::getSingleton('admin/session');
+        $adminSession->unsetAll();
+        $adminSession->getCookie()->delete($adminSession->getSessionName());
+        $adminSession->addSuccess(Mage::helper('adminhtml')->__('You have logged out.'));
+
+        $this->_redirect('*');
     }
 
     public function createAction()
