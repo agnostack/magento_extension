@@ -342,11 +342,11 @@ parts:
         title: "Ticket # %s Created"
         value: "Ticket #%s Created"
 
-# Log Viewer
+  # Log Viewer
   - translation:
-          key: "txt.integrations.magento.log_viewer.title"
-          title: "Log viewer page title"
-          value: "Zendesk Log Viewer"
+        key: "txt.integrations.magento.log_viewer.title"
+        title: "Log viewer page title"
+        value: "Zendesk Log Viewer"
   - translation:
         key: "txt.integrations.magento.log_viewer.clear_confirmation"
         title: "Confirmation message for clearing the log file"
