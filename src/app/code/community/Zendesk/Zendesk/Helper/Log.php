@@ -17,6 +17,15 @@
 
 class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
 {
+    /**
+     * Maximum size log file can grow to before we truncate output.
+     * Value is arbitrary and based on trial and error for a reasonable amount of data to send back to the browser.
+     */
+    const MAX_LOG_SIZE = 524288;
+
+    /**
+     * Number of lines to take from the end of the log file, if it's too large.
+     */
     const TAIL_SIZE = 1000;
 
     public function getLogPath()
@@ -75,7 +84,7 @@ class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
     {
         $size = $this->getLogSize();
 
-        if($size !== FALSE && $size > 512 * 1024) {
+        if($size !== FALSE && $size > self::MAX_LOG_SIZE) {
             return true;
         }
 
