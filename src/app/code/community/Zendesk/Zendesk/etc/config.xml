@@ -214,4 +214,12 @@
             </features>
         </zendesk>
     </default>
+    <crontab>
+        <jobs>
+            <zendesk_syncronize_users_info_api>
+                <schedule><cron_expr>0,15,30,45 * * * *</cron_expr></schedule>
+                <run><model>zendesk/observer::SyncronizeUsers</model></run>
+            </zendesk_syncronize_users_info_api>
+        </jobs>
+    </crontab>
 </config>

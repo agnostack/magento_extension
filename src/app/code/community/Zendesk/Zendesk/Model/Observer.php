@@ -97,4 +97,111 @@ class Zendesk_Zendesk_Model_Observer
             }
         }
     }
+
+    public function SyncronizeUsers(Varien_Event_Observer $observer)
+    {
+        $last_updated_time = Mage::getStoreConfig('zendesk/cronsyncusers/last_updated');
+
+        $customers = Mage::getModel('customer/customer')->getCollection()->addNameToSelect();
+        $customers->getSelect()
+            ->joinLeft('customer_entity_varchar', 'e.entity_id = customer_entity_varchar.entity_id AND customer_entity_varchar.attribute_id = 983',array('value AS phone'))->limit(1);
+        if(!empty($last_updated_time)) {
+            $customers->getSelect()
+                ->joinLeft(array('a' => 'appraisal'), 'a.customer_id = e.entity_id', array('a.update_time'))
+                ->where("a.`update_time` >= '{$last_updated_time}' OR e.updated_at >= '{$last_updated_time}'")
+                ->group('e.entity_id')
+                ->order('e.updated_at ASC')->order('a.update_time ASC');
+        }
+
+        foreach ($customers as $customer) {
+
+            $user = Mage::getModel('zendesk/api_users')->find($customer->getEmail());
+            $q = array();
+
+            $collection = Mage::getModel('appraisal/appraisal')->getCollection();
+            $collection->addFieldToFilter('customer_id', $customer->getId());
+            $collection->getSelect()->reset(Zend_Db_Select::COLUMNS)
+                ->columns(array(
+                    new Zend_Db_Expr('"all_items" AS name'),
+                    'items_count'=>'count(*)',
+                ));
+            $q[] = new Zend_Db_Expr('(' . $collection->getSelect() . ')');
+
+            $collection = Mage::getModel('appraisal/appraisal')->getCollection();
+            $collection->addFieldToFilter('main_table.associated_product', array('gt' => 0));
+            $associated = array();
+            $collection->addFieldToFilter('main_table.customer_id', array('eq' => $customer->getId()));
+
+            foreach ($collection->getData() as $collection) {
+                $associated[] = $collection['associated_product'];
+            }
+            $_productCollection = Mage::getModel('sales/order_item')->getCollection()
+                ->addFieldToFilter('product_id', array('in' => $associated))
+                ->addFieldToSelect(array('product_id'))
+                ->setOrder('order_id', 'desc');
+            $products = array();
+            foreach ($_productCollection as $prod_c) $products[] = $prod_c['product_id'];
+
+            $collection = Mage::getModel('catalog/product')->getCollection()
+                ->addAttributeToSelect('name')
+                ->addFieldToFilter('entity_id', array('in' => (empty($products) ? array() : $products)));
+            $collection->getSelect()->reset(Zend_Db_Select::COLUMNS)
+                ->columns(array(
+                    new Zend_Db_Expr('"sold_items" AS name'),
+                    'items_count'=>'count(*)',
+                ));
+            $q[] = new Zend_Db_Expr('(' . $collection->getSelect() . ')');
+
+            $collection = Mage::getModel('appraisal/appraisal')->getCollection();
+            $collection->addFieldToFilter('customer_id', $customer->getId());
+            $collection->addFieldToFilter('status', 10);
+            $collection->getSelect()->reset(Zend_Db_Select::COLUMNS)
+                ->columns(array(
+                    new Zend_Db_Expr('"rtbs_items" AS name'),
+                    'items_count'=>'count(*)',
+                ));
+            $q[] = new Zend_Db_Expr('(' . $collection->getSelect() . ')');
+
+            $collection->getSelect()->reset()
+                ->union($q);
+            $counts = $collection->getData();
+
+            $data["verified"] = true;
+            $data["phone"] = $customer->getPhone();
+            $data["external_id"] = $customer->getId();
+            $data["user_fields"] = array(
+                'no_of_submitted_items' => $counts[0]['items_count'],
+                'no_of_items_ready_to_be_sold' => $counts[1]['items_count'],
+                'items_sold' => $counts[2]['items_count'],
+            );
+
+            try {
+
+                if(empty($user)) {
+                    $response = Mage::getModel('zendesk/api_requesters')->create($customer->getEmail(), $customer->getName(), $data);
+                }
+                else {
+                    $data["email"] = $customer->getEmail();
+                    $data["name"] = $customer->getName();
+                    $response = Mage::getModel('zendesk/api_requesters')->update($user['id'], $data);
+                }
+
+                $c_dates = $customer->getUpdatedAt();
+                if($customer->getUpdatedTime() != '') $app_dates = $customer->getUpdatedTime();
+
+                $last_date = max($c_dates, $app_dates);
+            }
+            catch (Exception $e) {
+            }
+
+        }
+
+        if(isset($last_date)) {
+
+            $cronsyncusers_ld = new Mage_Core_Model_Config();
+            $cronsyncusers_ld ->saveConfig('zendesk/cronsyncusers/last_updated', $last_date, 'default', 0);
+        }
+
+        return true;
+    }
 }
