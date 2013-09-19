@@ -51,7 +51,7 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             Mage::getStoreConfig('zendesk/general/password')
         );
 
-        if($method == 'POST') {
+        if($method == 'POST' || $method == 'PUT') {
             $client->setRawData(json_encode($data), 'application/json');
         }
 

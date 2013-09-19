@@ -17,7 +17,7 @@
 
 class Zendesk_Zendesk_Model_Api_Requesters extends Zendesk_Zendesk_Model_Api_Users
 {
-    public function create($email, $name)
+    public function create($email, $name, $extra_info = null)
     {
         if(!Zend_Validate::is($email, 'EmailAddress')) {
             throw new InvalidArgumentException('Invalid email address provided');
@@ -34,7 +34,29 @@ class Zendesk_Zendesk_Model_Api_Requesters extends Zendesk_Zendesk_Model_Api_Use
                 'role' => 'end-user',
             )
         );
+        if(!empty($extra_info)) {
+            foreach ($extra_info as $key => $value) {
+                $data['user'][$key] = $value;
+            }
+        }
         $response = $this->_call('users.json', null, 'POST', $data);
+
+        return $response['user'];
+    }
+
+    public function update($id, $info = null)
+    {
+        $data = array(
+            'user' => array(
+                'id' => $id,
+            )
+        );
+        if(!empty($info)) {
+            foreach ($info as $key => $value) {
+                $data['user'][$key] = $value;
+            }
+        }
+        $response = $this->_call('users/' . $id . '.json', null, 'PUT', $data);
 
         return $response['user'];
     }
