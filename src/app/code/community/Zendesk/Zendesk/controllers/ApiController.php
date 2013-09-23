@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2012 Zendesk.
+ * Copyright 2013 Zendesk.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,15 +43,32 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
                     ->setBody(json_encode(array('success' => false, 'message' => 'API access disabled')))
                     ->setHttpResponseCode(403)
                     ->setHeader('Content-type', 'application/json', true);
+
+                Mage::log('API access disabled.', null, 'zendesk.log');
+
                 return false;
             }
 
             // If the API is enabled then check the token
-            if(!$token || $token != $apiToken) {
+            if(!$token) {
+                $this->getResponse()
+                    ->setBody(json_encode(array('success' => false, 'message' => 'No authorisation token provided')))
+                    ->setHttpResponseCode(401)
+                    ->setHeader('Content-type', 'application/json', true);
+
+                Mage::log('No authorisation token provided.', null, 'zendesk.log');
+
+                return false;
+            }
+
+            if($token != $apiToken) {
                 $this->getResponse()
                     ->setBody(json_encode(array('success' => false, 'message' => 'Not authorised')))
                     ->setHttpResponseCode(401)
                     ->setHeader('Content-type', 'application/json', true);
+
+                Mage::log('Not authorised.', null, 'zendesk.log');
+
                 return false;
             }
         }

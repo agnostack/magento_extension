@@ -3,9 +3,14 @@ Agent Email Address,Agent Email Address
 Agent Token,Agent Token
 API Details,API Details
 API Enabled,API Enabled
+API test connection failed,API test connection failed
+API test connection successful,API test connection successful
 API Token,API Token
+Are you sure you want to clear the entire Zendesk log?,Are you sure you want to clear the entire Zendesk log?
 Assignee,Assignee
 Code to display Feedback Tab,Code to display Feedback Tab
+Connection to Zendesk API failed,Connection to Zendesk API failed
+Connection to Zendesk API successful,Connection to Zendesk API successful
 Create Ticket,Create Ticket
 Create tickets from Contact Us form,Create tickets from Contact Us form
 Customise Feedback Tab,Customise Feedback Tab
@@ -13,6 +18,7 @@ Dashboard,Dashboard
 Decide which features you would like turned on in your Magento store.,Decide which features you would like turned on in your Magento store.
 Display link to Zendesk in Magento footer,Display link to Zendesk in Magento footer
 Features,Features
+File size too large - only showing last %s lines. Click download to retrieve the whole file.,File size too large - only showing last %s lines. Click download to retrieve the whole file.
 General settings that are required to connect Zendesk and Magento,General settings that are required to connect Zendesk and Magento.
 Group,Group
 Haven't setup Zendesk yet? Follow our easy setup guide to start using Zendesk to support your customers.,Haven't setup Zendesk yet? Follow our easy setup guide to start using Zendesk to support your customers.
@@ -34,25 +40,32 @@ Setup Guide,Setup Guide
 Show support tickets on admin dashboard,Show support tickets on admin dashboard
 Show support tickets on customer view,Show support tickets on customer view
 Show support tickets on order view,Show support tickets on order view
-Single Sign-on, Single Sign-on
+Single Sign-on - Admins &amp; Agents,Single Sign-on - Admins &amp; Agents
 Single Sign-on Enabled, Single Sign-on Enabled
+Single Sign-on - End-users,Single Sign-on - End-users
+Single Sign-on, Single Sign-on
 Status,Status
 Subject,Subject
 Successfully generated new API token,Successfully generated new API token
 Support,Support
 Support Tickets,Support Tickets
-Settings,Settings
+Test Connection,Test Connection
+The Zendesk log file has not been created. Please check that logging has been enabled.,The Zendesk log file has not been created. Please check that logging has been enabled.
 Ticket #%s Created.,Ticket #%s Created.
 "To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk.","To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk."
 "To generate a token, log in to Zendesk then select Manage > Channels > API > Token","To generate a token, log in to Zendesk then select Manage > Channels > API > Token"
+Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>,Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>
 Updated,Updated
-Use Magento to manage user authentication.,Use Magento to manage user authentication.
 Used to link order in Magento with tickets in Zendesk,Used to link order in Magento with tickets in Zendesk
+Use Magento to manage admin and agent authentication.,Use Magento to manage admin and agent authentication.
+Use Magento to manage end-user authentication.,Use Magento to manage end-user authentication.
+Use Magento to manage user authentication.,Use Magento to manage user authentication.
 View All Tickets,View All Tickets
-View ticket in Zendesk,View ticket in Zendesk
 Views to show on dashboards,Views to show on dashboards
+View ticket in Zendesk,View ticket in Zendesk
 Zendesk allows your customers to contact you using the methods they prefer. Use the links below to configure the channels you would like to use.,Zendesk allows your customers to contact you using the methods they prefer. Use the links below to configure the channels you would like to use.
-Zendesk Domain,Zendesk Domain
 Zendesk domain not set. Please add this to the settings page.,Zendesk domain not set. Please add this to the settings page.
+Zendesk Domain,Zendesk Domain
+Zendesk Log Viewer,Zendesk Log Viewer
 Zendesk Order Number field ID,Zendesk Order Number field ID
 Zendesk SSO token not set. Please add this to the settings page.,Zendesk SSO token not set. Please add this to the settings page.

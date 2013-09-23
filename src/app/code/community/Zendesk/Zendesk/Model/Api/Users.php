@@ -43,4 +43,10 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
 
         return $response['user'];
     }
+
+    public function all()
+    {
+        $response = $this->_call('users.json');
+        return $response['users'];
+    }
 }

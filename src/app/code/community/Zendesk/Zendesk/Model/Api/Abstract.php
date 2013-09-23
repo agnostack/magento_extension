@@ -75,7 +75,11 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
 
         if($response->isError()) {
             if(is_array($body) && isset($body['error'])) {
-                throw new Exception($body['error']['title'], $response->getStatus());
+                if(is_array($body['error']) && isset($body['error']['title'])) {
+                    throw new Exception($body['error']['title'], $response->getStatus());
+                } else {
+                    throw new Exception($body['error'], $response->getStatus());
+                }
             } else {
                 throw new Exception($body, $response->getStatus());
             }
