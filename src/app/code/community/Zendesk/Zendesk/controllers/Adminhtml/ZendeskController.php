@@ -348,7 +348,9 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             $user = Mage::getModel('zendesk/api_users')->all();
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zendesk')->__('Connection to Zendesk API successful'));
         } catch(Exception $e) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Connection to Zendesk API failed') . '<br />' . $e->getCode() . ': ' . $e->getMessage());
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
+                '<br />' . $e->getCode() . ': ' . $e->getMessage() .
+                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987'));
         }
 
         $this->_redirect('adminhtml/system_config/edit/section/zendesk');

@@ -30,7 +30,9 @@
                 document.getElementById('zendesk-test-connection-results').innerHTML = message;
             },
             onFailure: function(transport) {
-                var message = '<ul class="messages"><li class="error-msg"><?php echo Mage::helper('zendesk')->__('API test connection failed'); ?></li></ul>';
+                var message = '<ul class="messages"><li class="error-msg"><?php echo Mage::helper('zendesk')->__('API test connection failed'); ?><br />' +
+                              '<?php echo Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987'); ?>' +
+                              '</li></ul>';
                 document.getElementById('zendesk-test-connection-results').innerHTML = message;
             }
         });

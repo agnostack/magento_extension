@@ -54,6 +54,7 @@ The Zendesk log file has not been created. Please check that logging has been en
 Ticket #%s Created.,Ticket #%s Created.
 "To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk.","To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk."
 "To generate a token, log in to Zendesk then select Manage > Channels > API > Token","To generate a token, log in to Zendesk then select Manage > Channels > API > Token"
+Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>,Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>
 Updated,Updated
 Used to link order in Magento with tickets in Zendesk,Used to link order in Magento with tickets in Zendesk
 Use Magento to manage admin and agent authentication.,Use Magento to manage admin and agent authentication.
