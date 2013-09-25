@@ -71,12 +71,21 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[To generate a token, log in to Zendesk then select Manage > Channels > API > Token]]></comment>
                         </password>
+                        <test translate="button_label">
+                            <label></label>
+                            <button_label>Test Connection</button_label>
+                            <frontend_model>zendesk/adminhtml_config_buttons_zendeskTest</frontend_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </test>
                     </fields>
                 </general>
                 <sso translate="label comment">
                     <expanded>1</expanded>
-                    <label>Single Sign-on</label>
-                    <comment>Use Magento to manage user authentication.</comment>
+                    <label>Single Sign-on - Admins &amp; Agents</label>
+                    <comment>Use Magento to manage admin and agent authentication.</comment>
                     <frontend_type>text</frontend_type>
                     <sort_order>20</sort_order>
                     <show_in_default>1</show_in_default>
@@ -102,6 +111,35 @@
                         </token>
                     </fields>
                 </sso>
+                <sso_frontend translate="label comment">
+                    <expanded>1</expanded>
+                    <label>Single Sign-on - End-users</label>
+                    <comment>Use Magento to manage end-user authentication.</comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>25</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <enabled translate="label">
+                            <label>Single Sign-on Enabled</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enabled>
+                        <token translate="label">
+                            <label>Remote Authentication Token</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </token>
+                    </fields>
+                </sso_frontend>
                 <features translate="label">
                     <expanded>1</expanded>
                     <label>Features</label>
@@ -245,6 +283,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </sign_up>
+                        <test translate="button_label">
+                            <label></label>
+                            <button_label>Test Connection</button_label>
+                            <frontend_model>zendesk/adminhtml_config_buttons_magentoTest</frontend_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </test>
                     </fields>
                 </api>
                 <support_channels translate="label comment">

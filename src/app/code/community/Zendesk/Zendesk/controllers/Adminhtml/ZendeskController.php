@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2012 Zendesk.
+ * Copyright 2013 Zendesk.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     /**
      * Used by the Zendesk single sign on functionality to authenticate users.
-     * Currently only works for admin panel users, not for customers.
+     * Only works for admin panel users, not for customers.
      */
     public function authenticateAction()
     {
@@ -93,15 +93,38 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
           "external_id" => $externalId
         );
 
-        Mage::log(var_export($payload, true), null, 'zendesk.log');
+        Mage::log('Admin JWT: ' . var_export($payload, true), null, 'zendesk.log');
 
         $jwt = JWT::encode($payload, $token);
 
         $url = "http://".$domain."/access/jwt?jwt=" . $jwt;
 
-        Mage::log(var_export($url, true), null, 'zendesk.log');
+        Mage::log('Admin URL: ' . $url, null, 'zendesk.log');
 
         $this->_redirectUrl($url);
+    }
+
+    /**
+     * Wrapper for the existing authenticate action. Mirrors the login/logout actions available for customers.
+     */
+    public function loginAction()
+    {
+        $this->authenticateAction();
+    }
+
+    /**
+     * Log out action for SSO support.
+     */
+    public function logoutAction()
+    {
+        // Admin sessions do not currently have an explicit "logout" method (unlike customer sessions) so do this
+        // manually with the session object
+        $adminSession = Mage::getSingleton('admin/session');
+        $adminSession->unsetAll();
+        $adminSession->getCookie()->delete($adminSession->getSessionName());
+        $adminSession->addSuccess(Mage::helper('adminhtml')->__('You have logged out.'));
+
+        $this->_redirect('*');
     }
 
     public function createAction()
@@ -286,5 +309,50 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $output .= '</ul>';
 
         $this->getResponse()->setBody($output);
+    }
+
+    public function logAction()
+    {
+        $path = Mage::helper('zendesk/log')->getLogPath();
+
+        if(!file_exists($path)) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('The Zendesk log file has not been created. Please check that logging has been enabled.'));
+        }
+
+        if(Mage::helper('zendesk/log')->isLogTooLarge()) {
+            Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('zendesk')->__("File size too large - only showing last %s lines. Click download to retrieve the whole file.", Mage::helper('zendesk/log')->getTailSize()));
+        }
+
+        $this->_title($this->__('Zendesk Log Viewer'));
+        $this->loadLayout();
+        $this->_setActiveMenu('zendesk/zendesk_log');
+        $this->renderLayout();
+    }
+
+    public function downloadAction()
+    {
+        $this->_prepareDownloadResponse('zendesk.log', Mage::helper('zendesk/log')->getLogContents(false));
+    }
+
+    public function clearLogAction()
+    {
+        Mage::helper('zendesk/log')->clear();
+        $this->_redirect('*/*/log');
+    }
+
+    public function checkOutboundAction()
+    {
+        try {
+            // Try to retrieve a user with ID 1, which should always exist as a user account is needed to set up
+            // the API credentials in the first place.
+            $user = Mage::getModel('zendesk/api_users')->all();
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zendesk')->__('Connection to Zendesk API successful'));
+        } catch(Exception $e) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
+                '<br />' . $e->getCode() . ': ' . $e->getMessage() .
+                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987'));
+        }
+
+        $this->_redirect('adminhtml/system_config/edit/section/zendesk');
     }
 }
