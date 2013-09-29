@@ -33,7 +33,7 @@ parts:
   - translation:
       key: "txt.integrations.magento.config.sso.title"
       title: "Configuration form: title for agent Single Sign-on section"
-      value: "Single Sign-on - Admins &amp; Agents"
+      value: "Single Sign-on - Admins and Agents"
   - translation:
       key: "txt.integrations.magento.config.sso.comment"
       title: "Configuration form: description for agent Single Sign-on section"
@@ -179,7 +179,7 @@ parts:
         title: "Configuration form: button to save the form"
         value: "Save Config"
   - translation:
-        key: "text.integrations.magento.config.test_connection"
+        key: "text.integrations.magento.config.test_connection.title"
         title: "Configuration form: buttons to test API connections"
         value: "Test Connection"
   - translation:
@@ -213,7 +213,7 @@ parts:
   - translation:
         key: "text.integrations.magento.config.test_connection.tips"
         title: "Configuration message: suggestion to look at provided URL for troubleshooting"
-        value: "Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>"
+        value: 'Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>'
   - translation:
         key: "text.integrations.magento.config.test_connection.outbound.failure"
         title: "Configuration message: connection to the Zendesk API failed"
@@ -358,11 +358,11 @@ parts:
   - translation:
         key: "txt.integrations.magento.log_viewer.message.no_file"
         title: "Error message if log file does not exist"
-        value: "The Zendesk log file has not been created. Please check that logging has been enabled."
+        value: "The Zendesk log file has not been created. Check to see if logging has been enabled."
   - translation:
         key: "txt.integrations.magento.log_viewer.message.file_too_large"
         title: "Warning message shown if log file is too large to show all of it on screen"
-        value: "File size too large - only showing last %s lines. Click download to retrieve the whole file."
+        value: "File size too large - only showing the last %s lines. Click Download to retrieve the entire file."
 
   # General
   - translation:
