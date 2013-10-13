@@ -40,7 +40,7 @@ Setup Guide,Setup Guide
 Show support tickets on admin dashboard,Show support tickets on admin dashboard
 Show support tickets on customer view,Show support tickets on customer view
 Show support tickets on order view,Show support tickets on order view
-Single Sign-on - Admins &amp; Agents,Single Sign-on - Admins &amp; Agents
+Single Sign-on - Admins and Agents,Single Sign-on - Admins and Agents
 Single Sign-on Enabled, Single Sign-on Enabled
 Single Sign-on - End-users,Single Sign-on - End-users
 Single Sign-on, Single Sign-on
@@ -50,7 +50,7 @@ Successfully generated new API token,Successfully generated new API token
 Support,Support
 Support Tickets,Support Tickets
 Test Connection,Test Connection
-The Zendesk log file has not been created. Please check that logging has been enabled.,The Zendesk log file has not been created. Please check that logging has been enabled.
+The Zendesk log file has not been created. Check to see if logging has been enabled.,The Zendesk log file has not been created. Check to see if logging has been enabled.
 Ticket #%s Created.,Ticket #%s Created.
 "To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk.","To deploy tickets from Zendesk, we require a username and password/token of an agent on your Zendesk."
 "To generate a token, log in to Zendesk then select Manage > Channels > API > Token","To generate a token, log in to Zendesk then select Manage > Channels > API > Token"
