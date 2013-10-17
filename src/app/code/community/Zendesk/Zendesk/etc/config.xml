@@ -176,7 +176,8 @@
             <resources>
                 <admin>
                     <children>
-                        <zendesk>
+                        <zendesk translate="title" module="zendesk">
+                            <title>Zendesk Dashboard</title>
                             <children>
                                 <zendesk_dashboard translate="title" module="zendesk">
                                     <title>Dashboard</title>
