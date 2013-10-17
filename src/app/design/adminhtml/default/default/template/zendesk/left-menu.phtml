@@ -17,24 +17,32 @@
 ?>
 <h3>Zendesk</h3>
 <ul class="tabs">
+    <?php if ($this->isAllowed('dashboard')) { ?>
     <li>
         <a href="<?php echo $this->getUrl('*/*/index'); ?>" class="tab-item-link<?php if($this->getActiveItem() == "dashboard") echo ' active'; ?>">
             <span><?php echo $this->__('Dashboard'); ?></span>
         </a>
     </li>
+    <?php } ?>
+    <?php if ($this->isAllowed('create')) { ?>
     <li>
         <a href="<?php echo $this->getUrl('*/*/create'); ?>" class="tab-item-link<?php if($this->getActiveItem() == "create") echo ' active'; ?>">
             <span><?php echo $this->__('Create Ticket'); ?></span>
         </a>
     </li>
+    <?php } ?>
+    <?php if ($this->isAllowed('launch')) { ?>
     <li>
         <a href="<?php echo Mage::helper('zendesk')->getUrl(); ?>" target="_blank" class="tab-item-link">
             <span><?php echo $this->__('Launch Zendesk'); ?></span>
         </a>
     </li>
+    <?php } ?>
+    <?php if ($this->isAllowed('settings')) { ?>
     <li>
         <a href="<?php echo $this->getUrl('adminhtml/system_config/edit/section/zendesk'); ?>" class="tab-item-link">
             <span><?php echo $this->__('Settings'); ?></span>
         </a>
     </li>
+    <?php } ?>
 </ul>
