@@ -17,6 +17,12 @@
 
 class Zendesk_Zendesk_Block_Adminhtml_Create_Edit extends Mage_Adminhtml_Block_Widget_Form_Container
 {
+    protected function _construct()
+    {
+        parent::_construct();
+        $this->_controller = FALSE;
+    }
+
     protected function _preparelayout()
     {
         $this->removeButton('delete');
