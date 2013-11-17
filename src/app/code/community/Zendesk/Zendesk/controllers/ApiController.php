@@ -89,7 +89,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
 
         if(!$order && !$order->getId()) {
             $this->getResponse()
-                >setBody(json_encode(array('success' => false, 'message' => 'Order does not exist')))
+                ->setBody(json_encode(array('success' => false, 'message' => 'Order does not exist')))
                 ->setHttpResponseCode(404)
                 ->setHeader('Content-type', 'application/json', true);
             return $this;
