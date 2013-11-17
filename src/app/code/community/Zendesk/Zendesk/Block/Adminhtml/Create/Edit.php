@@ -30,7 +30,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Edit extends Mage_Adminhtml_Block_W
             if(isset($data['order_id'])) {
                 $this->_addButton('back', array(
                      'label'     => Mage::helper('adminhtml')->__('Back'),
-                     'onclick'   => 'setLocation(\'' . $this->getBackUrl($data['order_id']) . '\')',
+                     'onclick'   => 'setLocation(\'' . $this->getZdBackUrl($data['order_id']) . '\')',
                      'class'     => 'back',
                 ), -1);
             }
@@ -44,19 +44,19 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Edit extends Mage_Adminhtml_Block_W
         $this->setChild('form', $this->getLayout()->createBlock('zendesk/adminhtml_create_edit_form'));
         return parent::_prepareLayout();
     }
-    
+
     public function getFormHtml()
     {
         $formHtml = parent::getFormHtml();
         return $formHtml;
     }
-    
+
     public function getHeaderText()
     {
         return Mage::helper('zendesk')->__('New Ticket');
     }
 
-    public function getBackUrl($orderId)
+    public function getZdBackUrl($orderId)
     {
         if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/view')) {
             return $this->getUrl('adminhtml/sales_order/view', array('order_id' => $orderId));
