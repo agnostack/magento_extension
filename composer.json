@@ -1,0 +1,10 @@
+{
+    "name": "zendesk/zendesk",
+    "license": "OSL-3.0",
+    "type": "magento-module",
+    "description": "Zendesk Extension for Magento",
+    "homepage": "https://github.com/zendesk/magento_extension",
+    "require": {
+        "magento-hackathon/magento-composer-installer": "*"
+    }
+}
