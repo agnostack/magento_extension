@@ -23,4 +23,13 @@ class Zendesk_Zendesk_Block_Adminhtml_Menu extends Mage_Adminhtml_Block_Template
         $this->setId('page_tabs');
         $this->setTemplate('zendesk/left-menu.phtml');
     }
+
+    public function isAllowed($target)
+    {
+        try {
+            return Mage::getSingleton('admin/session')->isAllowed('admin/zendesk/zendesk_' . $target);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
 }
