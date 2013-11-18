@@ -19,8 +19,14 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
 {
     protected function _getUrl($path)
     {
-        $base_url = 'https://' . Mage::getStoreConfig('zendesk/general/domain') . '/api/v2';
+        if(strpos($path, 'update_number') === false) {
+            $base_url = 'https://' . Mage::getStoreConfig('zendesk/general/domain') . '/api/v2';
+        }
+        else {
+            $base_url = 'https://' . Mage::getStoreConfig('zendesk/general/domain');
+        }
         $path = trim($path, '/');
+
         return $base_url . '/' . $path;
     }
 
@@ -51,7 +57,7 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             Mage::getStoreConfig('zendesk/general/password')
         );
 
-        if($method == 'POST') {
+        if($method == 'POST' || $method == 'PUT') {
             $client->setRawData(json_encode($data), 'application/json');
         }
 
@@ -77,7 +83,9 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             if(is_array($body) && isset($body['error'])) {
                 if(is_array($body['error']) && isset($body['error']['title'])) {
                     throw new Exception($body['error']['title'], $response->getStatus());
-                } else {
+                } else if(is_array($body) && isset($body[0][1]) && strpos($endpoint, 'update_number') !== false) {
+                throw new Exception($body[0][1]);
+            	} else {
                     throw new Exception($body['error'], $response->getStatus());
                 }
             } else {
