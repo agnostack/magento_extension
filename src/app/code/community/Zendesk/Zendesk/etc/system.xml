@@ -219,7 +219,7 @@
                             <label></label>
                             <frontend_model>zendesk/adminhtml_config_link</frontend_model>
                             <destination><![CDATA[account/dropboxes/new]]></destination>
-                            <value>Customise Feedback Tab</value>
+                            <value>Customize Feedback Tab</value>
                             <sort_order>8</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
@@ -397,7 +397,7 @@
                     <fields>
                         <sign_up translate="button_label">
                             <label></label>
-                            <button_label>Setup Guide</button_label>
+                            <button_label>Setup guide</button_label>
                             <frontend_model>zendesk/adminhtml_config_buttons_signup</frontend_model>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>

@@ -259,7 +259,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
                 $response = Mage::getModel('zendesk/api_tickets')->create($ticket);
 
-                $text = Mage::helper('zendesk')->__('Ticket #%s Created.', $response['id']);
+                $text = Mage::helper('zendesk')->__('Ticket #%s Created', $response['id']);
                 $text .= ' <a href="' . Mage::helper('zendesk')->getUrl('ticket', $response['id']) . '" target="_blank">';
                 $text .= Mage::helper('zendesk')->__('View ticket in Zendesk');
                 $text .= '</a>';
@@ -277,7 +277,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     {
         try {
             Mage::helper('zendesk')->setApiToken();
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zendesk')->__('Successfully generated new API token'));
+            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zendesk')->__('Successfully generated a new API token'));
         } catch(Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError($e->getCode() . ': ' . $e->getMessage());
         }
@@ -320,7 +320,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
 
         if(Mage::helper('zendesk/log')->isLogTooLarge()) {
-            Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('zendesk')->__("File size too large - only showing last %s lines. Click download to retrieve the whole file.", Mage::helper('zendesk/log')->getTailSize()));
+            Mage::getSingleton('adminhtml/session')->addNotice(Mage::helper('zendesk')->__("File size too large - only showing the last %s lines. Click Download to retrieve the entire file.", Mage::helper('zendesk/log')->getTailSize()));
         }
 
         $this->_title($this->__('Zendesk Log Viewer'));
@@ -350,7 +350,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         } catch(Exception $e) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
                 '<br />' . $e->getCode() . ': ' . $e->getMessage() .
-                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987'));
+                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href=%s>%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987'));
         }
 
         $this->_redirect('adminhtml/system_config/edit/section/zendesk');
