@@ -23,7 +23,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         // Perform some basic checks before running any of the API methods
         // Note that authorisation will accept either the provisioning or the standard API token, which facilitates API
         // methods being called during the setup process
-        $tokenString = $this->getRequest()->getHeader('authorization');
+        $tokenString = stripslashes($this->getRequest()->getHeader('authorization'));
 
         $token = null;
         $matches = array();
