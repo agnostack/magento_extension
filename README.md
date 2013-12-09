@@ -24,14 +24,26 @@ The API can be enabled in the Zendesk settings page in the Magento admin panel. 
 
     Authorization: Token token="your token goes here"
 
+### Single Sign-on (SSO)
+
+* Admins & Agents
+
+  Remote login URL: http://your_site_base_url/admin/zendesk/authenticate
+  Remote logout URL: http://your_site_base_url/admin/zendesk/logout
+
+* End-user
+
+  Remote login URL: http://your_site_base_url/zendesk/sso/login
+  Remote logout URL: http://your_site_base_url/zendesk/sso/logout
+
 ### Responses
 
 You may receive the following errors from any of the API calls:
 
 * 401 Not authorised
-  
+
   Authentication token is not valid.
-  
+
 * 403 API access disabled
 
   API access has been disabled in the Magento admin panel. It will need to be enabled before using the API.
