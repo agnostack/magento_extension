@@ -2,6 +2,7 @@ title: "Magento"
 packages:
   - default
   - magento
+  - classic
 
 parts:
 
