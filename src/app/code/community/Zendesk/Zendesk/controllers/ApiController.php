@@ -26,7 +26,14 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         $authHeader = $this->getRequest()->getHeader('authorization');
 
         if (!$authHeader) {
-            Mage::log('Unable to extract authorization header from request', null, 'zendesk.log');
+            // Certain server configurations fail to extract headers from the request, see PR #24.
+            $this->getResponse()
+                ->setBody(json_encode(array('success' => false, 'message' => 'Unable to extract authorization header from request')))
+                ->setHttpResponseCode(403)
+                ->setHeader('Content-type', 'application/json', true);
+
+            Mage::log('Unable to extract authorization header from request.', null, 'zendesk.log');
+
             return false;
         }
 
