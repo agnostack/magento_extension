@@ -93,7 +93,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         );
 
         // Validate if we need to include external_id param
-        $externalIdEnabled = Mage::getStoreConfig('zendesk/general/use_external_id');
+        $externalIdEnabled = Mage::helper('zendesk')->isExternalIdEnabled();
         if($externalIdEnabled) {
             $payload['external_id'] = $user->getId();
         }
