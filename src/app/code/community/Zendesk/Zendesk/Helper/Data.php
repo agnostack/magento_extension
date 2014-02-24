@@ -175,4 +175,14 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $customer;
     }
+
+    /**
+     * Retrieve Use External ID config option
+     *
+     * @return integer
+     */
+    public function isExternalIdEnabled()
+    {
+        return Mage::getStoreConfig('zendesk/general/use_external_id');
+    }
 }
