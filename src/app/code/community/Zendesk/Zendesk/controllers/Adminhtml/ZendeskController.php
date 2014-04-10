@@ -86,12 +86,17 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $externalId = $user->getId();
 
         $payload = array(
-          "iat" => $now,
-          "jti" => $jti,
-          "name" => $name,
-          "email" => $email,
-          "external_id" => $externalId
+            "iat" => $now,
+            "jti" => $jti,
+            "name" => $name,
+            "email" => $email
         );
+
+        // Validate if we need to include external_id param
+        $externalIdEnabled = Mage::helper('zendesk')->isExternalIdEnabled();
+        if($externalIdEnabled) {
+            $payload['external_id'] = $user->getId();
+        }
 
         Mage::log('Admin JWT: ' . var_export($payload, true), null, 'zendesk.log');
 
