@@ -336,7 +336,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function downloadAction()
     {
-        $this->_prepareDownloadResponse('zendesk.log', Mage::helper('zendesk/log')->getLogContents(false));
+        $this->_prepareDownloadResponse(Zendesk_Zendesk_Model_Logger::LOG_FILE, Mage::helper('zendesk/log')->getLogContents(false));
     }
 
     public function clearLogAction()
