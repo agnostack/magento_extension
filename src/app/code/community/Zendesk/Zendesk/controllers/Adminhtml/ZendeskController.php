@@ -155,7 +155,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
         // Add the custom JavaScript for the customer autocomplete
         $block = $this->getLayout()->createBlock(
-            'Mage_Core_Block_Template',
+            'core/template',
             'customer_email_autocomplete',
             array('template' => 'zendesk/autocomplete.phtml')
         );
