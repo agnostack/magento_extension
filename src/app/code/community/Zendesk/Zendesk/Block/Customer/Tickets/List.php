@@ -20,6 +20,19 @@ class Zendesk_Zendesk_Block_Customer_Tickets_List extends Mage_Core_Block_Templa
     public function __construct()
     {
         parent::__construct();
+
+        $key = array(
+            'ZendeskCustomerTickets',
+            $this->getCustomer()->getId()
+        );
+
+        $this->addData(array(
+            'cache_lifetime' => 60 * 5,
+            'cache_tags' => array('Zendesk_Customer_Tickets'),
+            'cache_key' => implode('_', $key)
+
+        ));
+
         $this->setTemplate('zendesk/customer/tickets/list.phtml');
     }
 
