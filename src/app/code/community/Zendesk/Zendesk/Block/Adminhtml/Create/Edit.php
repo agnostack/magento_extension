@@ -51,12 +51,6 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Edit extends Mage_Adminhtml_Block_W
         return parent::_prepareLayout();
     }
 
-    public function getFormHtml()
-    {
-        $formHtml = parent::getFormHtml();
-        return $formHtml;
-    }
-
     public function getHeaderText()
     {
         return Mage::helper('zendesk')->__('New Ticket');
