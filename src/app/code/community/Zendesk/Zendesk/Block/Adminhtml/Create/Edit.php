@@ -65,7 +65,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Edit extends Mage_Adminhtml_Block_W
     public function getZdBackUrl($orderId)
     {
         if (Mage::getSingleton('admin/session')->isAllowed('sales/order/actions/view')) {
-            return $this->getUrl('adminhtml/sales_order/view', array('order_id' => $orderId));
+            return $this->getUrl('*/sales_order/view', array('order_id' => $orderId));
         }
         return false;
     }

@@ -38,7 +38,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Config_Buttons_ZendeskTest extends Mage_Ad
         $this->addData(array(
             'button_label' => Mage::helper('zendesk')->__($originalData['button_label']),
             'html_id' => $element->getHtmlId(),
-            'url' => Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/zendesk/checkOutbound')
+            'url' => Mage::getSingleton('adminhtml/url')->getUrl('*/zendesk/checkOutbound')
         ));
 
         return $this->_toHtml();
