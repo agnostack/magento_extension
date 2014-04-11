@@ -37,15 +37,15 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         if($id && $type && in_array($type, array('customer','order','settings'))) {
             switch($type) {
                 case 'settings':
-                    $this->_redirect('adminhtml/system_config/edit/section/zendesk');
+                    $this->_redirect('*/system_config/edit/section/zendesk');
                     break;
 
                 case 'customer':
-                    $this->_redirect('adminhtml/customer/edit', array('id' => $id));
+                    $this->_redirect('*/customer/edit', array('id' => $id));
                     break;
 
                 case 'order':
-                    $this->_redirect('adminhtml/sales_order/view', array('order_id' => $id));
+                    $this->_redirect('*/sales_order/view', array('order_id' => $id));
                     break;
             }
         } else {
@@ -287,7 +287,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             Mage::getSingleton('adminhtml/session')->addError($e->getCode() . ': ' . $e->getMessage());
         }
 
-        $this->_redirect('adminhtml/system_config/edit/section/zendesk');
+        $this->_redirect('*/system_config/edit/section/zendesk');
     }
 
     /*
@@ -358,6 +358,6 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href=%s>%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987'));
         }
 
-        $this->_redirect('adminhtml/system_config/edit/section/zendesk');
+        $this->_redirect('*/system_config/edit/section/zendesk');
     }
 }

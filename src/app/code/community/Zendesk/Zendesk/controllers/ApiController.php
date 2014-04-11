@@ -142,7 +142,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
                 'name' => $customer->getName(),
                 'email' => $customer->getEmail(),
                 'active' => (bool)$customer->getIsActive(),
-                'admin_url' => Mage::helper('adminhtml')->getUrl('adminhtml/zendesk/redirect', array('id' => $customer->getId(), 'type' => 'customer')),
+                'admin_url' => Mage::helper('adminhtml')->getUrl('*/zendesk/redirect', array('id' => $customer->getId(), 'type' => 'customer')),
                 'created' => $customer->getCreatedAt(),
                 'dob' => $customer->getDob(),
                 'addresses' => array(),
