@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2012 Zendesk.
  *
@@ -14,19 +15,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 {
 
     public function getUrl($object = '', $id = null, $format = 'old')
     {
         $protocol = 'https://';
-        $domain = Mage::getStoreConfig('zendesk/general/domain');
-        $root = ($format === 'old') ? '' : '/agent/#';
+        $domain   = Mage::getStoreConfig('zendesk/general/domain');
+        $root     = ($format === 'old') ? '' : '/agent/#';
 
         $base = $protocol . $domain . $root;
 
-        switch($object) {
+        switch ($object) {
             case '':
                 return $base;
                 break;
@@ -50,7 +50,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         // Grab any existing token from the admin scope
         $token = Mage::getStoreConfig('zendesk/api/token', 0);
 
-        if( (!$token || strlen(trim($token)) == 0) && $generate) {
+        if ((!$token || strlen(trim($token)) == 0) && $generate) {
             $token = $this->setApiToken();
         }
 
@@ -59,7 +59,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function setApiToken($token = null)
     {
-        if(!$token) {
+        if (!$token) {
             $token = md5(time());
         }
         Mage::getModel('core/config')->saveConfig('zendesk/api/token', $token, 'default');
@@ -77,8 +77,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function getProvisionUrl()
     {
         $config = Mage::getConfig();
-        $data = $config->getNode('zendesk/provision_url');
-        if(!$data) {
+        $data   = $config->getNode('zendesk/provision_url');
+        if (!$data) {
             return null;
         }
         return (string)$data;
@@ -88,7 +88,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $token = Mage::getStoreConfig('zendesk/hidden/provision_token', 0);
 
-        if( (!$token || strlen(trim($token)) == 0) && $generate) {
+        if ((!$token || strlen(trim($token)) == 0) && $generate) {
             $token = $this->setProvisionToken();
         }
 
@@ -97,7 +97,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function setProvisionToken($token = null)
     {
-        if(!$token) {
+        if (!$token) {
             $token = md5(time());
         }
 
@@ -110,26 +110,26 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function getOrderDetail($order)
     {
         $orderInfo = array(
-            'id' => $order->getIncrementId(),
-            'status' => $order->getStatus(),
-            'created' => $order->getCreatedAt(),
-            'updated' => $order->getUpdatedAt(),
-            'customer' => array(
-                'name' => $order->getCustomerName(),
+            'id'        => $order->getIncrementId(),
+            'status'    => $order->getStatus(),
+            'created'   => $order->getCreatedAt(),
+            'updated'   => $order->getUpdatedAt(),
+            'customer'  => array(
+                'name'  => $order->getCustomerName(),
                 'email' => $order->getCustomerEmail(),
-                'ip' => $order->getRemoteIp(),
+                'ip'    => $order->getRemoteIp(),
                 'guest' => (bool)$order->getCustomerIsGuest(),
             ),
-            'store' => $order->getStoreName(),
-            'total' => $order->getGrandTotal(),
-            'currency' => $order->getOrderCurrencyCode(),
-            'items' => array(),
+            'store'     => $order->getStoreName(),
+            'total'     => $order->getGrandTotal(),
+            'currency'  => $order->getOrderCurrencyCode(),
+            'items'     => array(),
             'admin_url' => Mage::helper('adminhtml')->getUrl('adminhtml/sales_order/view', array('order_id' => $order->getId())),
         );
 
-        foreach($order->getItemsCollection(array(), true) as $item) {
+        foreach ($order->getItemsCollection(array(), true) as $item) {
             $orderInfo['items'][] = array(
-                'sku' => $item->getSku(),
+                'sku'  => $item->getSku(),
                 'name' => $item->getName(),
             );
         }
@@ -140,7 +140,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function getSupportEmail($store = null)
     {
         $domain = Mage::getStoreConfig('zendesk/general/domain', $store);
-        $email = 'support@' . $domain;
+        $email  = 'support@' . $domain;
 
         return $email;
     }
@@ -149,10 +149,10 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $customer = null;
 
-        if(Mage::getModel('customer/customer')->getSharingConfig()->isWebsiteScope()) {
+        if (Mage::getModel('customer/customer')->getSharingConfig()->isWebsiteScope()) {
             // Customer email address can be used in multiple websites so we need to
             // explicitly scope it
-            if($website) {
+            if ($website) {
                 // We've been given a specific website, so try that
                 $customer = Mage::getModel('customer/customer')
                     ->setWebsiteId($website)
@@ -162,12 +162,11 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                 $customers = Mage::getModel('customer/customer')
                     ->getCollection()
                     ->addFieldToFilter('email', array('eq' => array($email)));
-                if($customers->getSize()) {
-                    $id = $customers->getLastItem()->getId();
+                if ($customers->getSize()) {
+                    $id       = $customers->getLastItem()->getId();
                     $customer = Mage::getModel('customer/customer')->load($id);
                 }
             }
-
         } else {
             // Customer email is global, so no scoping issues
             $customer = Mage::getModel('customer/customer')->loadByEmail($email);
@@ -184,5 +183,13 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function isExternalIdEnabled()
     {
         return Mage::getStoreConfig('zendesk/general/use_external_id');
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLogApiCalls()
+    {
+        return Mage::getStoreConfigFlag('zendesk/api/log_calls');
     }
 }

@@ -30,7 +30,7 @@ class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
 
     public function getLogPath()
     {
-        return Mage::getBaseDir('log') . DS. 'zendesk.log';
+        return Mage::getBaseDir('log') . DS. Zendesk_Zendesk_Model_Logger::LOG_FILE;
     }
 
     public function getLogSize()
