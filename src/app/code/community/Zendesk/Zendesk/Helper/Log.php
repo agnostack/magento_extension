@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2013 Zendesk.
  *
@@ -14,7 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
 {
     /**
@@ -30,11 +30,17 @@ class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
 
     public function getLogPath()
     {
-        return Mage::getBaseDir('log') . DS. Zendesk_Zendesk_Model_Logger::LOG_FILE;
+        return Mage::getBaseDir('log') . DS . Zendesk_Zendesk_Model_Logger::LOG_FILE;
     }
 
+    /**
+     * @return int
+     */
     public function getLogSize()
     {
+        if (false === file_exists($this->getLogPath())) {
+            return 0;
+        }
         return filesize($this->getLogPath());
     }
 
@@ -56,11 +62,11 @@ class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
      */
     public function getLogContents($allowTruncate = true)
     {
-        $path = $this->getLogPath();
+        $path    = $this->getLogPath();
         $content = '';
 
-        if(file_exists($path)) {
-            if($allowTruncate && $this->isLogTooLarge()) {
+        if (file_exists($path)) {
+            if ($allowTruncate && $this->isLogTooLarge()) {
                 $content = $this->_tail($path, self::TAIL_SIZE);
             } else {
                 $content = file_get_contents($path);
@@ -82,13 +88,7 @@ class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
      */
     public function isLogTooLarge()
     {
-        $size = $this->getLogSize();
-
-        if($size !== FALSE && $size > self::MAX_LOG_SIZE) {
-            return true;
-        }
-
-        return false;
+        return $this->getLogSize() > self::MAX_LOG_SIZE;
     }
 
     public function clear()
@@ -99,6 +99,7 @@ class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
 
     /**
      * Runs a tail operation to retrieve the last lines of a file.
+     *
      * @param string $file  Path to the file to tail
      * @param int    $lines Number of lines to retrieve
      *
@@ -112,28 +113,29 @@ class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
         // Note that this could potentially be implemented as "everything that ISN'T Windows" but
         // was done with a specific list of common kernels for safety.
         // For a larger list see: http://en.wikipedia.org/wiki/Uname#Table_of_standard_uname_output
-        if(in_array(php_uname('s'), array('Linux', 'FreeBSD', 'NetBSD', 'OpenBSD', 'Darwin', 'SunOS', 'Unix'))) {
+        if (in_array(php_uname('s'), array('Linux', 'FreeBSD', 'NetBSD', 'OpenBSD', 'Darwin', 'SunOS', 'Unix'))) {
             $data = shell_exec("tail -n $lines '$file'");
         } else {
             // Fall back to a much slower (and manual) process for using PHP to tail the file.
-            $fp = fopen($file, 'r');
+            $fp       = fopen($file, 'r');
             $position = filesize($file);
-            fseek($fp, $position-1);
+            fseek($fp, $position - 1);
             $chunklen = 4096;
-            $data = '';
+            $data     = '';
 
-            while($position >= 0) {
+            while ($position >= 0) {
                 $position = $position - $chunklen;
 
                 if ($position < 0) {
-                    $chunklen = abs($position); $position=0;
+                    $chunklen = abs($position);
+                    $position = 0;
                 }
 
                 fseek($fp, $position);
                 $data = fread($fp, $chunklen) . $data;
 
                 if (substr_count($data, "\n") >= $lines + 1) {
-                    preg_match("!(.*?\n){".($lines-1)."}$!", $data, $match);
+                    preg_match("!(.*?\n){" . ($lines - 1) . "}$!", $data, $match);
                     return $match[0];
                 }
             }
