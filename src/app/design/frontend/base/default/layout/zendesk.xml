@@ -19,8 +19,7 @@
 <layout>
     <default>
         <reference name="footer_links">
-            <action method="addLink" translate="label title" module="contacts"
-                    ifconfig="zendesk/features/footer_link_enabled">
+            <action method="addLink" translate="label title" module="contacts" ifconfig="zendesk/features/footer_link_enabled">
                 <label>Support</label>
                 <url>zendesk</url>
                 <title>Support</title>
