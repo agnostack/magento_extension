@@ -34,6 +34,6 @@ class Zendesk_Zendesk_Block_Adminhtml_Order_View extends Mage_Adminhtml_Block_Sa
     {
         // Since we're subclassing from the Sales_Order_View block, the order_id is already
         // being passed in as a URL parameter so there's no need for us to do it
-        return $this->getUrl('*/zendesk/create');
+        return $this->getUrl('adminhtml/zendesk/create');
     }
 }

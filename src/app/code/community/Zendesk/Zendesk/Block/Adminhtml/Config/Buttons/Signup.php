@@ -56,7 +56,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Config_Buttons_Signup extends Mage_Adminht
             'magento_current_user_id' => Mage::getSingleton('admin/session')->getUser()->getUserId(),
             'magento_user_count' => Mage::getModel('admin/user')->getCollection()->getSize(),
             'magento_auth_token' => Mage::helper('zendesk')->getProvisionToken(true),
-            'magento_callback' => Mage::helper('adminhtml')->getUrl('*/zendesk/redirect', array('type' => 'settings', 'id' => 'zendesk')),
+            'magento_callback' => Mage::helper('adminhtml')->getUrl('adminhtml/zendesk/redirect', array('type' => 'settings', 'id' => 'zendesk')),
             'magento_locale' => Mage::getStoreConfig('general/locale/code'),
             'magento_timezone' => Mage::getStoreConfig('general/locale/timezone'),
         );

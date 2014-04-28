@@ -124,7 +124,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'total'     => $order->getGrandTotal(),
             'currency'  => $order->getOrderCurrencyCode(),
             'items'     => array(),
-            'admin_url' => Mage::helper('adminhtml')->getUrl('*/sales_order/view', array('order_id' => $order->getId())),
+            'admin_url' => Mage::helper('adminhtml')->getUrl('adminhtml/sales_order/view', array('order_id' => $order->getId())),
         );
 
         foreach ($order->getItemsCollection(array(), true) as $item) {
