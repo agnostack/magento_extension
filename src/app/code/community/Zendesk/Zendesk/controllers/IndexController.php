@@ -19,10 +19,18 @@ class Zendesk_Zendesk_IndexController extends Mage_Core_Controller_Front_Action
 {
     /**
      * Redirects to the Zendesk support portal for this website
+     * If SSO for EndUsers is enabled, we redirect to SSO Auth URL
+     * Otherwise to their support portal
      */
     public function indexAction()
     {
-        $url = Mage::helper('zendesk')->getUrl();
+
+        if(Mage::helper('zendesk')->isSSOEndUsersEnabled()) {
+            $url = Mage::helper('zendesk')->getSSOAuthUrlEndUsers();
+        } else {
+            $url = Mage::helper('zendesk')->getUrl();
+        }
+
         $this->_redirectUrl($url);
     }
 }
