@@ -18,6 +18,17 @@
 class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 {
 
+    /**
+     * Returns configured Zendesk Domain
+     * format: company.zendesk.com
+     *
+     * @return mixed Zendesk Account Domain
+     */
+    public function getZendeskDomain()
+    {
+        return Mage::getStoreConfig('zendesk/general/domain');
+    }
+
     public function getUrl($object = '', $id = null, $format = 'old')
     {
         $protocol = 'https://';
@@ -184,5 +195,73 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function isExternalIdEnabled()
     {
         return Mage::getStoreConfig('zendesk/general/use_external_id');
+    }
+
+    /**
+     * Returns if SSO is enabled for EndUsers
+     * @return integer
+     */
+    public function isSSOEndUsersEnabled()
+    {
+        return Mage::getStoreConfig('zendesk/sso_frontend/enabled');
+    }
+
+    /**
+     * Returns if SSO is enabled for Admin/Agent Users
+     * @return integer
+     */
+    public function isSSOAdminUsersEnabled()
+    {
+        return Mage::getStoreConfig('zendesk/sso/enabled');
+    }
+
+    /**
+     * Returns frontend URL where authentication process starts for EndUsers
+     *
+     * @return string SSO Url to auth EndUsers
+     */
+    public function getSSOAuthUrlEndUsers()
+    {
+        return Mage::getUrl('zendesk/sso/login');
+    }
+
+    /**
+     * Returns backend URL where authentication process starts for Admin/Agents
+     *
+     * @return string SSO Url to auth Admin/Agents
+     */
+    public function getSSOAuthUrlAdminUsers()
+    {
+        return Mage::helper('adminhtml')->getUrl('*/zendesk/login');
+    }
+
+    /**
+     * Returns Zendesk Account Login URL for normal access
+     * format: https://<zendesk_account>/<route>
+     *
+     * @return string Zendesk Account login url
+     */
+    public function getZendeskAuthNormalUrl()
+    {
+        $protocol = 'https://';
+        $domain = $this->getZendeskDomain();
+        $route = '/access/normal';
+
+        return $protocol . $domain . $route;
+    }
+
+    /**
+     * Returns Zendesk Login Form unauthenticated URL
+     * format: https://<zendesk_account>/<route>
+     *
+     * @return string Zendesk Account login unauthenticated form url
+     */
+    public function getZendeskUnauthUrl()
+    {
+        $protocol = 'https://';
+        $domain = $this->getZendeskDomain();
+        $route = '/access/unauthenticated';
+
+        return $protocol . $domain . $route;
     }
 }
