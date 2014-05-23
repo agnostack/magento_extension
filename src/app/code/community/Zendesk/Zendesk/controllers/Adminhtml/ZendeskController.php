@@ -166,7 +166,15 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function launchAction()
     {
-        $this->_redirectUrl(Mage::helper('zendesk')->getUrl());
+
+        if(Mage::helper('zendesk')->isSSOAdminUsersEnabled()) {
+            $url = Mage::helper('zendesk')->getSSOAuthUrlAdminUsers();
+        } else {
+//            $url = Mage::helper('zendesk')->getUrl();
+            $url = Mage::helper('zendesk')->getZendeskUnauthUrl();
+        }
+
+        $this->_redirectUrl($url);
     }
 
     public function saveAction()
