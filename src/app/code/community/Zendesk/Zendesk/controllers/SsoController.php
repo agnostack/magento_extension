@@ -34,13 +34,13 @@ class Zendesk_Zendesk_SsoController extends Mage_Core_Controller_Front_Action
         $token = Mage::getStoreConfig('zendesk/sso_frontend/token');
 
         if(!Zend_Validate::is($domain, 'NotEmpty')) {
-            Mage::log(Mage::helper('zendesk')->__('Zendesk domain not set. Please add this to the settings page.'), null, 'zendesk.log');
+            Mage::getSingleton('zendesk/logger')->log(Mage::helper('zendesk')->__('Zendesk domain not set. Please add this to the settings page.'));
             $this->_redirect('/');
             return $this;
         }
 
         if(!Zend_Validate::is($token, 'NotEmpty')) {
-            Mage::log(Mage::helper('zendesk')->__('Zendesk SSO token not set. Please add this to the settings page.'), null, 'zendesk.log');
+            Mage::getSingleton('zendesk/logger')->log(Mage::helper('zendesk')->__('Zendesk SSO token not set. Please add this to the settings page.'));
             $this->_redirect('/');
             return $this;
         }
@@ -74,13 +74,13 @@ class Zendesk_Zendesk_SsoController extends Mage_Core_Controller_Front_Action
             $payload['external_id'] = $user->getId();
         }
 
-        Mage::log('End-user JWT: ' . var_export($payload, true), null, 'zendesk.log');
+        Mage::getSingleton('zendesk/logger')->log('End-user JWT: ' . var_export($payload, true));
 
         $jwt = JWT::encode($payload, $token);
 
         $url = "http://".$domain."/access/jwt?jwt=" . $jwt;
 
-        Mage::log('End-user URL: ' . $url, null, 'zendesk.log');
+        Mage::getSingleton('zendesk/logger')->log('End-user URL: ' . $url);
 
         $this->_redirectUrl($url);
     }

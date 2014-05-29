@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2012 Zendesk.
  *
@@ -14,21 +15,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
 {
     protected function _getUrl($path)
     {
         $base_url = 'https://' . Mage::getStoreConfig('zendesk/general/domain') . '/api/v2';
-        $path = trim($path, '/');
+        $path     = trim($path, '/');
         return $base_url . '/' . $path;
     }
 
     protected function _call($endpoint, $params = null, $method = 'GET', $data = null)
     {
-        if($params && is_array($params) && count($params) > 0) {
+        if ($params && is_array($params) && count($params) > 0) {
             $args = array();
-            foreach($params as $arg => $val) {
+            foreach ($params as $arg => $val) {
                 $args[] = urlencode($arg) . '=' . urlencode($val);
             }
             $endpoint .= '?' . implode('&', $args);
@@ -42,8 +42,8 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
         $client->setMethod($method);
         $client->setHeaders(
             array(
-                 'Accept' => 'application/json',
-                 'Content-Type' => 'application/json'
+                'Accept'       => 'application/json',
+                'Content-Type' => 'application/json'
             )
         );
         $client->setAuth(
@@ -51,31 +51,31 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             Mage::getStoreConfig('zendesk/general/password')
         );
 
-        if($method == 'POST') {
+        if ($method == 'POST') {
             $client->setRawData(json_encode($data), 'application/json');
         }
 
-        Mage::log(
-            print_r(
+        if (true === Mage::helper('zendesk')->isLogApiCalls()) {
+            Mage::getSingleton('zendesk/logger')->debug(print_r(
                 array(
-                   'url' => $url,
-                   'method' => $method,
-                   'data' => json_encode($data),
+                    'url'    => $url,
+                    'method' => $method,
+                    'data'   => json_encode($data),
                 ),
                 true
-            ),
-            null,
-            'zendesk.log'
-        );
+            ));
+        }
 
         $response = $client->request();
-        $body = json_decode($response->getBody(), true);
+        $body     = json_decode($response->getBody(), true);
 
-        Mage::log(var_export($body, true), null, 'zendesk.log');
+        if (true === Mage::helper('zendesk')->isLogApiCalls()) {
+            Mage::getSingleton('zendesk/logger')->debug(var_export($body, true));
+        }
 
-        if($response->isError()) {
-            if(is_array($body) && isset($body['error'])) {
-                if(is_array($body['error']) && isset($body['error']['title'])) {
+        if ($response->isError()) {
+            if (is_array($body) && isset($body['error'])) {
+                if (is_array($body['error']) && isset($body['error']['title'])) {
                     throw new Exception($body['error']['title'], $response->getStatus());
                 } else {
                     throw new Exception($body['error'], $response->getStatus());
