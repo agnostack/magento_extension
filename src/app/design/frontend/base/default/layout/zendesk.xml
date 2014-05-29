@@ -19,10 +19,35 @@
 <layout>
     <default>
         <reference name="footer_links">
-            <action method="addLink" translate="label title" module="contacts" ifconfig="zendesk/features/footer_link_enabled"><label>Support</label><url>zendesk</url><title>Support</title><prepare>true</prepare></action>
+            <action method="addLink" translate="label title" module="contacts" ifconfig="zendesk/features/footer_link_enabled">
+                <label>Support</label>
+                <url>zendesk</url>
+                <title>Support</title>
+                <prepare>true</prepare>
+            </action>
         </reference>
         <reference name="before_body_end">
             <block type="zendesk/supporttab" name="zendesk_support_tab"/>
         </reference>
     </default>
+
+    <customer_account>
+        <reference name="customer_account_navigation">
+            <action method="addLink" ifconfig="zendesk/features/customer_tickets" translate="label" module="zendesk">
+                <name>customertickets</name>
+                <path>zendesk/customer_tickets/index</path>
+                <label>My Tickets</label>
+            </action>
+        </reference>
+    </customer_account>
+
+    <zendesk_customer_tickets_index>
+        <update handle="customer_account"/>
+        <reference name="my.account.wrapper">
+            <block type="zendesk/customer_tickets" name="zendesk.customer.tickets">
+                <block type="zendesk/customer_tickets_list" name="zendesk.customer.tickets.list" />
+            </block>
+        </reference>
+    </zendesk_customer_tickets_index>
+
 </layout>
