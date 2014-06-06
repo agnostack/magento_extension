@@ -27,7 +27,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
 
         if(!$tokenString && isset($_SERVER['Authorization'])) {
             $tokenString = $_SERVER['Authorization'];
-		}
+        }
 
         if(!$tokenString && isset($_SERVER['HTTP_AUTHORIZATION'])) {
             $tokenString = $_SERVER['HTTP_AUTHORIZATION'];
