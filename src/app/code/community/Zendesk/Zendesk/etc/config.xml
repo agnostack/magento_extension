@@ -40,11 +40,6 @@
             <zendesk>
                 <class>Zendesk_Zendesk_Block</class>
             </zendesk>
-            <adminhtml>
-                <rewrite>
-                    <sales_order_view>Zendesk_Zendesk_Block_Adminhtml_Order_View</sales_order_view>
-                </rewrite>
-            </adminhtml>
         </blocks>
         <resources>
             <zendesk_setup>
@@ -114,6 +109,14 @@
             </modules>
         </translate>
         <events>
+            <core_block_abstract_prepare_layout_before>
+                <observers>
+                    <zendesk>
+                        <class>zendesk/observer</class>
+                        <method>addTicketButton</method>
+                    </zendesk>
+                </observers>
+            </core_block_abstract_prepare_layout_before>
             <core_block_abstract_prepare_layout_after>
                 <observers>
                     <zendesk>

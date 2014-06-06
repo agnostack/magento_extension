@@ -97,4 +97,16 @@ class Zendesk_Zendesk_Model_Observer
             }
         }
     }
+
+    public function addTicketButton(Varien_Event_Observer $event)
+    {
+        $block = $event->getBlock();
+        if ($block instanceof Mage_Adminhtml_Block_Sales_Order_View && Mage::getStoreConfig('zendesk/features/show_on_order')) {
+            $block->addButton('ticket_new', array(
+             'label'     => Mage::helper('zendesk')->__('Create Ticket'),
+             'onclick'   => 'setLocation(\'' . $block->getUrl('adminhtml/zendesk/create') . '\')',
+             'class'     => 'zendesk',
+            ));
+        }
+    }
 }
