@@ -135,6 +135,9 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         // Try to load a corresponding customer object for the provided email address
         $customer = Mage::helper('zendesk')->loadCustomer($email);
 
+        // if the admin site has a custom URL, use it
+        $urlModel = Mage::getModel('adminhtml/url')->setStore('admin');
+
         if($customer && $customer->getId()) {
             $info = array(
                 'guest' => false,
@@ -142,7 +145,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
                 'name' => $customer->getName(),
                 'email' => $customer->getEmail(),
                 'active' => (bool)$customer->getIsActive(),
-                'admin_url' => Mage::helper('adminhtml')->getUrl('adminhtml/zendesk/redirect', array('id' => $customer->getId(), 'type' => 'customer')),
+                'admin_url' => $urlModel->getUrl('adminhtml/zendesk/redirect', array('id' => $customer->getId(), 'type' => 'customer')),
                 'created' => $customer->getCreatedAt(),
                 'dob' => $customer->getDob(),
                 'addresses' => array(),
