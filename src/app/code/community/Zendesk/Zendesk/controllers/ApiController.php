@@ -51,10 +51,6 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         $matches = array();
         if(preg_match('/Token token="([a-z0-9]+)"/', $tokenString, $matches)) {
             $token = $matches[1];
-        } else {
-            // sometimes preg_match fails to retrieve token, so we explode
-            $apiToken = explode("=", $tokenString);
-            $token = str_replace('"', '', $apiToken[1]);
         }
 
         $apiToken = Mage::helper('zendesk')->getApiToken(false);
