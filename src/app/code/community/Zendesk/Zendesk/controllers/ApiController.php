@@ -23,14 +23,29 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         // Perform some basic checks before running any of the API methods
         // Note that authorisation will accept either the provisioning or the standard API token, which facilitates API
         // methods being called during the setup process
-        $authHeader = $this->getRequest()->getHeader('authorization');
+        $tokenString = $this->getRequest()->getHeader('authorization');
 
-        if (!$authHeader) {
-            Mage::log('Unable to extract authorization header from request', null, 'zendesk.log');
+        if(!$tokenString && isset($_SERVER['Authorization'])) {
+            $tokenString = $_SERVER['Authorization'];
+        }
+
+        if(!$tokenString && isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $tokenString = $_SERVER['HTTP_AUTHORIZATION'];
+        }
+
+        if (!$tokenString) {
+            // Certain server configurations fail to extract headers from the request, see PR #24.
+            Mage::log('Unable to extract authorization header from request.', null, 'zendesk.log');
+
+            $this->getResponse()
+                ->setBody(json_encode(array('success' => false, 'message' => 'Unable to extract authorization header from request')))
+                ->setHttpResponseCode(403)
+                ->setHeader('Content-type', 'application/json', true);
+
             return false;
         }
 
-        $tokenString = stripslashes($authHeader);
+        $tokenString = stripslashes($tokenString);
 
         $token = null;
         $matches = array();
