@@ -246,6 +246,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                         'status' => $data['status'],
                         'priority' => $data['priority'],
                         'comment' => array(
+                            'public' => $data['visibility'],
                             'value' => $data['description']
                         )
                     )

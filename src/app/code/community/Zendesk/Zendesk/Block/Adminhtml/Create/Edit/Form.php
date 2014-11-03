@@ -103,6 +103,17 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Edit_form extends Mage_Adminhtml_Bl
             )
         ));
         
+        $fieldset->addField('visibility', 'select', array(
+            'name'     => 'visibility',
+            'label'    => Mage::helper('zendesk')->__('Visibility'),
+            'title'    => Mage::helper('zendesk')->__('Visibility'),
+            'required' => false,
+            'values'   => array(
+                array('label' => 'Public', 'value' => 'true'),
+                array('label' => 'Internal', 'value' => 'false'),
+            )
+        ));
+        
         $fieldset->addField('order', 'text', array(
             'name'     => 'order',
             'label'    => Mage::helper('zendesk')->__('Order number'),
