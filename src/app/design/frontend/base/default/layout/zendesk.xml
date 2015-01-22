@@ -19,7 +19,7 @@
 <layout>
     <default>
         <reference name="footer_links">
-            <action method="addLink" translate="label title" module="contacts" ifconfig="zendesk/features/footer_link_enabled">
+            <action method="addLink" translate="label title" module="contacts" ifconfig="zendesk/frontend_features/footer_link_enabled">
                 <label>Support</label>
                 <url>zendesk</url>
                 <title>Support</title>
@@ -33,7 +33,7 @@
 
     <customer_account>
         <reference name="customer_account_navigation">
-            <action method="addLink" ifconfig="zendesk/features/customer_tickets" translate="label" module="zendesk">
+            <action method="addLink" ifconfig="zendesk/frontend_features/customer_tickets" translate="label" module="zendesk">
                 <name>customertickets</name>
                 <path>zendesk/customer_tickets/index</path>
                 <label>My Tickets</label>
@@ -49,5 +49,7 @@
             </block>
         </reference>
     </zendesk_customer_tickets_index>
+    <zendesk_sso_login>
+    </zendesk_sso_login>
 
 </layout>

@@ -17,7 +17,7 @@
 ?>
 <script type="text/javascript">
     function postToZendesk() {
-        var form = new Element('form', {method: 'post', action: '<?php echo $this->getPostUrl(); ?>'});
+        var form = new Element('form', {method: 'get', action: '<?php echo $this->getPostUrl(); ?>'});
         <?php foreach($this->getPostInfo() as $name => $value): ?>
             form.insert(new Element('input', {type: 'hidden', name: '<?php echo $name; ?>', value: '<?php echo $value; ?>'}));
         <?php endforeach; ?>

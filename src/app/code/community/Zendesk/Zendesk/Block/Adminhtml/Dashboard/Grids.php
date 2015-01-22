@@ -35,22 +35,50 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
 
         $views = null;
         $first = true;
+        $configured = false;
 
         if(Mage::getStoreConfig('zendesk/features/show_views')) {
             $list = trim(trim(Mage::getStoreConfig('zendesk/features/show_views')), ',');
             $views = explode(',', $list);
         }
 
-        if($views && count($views)) {
-            foreach($views as $viewId) {
-                try {
+        //check if module is setted up
+        if( Mage::getStoreConfig('zendesk/general/domain') )
+            $configured = true;
+
+        if( Mage::getStoreConfig('zendesk/backend_features/show_all') && $configured )
+        {
+                $tab = array(
+                    'content' => $this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid')->toHtml()
+                );
+                
+                Mage::registry('zendesk_tickets_count') ? $count =  " (".Mage::registry('zendesk_tickets_count').")" : $count = "";
+                $tab['label'] = $this->__("All") . $count;
+                
+                //Clear total tickets count
+                Mage::unregister('zendesk_tickets_count');
+                    
+                if( $first )
+                {
+                    $tab['active'] = true;
+                    $first = false;
+                }
+                $this->addTab("all", $tab);
+        }
+
+        if( $views && count($views) && $configured )
+        {
+            foreach( $views as $viewId )
+            {
+                try
+                {
                     $view = Mage::getModel('zendesk/api_views')->get($viewId);
 
                     $tab = array(
                         'label'     => $this->__($view['title']),
                         'content'   => $this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_view')->setView($view)->toHtml(),
                     );
-
+                    
                     if($first) {
                         $tab['active'] = true;
                         $first = false;
@@ -71,7 +99,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
 
         return parent::_prepareLayout();
     }
-
+    
     public function getIsZendeskDashboard()
     {
         $controller = Mage::app()->getFrontController()->getRequest()->getControllerName();

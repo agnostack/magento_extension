@@ -22,4 +22,8 @@ class Zendesk_Zendesk_Block_Customer_Tickets extends Mage_Core_Block_Template
         parent::__construct();
         $this->setTemplate('zendesk/customer/tickets.phtml');
     }
+    
+    public function getSubmitAction() {
+        return "http://".Mage::getStoreConfig('zendesk/general/domain')."/anonymous_requests/new";
+    }
 }

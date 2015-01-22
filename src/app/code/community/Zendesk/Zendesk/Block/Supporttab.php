@@ -19,10 +19,10 @@ class Zendesk_Zendesk_Block_Supporttab extends Mage_Core_Block_Template
 {
     protected function _toHtml()
     {
-        if(!Mage::getStoreConfig('zendesk/features/feedback_tab_code_active')) {
+        if(!Mage::getStoreConfig('zendesk/frontend_features/feedback_tab_code_active')) {
             return '';
         }
 
-        return Mage::getStoreConfig('zendesk/features/feedback_tab_code');
+        return Mage::getStoreConfig('zendesk/frontend_features/feedback_tab_code');
     }
 }

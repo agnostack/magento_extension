@@ -24,7 +24,7 @@ if($view) {
 
         $columns = $execute['columns'];
         $rows = $execute['rows'];
-
+        
         $isScoped = Mage::getModel('customer/customer')->getSharingConfig()->isWebsiteScope();
 
         $users = array();
@@ -58,16 +58,23 @@ if($view) {
         // Most likely the Zendesk domain has not been configured, so just don't show anything here.
         $view = null;
     }
-}
+?>
+<script>
+//made with js to reduce a number of API requests
+document.getElementById('tickets_grid_tab_'+ '<?php echo $view['id']; ?>').innerHTML = document.getElementById('tickets_grid_tab_'+ '<?php echo $view['id']; ?>').innerHTML + '(<?php echo count($rows); ?>)';
+</script>
+<?php
+    }
 ?>
 <?php if($view): ?>
 <div class="grid np">
     <table cellspacing="0" class="data order-tables">
         <thead>
             <tr class="headings">
-                <?php foreach($columns as $col): ?>
-                    <?php if($col['id'] === 'score') continue; ?>
-                    <th class="<?php echo $col['id']; ?>"><?php echo Mage::helper('zendesk')->__($col['title']); ?></th>
+                <?php $count = count($columns);
+                foreach($columns as $col): ?>
+                    <?php if($col['id'] === 'score') { $count--; continue; } ?>
+                    <th class="<?php echo $col['id']; ?> col-<?php echo $count; ?>"><?php echo Mage::helper('zendesk')->__($col['title']); ?></th>
                 <?php endforeach; ?>
             </tr>
         </thead>
@@ -91,8 +98,7 @@ if($view) {
                                 switch($col['id']) {
                                     case 'subject':
                                         if(isset($row['ticket']) && isset($row['ticket']['id'])) {
-                                            $url = Mage::helper('zendesk')->getUrl('ticket', $row['ticket']['id']);
-                                            $value = '<a href="' . $url . '" target="_blank">' . $value . '</a>';
+                                            $value = Mage::helper('zendesk')->getExcerpt($row['ticket']);
                                         }
                                         break;
 

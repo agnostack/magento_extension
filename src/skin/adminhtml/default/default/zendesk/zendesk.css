@@ -46,3 +46,30 @@ button.zendesk span {
     background-image: url("button.png");
     padding-left: 16px;
 }
+.grid tr.headings th.col-1 {
+    width: 100%;
+}
+.grid tr.headings th.col-2 {
+    width: 50%;
+}
+.grid tr.headings th.col-3 {
+    width: 33.33%;
+}
+.grid tr.headings th.col-4 {
+    width: 25%;
+}
+.grid tr.headings th.col-5 {
+    width: 20%;
+}
+.grid tr.headings th.col-6 {
+    width: 16.66%;
+}
+.grid tr.headings th.col-7 {
+    width: 14.28%;
+}
+.grid tr.headings th.col-8 {
+    width: 12.5%;
+}
+.grid tr.filter .range input {
+    min-width: 61px !important;
+}

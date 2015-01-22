@@ -1,37 +1,49 @@
 <?xml version="1.0"?>
 <!--
 /**
- * Copyright 2012 Zendesk.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
- -->
+* Copyright 2012 Zendesk.
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*   http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+-->
 <layout>
-	<adminhtml_system_config_edit>
-		<reference name="head">
-			<action method="addCss"><stylesheet>zendesk/zendesk.css</stylesheet></action>
-		</reference>
-	</adminhtml_system_config_edit>
+    <adminhtml_system_config_edit>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>zendesk/zendesk.css</stylesheet>
+            </action>
+        </reference>
+    </adminhtml_system_config_edit>
 
     <adminhtml_sales_order_view>
         <reference name="head">
-            <action method="addCss"><stylesheet>zendesk/zendesk.css</stylesheet></action>
+            <action method="addCss">
+                <stylesheet>zendesk/zendesk.css</stylesheet>
+            </action>
         </reference>
         <reference name="content">
             <block type="zendesk/adminhtml_order_view_tickets" name="zendesk_order_view_tickets" after="sales_order_edit"/>
         </reference>
     </adminhtml_sales_order_view>
 
+    <adminhtml_dashboard_index>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>zendesk/zendesk.css</stylesheet>
+            </action>
+        </reference>
+    </adminhtml_dashboard_index>
+    
     <adminhtml_customer_edit>
         <reference name="customer_edit_tab_view">
             <block type="adminhtml/template" after="-" name="zendesk.tickets" template="zendesk/customer/tickets.phtml"/>
@@ -39,26 +51,86 @@
     </adminhtml_customer_edit>
     
     <adminhtml_zendesk_index>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>zendesk/zendesk.css</stylesheet>
+            </action>
+        </reference>
         <reference name="left">
             <block type="zendesk/adminhtml_menu" name="adminhtml.left.menu">
-                <action method="setActiveItem"><params>dashboard</params></action>
+                <action method="setActiveItem">
+                    <params>dashboard</params>
+                </action>
             </block>
         </reference>
         <reference name="content">
             <block type="zendesk/adminhtml_dashboard" name="zendesk_dashboard">
-                <block type="zendesk/adminhtml_dashboard_grids" name="zendesk_dashboard_grids" />
+                <block type="zendesk/adminhtml_dashboard_grids" name="zendesk_dashboard_grids"/>
+
             </block>
+
         </reference>
     </adminhtml_zendesk_index>
+    <adminhtml_zendesk_settings>
+        <reference name="head">
+            <action method="setTitle">
+                <title><![CDATA[Edit Settings / Zendesk / Magento Admin]]></title>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>zendesk/js/jquery-1.11.1.min.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>zendesk/js/jquery-noconflict.min.js</script>
+            </action>
+            <action method="addItem">
+                <type>skin_js</type>
+                <script>zendesk/js/validation.js</script>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="zendesk/adminhtml_settings_edit" name="zendesk_settings_edit" />
+        </reference>
+    </adminhtml_zendesk_settings>
+    <adminhtml_zendesk_create_load_block_order_grid>
+        <reference name="root">
+            <block type="core/text_list" name="content" >
+                <block type="zendesk/adminhtml_create_order_grid" name="grid" />
+            </block>
+        </reference>
+    </adminhtml_zendesk_create_load_block_order_grid>
+    <adminhtml_zendesk_create_load_block_tickets>
+        <reference name="root">
+            <block type="core/text_list" name="content" >
+                <block type="zendesk/adminhtml_dashboard_tab_tickets_grid" name="grid" />
+            </block>
+        </reference>
+    </adminhtml_zendesk_create_load_block_tickets>
+    <adminhtml_zendesk_create_load_block_customer_grid>
+        <reference name="root">
+            <block type="core/text_list" name="content" >
+                <block type="zendesk/adminhtml_create_customer_grid" name="grid" />
+            </block>
+        </reference>
+    </adminhtml_zendesk_create_load_block_customer_grid>        
 
     <adminhtml_zendesk_create>
         <reference name="left">
             <block type="zendesk/adminhtml_menu" name="adminhtml.left.menu">
-                <action method="setActiveItem"><params>create</params></action>
+                <action method="setActiveItem">
+                    <params>create</params>
+                </action>
             </block>
         </reference>
         <reference name="content">
             <block type="zendesk/adminhtml_create_edit" name="create"/>
+            <block type="zendesk/adminhtml_create_customer" template="zendesk/create/customer.phtml" name="search">
+                <block type="zendesk/adminhtml_create_customer_grid" name="grid" />
+            </block>
+            <block type="zendesk/adminhtml_create_order" template="zendesk/create/order.phtml" name="order">
+                <block type="zendesk/adminhtml_create_order_grid" name="grid" />
+            </block>
         </reference>
     </adminhtml_zendesk_create>
 

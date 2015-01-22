@@ -34,4 +34,9 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard extends Mage_Adminhtml_Block_Tem
             return false;
         }
     }
+    
+    public function getAuthHeader()
+    {
+        return 'Token token="' . Mage::helper('zendesk')->getApiToken(false) . '"';
+    }
 }

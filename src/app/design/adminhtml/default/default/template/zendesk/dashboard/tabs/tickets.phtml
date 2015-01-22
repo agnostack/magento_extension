@@ -1,0 +1,74 @@
+<?php
+/**
+ * Copyright 2012 Zendesk.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+?>
+<?php
+$all = $this->getView();
+$maped_users = array();
+if( isset($all['users']) )
+{
+    foreach( $all['users'] as $user )
+    {
+        $maped_users[$user['id']] = $user['name'];
+    }  
+    
+    //Check if all users returned
+    foreach( $all['tickets'] as $ticket )
+    {
+        if( !isset($maped_users[$ticket['requester_id']]) )
+        {
+            $model = Mage::getModel('zendesk/api_users')->get($ticket['requester_id']);
+            $maped_users[$ticket['requester_id']] = $model['name'];
+        }
+    }
+}
+?>
+<?php if( $all['tickets'] ): ?>
+    <div class="grid np">
+        <table cellspacing="0" class="data order-tables">
+            <thead>
+                <tr class="headings">
+                    <th class="subject col-6"><?php echo $this->helper('zendesk')->__('Subject'); ?></th>
+                    <th class="requester col-6"><?php echo $this->helper('zendesk')->__('Requester'); ?></th>
+                    <th class="created col-6"><?php echo $this->helper('zendesk')->__('Requested'); ?></th>
+                    <th class="status col-6"><?php echo $this->helper('zendesk')->__('Status'); ?></th>
+                    <th class="priority col-6"><?php echo $this->helper('zendesk')->__('Priority'); ?></th>
+                    <th class="updated col-6"><?php echo $this->helper('zendesk')->__('Updated'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+            <?php  if ($all): ?>
+                <?php $i = 0; ?>
+                <?php foreach ($all['tickets'] as $row): ?>
+                    <tr class="border <?php echo (++$i % 2) ? 'even' : 'odd'; ?>">
+                        <td><?php echo Mage::helper('zendesk')->getExcerpt($row); ?></td>
+                            <td><?php echo $maped_users[$row['requester_id']]; ?></td>
+                            <td><?php echo Mage::helper('core')->formatDate($row['created_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
+                            <td><?php echo $row['status']; ?></td>
+                            <td><?php echo $row['priority'] ? $row['priority'] : "-"; ?></td>
+                            <td><?php echo Mage::helper('core')->formatDate($row['updated_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
+                    </tr>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <tr>
+                    <td class="empty-text a-center" colspan="100"><?php echo Mage::helper('zendesk')->__('No tickets found'); ?></td>
+                </tr>
+            <?php endif; ?>
+        </tbody>
+    </table>
+</div>
+<div class="clear"></div>
+<?php endif; ?>

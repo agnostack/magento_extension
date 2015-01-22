@@ -1,0 +1,70 @@
+<?php
+
+/* * ********************************************************************
+ * Customization Services by ModulesGarden.com
+ * Copyright (c) ModulesGarden, INBS Group Brand, All Rights Reserved 
+ * 
+ *
+ *  CREATED BY MODULESGARDEN       ->        http://modulesgarden.com
+ *  CONTACT                        ->       contact@modulesgarden.com
+ *
+ *
+ *
+ *
+ * This software is furnished under a license and may be used and copied
+ * only  in  accordance  with  the  terms  of such  license and with the
+ * inclusion of the above copyright notice.  This software  or any other
+ * copies thereof may not be provided or otherwise made available to any
+ * other person.  No title to and  ownership of the  software is  hereby
+ * transferred.
+ *
+ *
+ * ******************************************************************** */
+
+/**
+ * @author Marcin Kozak <marcin.ko@modulesgarden.com>
+ */
+
+?>
+<?php $_element = $this->getElement() ?>
+<?php if ($_element->getFieldsetContainerId()): ?>
+<div id="<?php echo $_element->getFieldsetContainerId(); ?>">
+<?php endif; ?>
+<?php if ($_element->getLegend()): ?>
+<div class="entry-edit-head">
+    <h4 class="icon-head head-edit-form fieldset-legend"><?php echo $_element->getLegend() ?></h4>
+    <div class="form-buttons"><?php echo $_element->getHeaderBar() ?></div>
+</div>
+<?php endif; ?>
+<?php if (!$_element->getNoContainer()): ?>
+    <div class="fieldset <?php echo $_element->getClass() ?>" id="<?php echo $_element->getHtmlId() ?>">
+<?php endif; ?>
+    <div class="hor-scroll">
+        <?php if ($this->hasMessage()): ?>
+            <div id="messages">
+                <ul class="messages">
+                    <li class="notice-msg"><?php echo $this->getMessage() ?></li>
+                </ul>
+            </div>
+        <?php endif ?>
+        
+        <?php if ($_element->getComment()): ?>
+            <p class="comment"><?php echo $this->escapeHtml($_element->getComment()) ?></p>
+        <?php endif; ?>
+        <?php if ($_element->hasHtmlContent()): ?>
+            <?php echo $_element->getHtmlContent(); ?>
+        <?php else: ?>
+        <table cellspacing="0" class="<?php echo $_element->hasTableClass() ? $_element->getTableClass() : 'form-list'?>">
+            <tbody>
+                <?php echo $_element->getChildrenHtml(); ?>
+            </tbody>
+        </table>
+        <?php endif; ?>
+    </div>
+    <?php echo $_element->getSubFieldsetHtml() ?>
+<?php if (!$_element->getNoContainer()): ?>
+    </div>
+<?php endif; ?>
+<?php if ($_element->getFieldsetContainerId()): ?>
+</div>
+<?php endif; ?>

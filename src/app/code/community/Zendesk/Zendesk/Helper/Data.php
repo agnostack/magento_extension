@@ -45,6 +45,86 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
 
+    /**
+     * Returns configured Zendesk Domain
+     * format: company.zendesk.com
+     *
+     * @return mixed Zendesk Account Domain
+     */
+    public function getZendeskDomain()
+    {
+        return Mage::getStoreConfig('zendesk/general/domain');
+    }
+    
+    
+    /**
+     * Returns if SSO is enabled for EndUsers
+     * @return integer
+     */
+    public function isSSOEndUsersEnabled()
+    {
+        return Mage::getStoreConfig('zendesk/sso_frontend/enabled');
+    }
+
+    /**
+     * Returns if SSO is enabled for Admin/Agent Users
+     * @return integer
+     */
+    public function isSSOAdminUsersEnabled()
+    {
+        return Mage::getStoreConfig('zendesk/sso/enabled');
+    }
+
+    /**
+     * Returns frontend URL where authentication process starts for EndUsers
+     *
+     * @return string SSO Url to auth EndUsers
+     */
+    public function getSSOAuthUrlEndUsers()
+    {
+        return Mage::getUrl('zendesk/sso/login');
+    }
+
+    /**
+     * Returns backend URL where authentication process starts for Admin/Agents
+     *
+     * @return string SSO Url to auth Admin/Agents
+     */
+    public function getSSOAuthUrlAdminUsers()
+    {
+        return Mage::helper('adminhtml')->getUrl('*/zendesk/login');
+    }
+
+    /**
+     * Returns Zendesk Account Login URL for normal access
+     * format: https://<zendesk_account>/<route>
+     *
+     * @return string Zendesk Account login url
+     */
+    public function getZendeskAuthNormalUrl()
+    {
+        $protocol = 'https://';
+        $domain = $this->getZendeskDomain();
+        $route = '/access/normal';
+
+        return $protocol . $domain . $route;
+    }
+
+    /**
+     * Returns Zendesk Login Form unauthenticated URL
+     * format: https://<zendesk_account>/<route>
+     *
+     * @return string Zendesk Account login unauthenticated form url
+     */
+    public function getZendeskUnauthUrl()
+    {
+        $protocol = 'https://';
+        $domain = $this->getZendeskDomain();
+        $route = '/access/unauthenticated';
+
+        return $protocol . $domain . $route;
+    }
+    
     public function getApiToken($generate = true)
     {
         // Grab any existing token from the admin scope
@@ -187,5 +267,149 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function isExternalIdEnabled()
     {
         return Mage::getStoreConfig('zendesk/general/use_external_id');
+    }
+    
+    /**
+     * Retrieve ticket statistics
+     */
+    public function getTicketTotals($type = null, $from = null, $to = null)
+    {
+        $tickets = Mage::getModel('zendesk/api_tickets')->all();
+        
+        if( is_null($tickets) )
+        {
+            return false;
+        }
+        
+        $totals = array(
+            'open'      =>  0,
+            'new'       =>  0,
+            'solved'    =>  0,
+            'closed'    =>  0
+        );
+
+        if( $from )
+            $from = strtotime($from);
+        else
+            $from = 0;
+
+        foreach( $tickets as $ticket )
+        {
+            if( $from || $to )
+            {
+                if( strtotime($ticket['created_at']) > $from)
+                {
+                    if( $to )
+                    {
+                        if( strtotime($ticket['created_at']) < strtotime($to) )
+                        {
+                            if( isset($totals[$ticket['status']]) )
+                                $totals[$ticket['status']]++;
+                        }
+                    }
+                    else
+                    {
+                        if( isset($totals[$ticket['status']]) )
+                            $totals[$ticket['status']]++;
+                    }
+                }
+            }
+            else
+            {
+                if( isset($totals[$ticket['status']]) )
+                    $totals[$ticket['status']]++;
+            }
+        }
+        
+        if( $type && isset($totals[$type]))
+        {
+            return $totals[$type];
+        }
+        else
+        {
+            return $totals;
+        }
+    }
+    
+    public function getExcerpt($row)
+    {
+        if( !$row )
+        {
+            return Mage::helper('zendesk')->__('Subject');
+        }
+        $url = Mage::helper('zendesk')->getUrl('ticket', $row['id']);
+        if( $row['subject'] )
+        {
+            return '<a href="' . $url . '" target="_blank">' . $row['subject']. '</a>'; 
+        }
+        else
+        {
+            $subject = "";
+            
+            $text = explode("Comment:",$row['description']); 
+            $text = explode("------------------", $text[count($text)-1]);
+            $text = $text[0];
+           
+            if( strlen($text) > 30 )
+            {
+                for( $index = 0; $index <= 30; $index++ )
+                {
+                    if( $index === 30)
+                    {
+                        while( $text[$index] !== " " && $index <= strlen($text))
+                        {
+                            $subject .= $text[$index];
+                            $index++;
+                        }
+                        break;
+                    }
+                    $subject .= $text[$index];
+                }
+                $subject .= "...";
+            }
+            else
+            {
+                $subject = $text;
+            }
+            
+            return '<a href="' . $url . '" target="_blank">' . $subject . '</a>'; 
+        }
+        
+    }
+        
+    public function getAdminSettings() {
+        $admin = Mage::getSingleton('admin/session')->getUser();
+        if( $admin )
+        {
+            $adminId    = $admin->getUserId();
+            $settings   = Mage::getModel('zendesk/settings')->loadByAdminId($adminId);
+            return $settings;
+        }
+        else
+        {
+            return false;
+        }
+        
+    }
+    
+    public function getStatusMap()
+    {
+        return array(
+            'new'       =>  'New',
+            'open'      =>  'Open',
+            'pending'   =>  'Pending',
+            'solved'    =>  'Solved',
+            'closed'    =>  'Closed'
+        );
+    }
+        
+    public function getPriorityMap()
+    {
+        return array(
+            'low'       =>  'Low',
+            'normal'    =>  'Normal',
+            'high'      =>  'High',
+            'urgent'    =>  'Urgent'
+        );
     }
 }

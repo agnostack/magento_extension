@@ -33,7 +33,7 @@
     <?php } ?>
     <?php if ($this->isAllowed('launch')) { ?>
     <li>
-        <a href="<?php echo Mage::helper('zendesk')->getUrl(); ?>" target="_blank" class="tab-item-link">
+        <a href="<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/zendesk/launch'); ?>" target="_blank" class="tab-item-link">
             <span><?php echo $this->__('Launch Zendesk'); ?></span>
         </a>
     </li>
@@ -41,7 +41,7 @@
     <?php if ($this->isAllowed('settings')) { ?>
     <li>
         <a href="<?php echo $this->getUrl('adminhtml/system_config/edit/section/zendesk'); ?>" class="tab-item-link">
-            <span><?php echo $this->__('Settings'); ?></span>
+            <span><?php echo $this->__('Configuration'); ?></span>
         </a>
     </li>
     <?php } ?>
