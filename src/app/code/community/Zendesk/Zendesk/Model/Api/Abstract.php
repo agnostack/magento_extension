@@ -24,8 +24,16 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
         return $base_url . '/' . $path;
     }
 
-    protected function _call($endpoint, $params = null, $method = 'GET', $data = null)
+    protected function _call(
+        $endpoint, 
+        $params = null, 
+        $method = 'GET', 
+        $data = null, 
+        $headers = null
+    )
     {
+        $usingRawData = false;
+
         if($params && is_array($params) && count($params) > 0) {
             $args = array();
             foreach($params as $arg => $val) {
@@ -34,25 +42,36 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             $endpoint .= '?' . implode('&', $args);
         }
 
+        if (empty($headers)) {
+            $headers = array(
+                 'Accept'       => 'application/json',
+                 'Content-Type' => 'application/json',
+            );
+        }
+
         $url = $this->_getUrl($endpoint);
 
         $method = strtoupper($method);
 
         $client = new Zend_Http_Client($url);
         $client->setMethod($method);
-        $client->setHeaders(
-            array(
-                 'Accept' => 'application/json',
-                 'Content-Type' => 'application/json'
-            )
-        );
+        $client->setHeaders($headers);
+
         $client->setAuth(
             Mage::getStoreConfig('zendesk/general/email') . '/token',
             Mage::getStoreConfig('zendesk/general/password')
         );
 
         if($method == 'POST' || $method == 'PUT') {
-            $client->setRawData(json_encode($data), 'application/json');
+            $contentType = $client->getHeader('Content-Type');
+
+            if ($contentType == 'application/json' && !preg_match('/^[\{\[]/', $contentType)) {
+                $data = json_encode($data);
+            }
+
+            $client->setRawData($data, $client->getHeader('Content-Type'));
+
+            $usingRawData = true;
         }
 
         Mage::log(
@@ -60,7 +79,7 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
                 array(
                    'url' => $url,
                    'method' => $method,
-                   'data' => json_encode($data),
+                   'data' => $usingRawData ? '' : json_encode($data),
                 ),
                 true
             ),
