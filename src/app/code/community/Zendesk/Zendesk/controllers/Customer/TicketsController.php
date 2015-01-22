@@ -18,6 +18,14 @@
 class Zendesk_Zendesk_Customer_TicketsController extends Mage_Core_Controller_Front_Action
 {
 
+    public function preDispatch()
+    {
+        parent::preDispatch();
+        if (!Mage::getSingleton('customer/session')->isLoggedIn()) {
+            $this->_redirectUrl(Mage::helper('customer')->getAccountUrl());
+        }
+    }
+
     /**
      * Display data
      */
