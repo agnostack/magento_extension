@@ -561,10 +561,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             {
                 $post['password'] = "";
             }
-            var_dump(Mage::helper('core')->decrypt($settings->getPassword()));
-            var_dump($settings->getPassword());
-            var_dump($post['password']);
-            //die;
+            
             if( !empty($post['password']) )
             {
                 $post['password'] = Mage::helper('core')->encrypt($post['password']);
@@ -574,13 +571,10 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 unset($post['password']);
             }
             
- 
-
             $settings->setData($post);
             $settings->save();
             Mage::register('zendesk_settings', $settings);
-            var_dump(Mage::helper('core')->decrypt($settings->getPassword()));
-            //die;
+            
             if( !$settings->getId() )
             {
                 Mage::throwException(Mage::helper('zendesk')->__('Error saving settings.'));

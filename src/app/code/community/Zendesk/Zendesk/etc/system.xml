@@ -35,7 +35,7 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
-        		<general translate="label comment">
+                    <general translate="label comment">
                     <expanded>1</expanded>
                     <label>General</label>
                     <comment>General settings that are required to connect Zendesk and Magento.</comment>
@@ -44,7 +44,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-					<fields>
+                    <fields>
                         <domain translate="label comment">
                             <label>Zendesk Domain</label>
                             <frontend_type>text</frontend_type>
@@ -80,7 +80,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </test>
-                        <use_external_id>
+                        <use_external_id translate="label comment">
                             <label>Use External ID</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
@@ -90,7 +90,7 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Depending on your Zendesk configuration under "Settings / Security / JSON Web Token / Update of external IDs?" ]]></comment>
                         </use_external_id>
-                        <customer_sync>
+                        <customer_sync translate="label comment">
                             <label>Synchronize Customers</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
@@ -100,7 +100,7 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Synchronize magento customer accounts with zendesk end-users? ]]></comment>
                         </customer_sync>
-                        <sync_now translate="button_label">
+                        <sync_now translate="button_label comment">
                             <label></label>
                             <button_label>Sync All Customers And Create User Fields</button_label>
                             <frontend_model>zendesk/adminhtml_config_buttons_sync</frontend_model>
@@ -170,7 +170,7 @@
                         </token>
                     </fields>
                 </sso_frontend>
-                <frontend_features>
+                <frontend_features translate="label comment">
                     <expanded>1</expanded>
                     <label>Customer Frontend</label>
                     <comment>Decide which features you would like turned on in your Magento store.</comment>
@@ -251,7 +251,7 @@
                         </order_field_id>
                     </fields>
                 </frontend_features>
-                <backend_features>
+                <backend_features translate="label comment">
                     <expanded>1</expanded>
                     <label>Admin Backend</label>
                     <comment>Decide which features you would like turned on in your admin panel.</comment>
