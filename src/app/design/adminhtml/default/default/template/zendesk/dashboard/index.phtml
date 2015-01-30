@@ -21,7 +21,7 @@
 <div class="box" id="dashboard_diagram_ticket_totals">
     <div class="entry-edit">
         <p class="switcher a-right" style="padding:5px 10px;">
-            <span style="float: left;"><?php echo $this->__('Ticket Statistics') ?></span>
+            <span class="statistics-title"><?php echo $this->__('Ticket Statistics') ?></span>
             <?php echo $this->__('From') ?>:&nbsp;<input type="text" name="ticket_from" id="ticket_from" value="" class="input-text input-text-range-date">
             <img src="<?php echo Mage::getDesign()->getSkinUrl('images/grid-cal.gif') ?>" alt="Select Date" class="v-middle" title="Select Date" id="ticket_from_trig">
             <?php echo $this->__('To') ?>:&nbsp;<input type="text" name="ticket_to" id="ticket_to" value="" class="input-text input-text-range-date">
@@ -34,20 +34,28 @@
         <table cellspacing="0" width="100%">
             <tbody><tr>
                 <td class="a-center bold">
-                    <span><?php echo $this->__('Open') ?></span><br>
-                    <span class="nowrap" style="font-size:18px; color:#EA7601;" id="tickets-open"><?php echo $totals['open']; ?></span>
+                    <span><?php echo $this->__('All') ?></span><br>
+                    <span class="nowrap statistics-entry" id="tickets-all"><?php echo $totals['all']; ?></span>
                 </td>
-                            <td class="a-center bold">
+                <td class="a-center bold">
                     <span><?php echo $this->__('New') ?></span><br>
-                    <span class="nowrap" style="font-size:18px; color:#EA7601;" id="tickets-new"><?php echo $totals['new']; ?></span>
+                    <span class="nowrap statistics-entry" id="tickets-new"><?php echo $totals['new']; ?></span>
+                </td>
+                <td class="a-center bold">
+                    <span><?php echo $this->__('Open') ?></span><br>
+                    <span class="nowrap statistics-entry" id="tickets-open"><?php echo $totals['open']; ?></span>
                 </td>
                             <td class="a-center bold">
+                    <span><?php echo $this->__('Pending') ?></span><br>
+                    <span class="nowrap statistics-entry" id="tickets-pending"><?php echo $totals['pending']; ?></span>
+                </td>
+                <td class="a-center bold">
                     <span><?php echo $this->__('Solved') ?></span><br>
-                    <span class="nowrap" style="font-size:18px; color:#EA7601;" id="tickets-solved"><?php echo $totals['solved']; ?></span>
+                    <span class="nowrap statistics-entry" id="tickets-solved"><?php echo $totals['solved']; ?></span>
                 </td>
                 <td class="a-center bold">
                     <span><?php echo $this->__('Closed') ?></span><br>
-                    <span class="nowrap" style="font-size:18px; color:#EA7601;" id="tickets-closed"><?php echo $totals['closed']; ?></span>
+                    <span class="nowrap statistics-entry" id="tickets-closed"><?php echo $totals['closed']; ?></span>
                 </td>
                         </tr>
         </tbody></table>
@@ -74,6 +82,8 @@ function setTotalValues(values) {
     document.getElementById('tickets-new').innerHTML = values.new;
     document.getElementById('tickets-closed').innerHTML = values.closed;
     document.getElementById('tickets-solved').innerHTML = values.solved;
+    document.getElementById('tickets-all').innerHTML = values.all;
+    document.getElementById('tickets-pending').innerHTML = values.pending;
 }
 function checkStatistics() {
     url = '<?php echo Mage::helper("adminhtml")->getUrl('/zendesk/gettotals/') ?>';
@@ -92,6 +102,8 @@ function checkStatistics() {
                     totals.new = "0";
                     totals.closed = "0";
                     totals.solved = "0";
+                    totals.all = "0";
+                    totals.pending = "0";
                     setTotalValues(totals);
                 }
             },
@@ -101,6 +113,8 @@ function checkStatistics() {
                 totals.new = "0";
                 totals.closed = "0";
                 totals.solved = "0";
+                totals.all = "0";
+                totals.pending = "0";
                 setTotalValues(totals);
             }
         });

@@ -473,7 +473,9 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 'open'      =>  0,
                 'new'       =>  0,
                 'solved'    =>  0,
-                'closed'    =>  0
+                'closed'    =>  0,
+                'pending'   =>  0,
+                'all'       =>  0
                 ))));
         }
     }

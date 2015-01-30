@@ -285,7 +285,9 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'open'      =>  0,
             'new'       =>  0,
             'solved'    =>  0,
-            'closed'    =>  0
+            'closed'    =>  0,
+            'all'       =>  0,
+            'pending'   =>  0
         );
 
         if( $from )
@@ -305,12 +307,16 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                         {
                             if( isset($totals[$ticket['status']]) )
                                 $totals[$ticket['status']]++;
+                            
+                            $totals['all']++;
                         }
                     }
                     else
                     {
                         if( isset($totals[$ticket['status']]) )
                             $totals[$ticket['status']]++;
+                        
+                        $totals['all']++;
                     }
                 }
             }
@@ -318,8 +324,11 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             {
                 if( isset($totals[$ticket['status']]) )
                     $totals[$ticket['status']]++;
+                    
+                $totals['all']++;
             }
         }
+        
         
         if( $type && isset($totals[$type]))
         {

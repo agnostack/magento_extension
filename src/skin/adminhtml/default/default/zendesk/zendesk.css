@@ -73,3 +73,14 @@ button.zendesk span {
 .grid tr.filter .range input {
     min-width: 61px !important;
 }
+.statistics-title {
+    float: left; 
+    font-weight: bold;
+}
+.statistics-entry {
+    font-size:18px; 
+    color:#EA7601;
+}
+#dashboard_diagram_ticket_totals table td {
+    width: 16.6%;
+}
