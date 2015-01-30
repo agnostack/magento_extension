@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2015 Zendesk
+ * Copyright 2013 Zendesk.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +16,23 @@
  * limitations under the License.
  */
 
-class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_Email extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
-{
-    public function render(Varien_Object $row)
-    {
-        $maped_users = array();
-        $users = Mage::registry('zendesk_users');
-        if( $users )
-        {
-            foreach( $users as $user )
-            {
-                $maped_users[$user['id']] = $user['email'];
-            }
+class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_Email extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
 
-            if( !isset($maped_users[$row->getRequesterId()]) )
-            {
-                $model = Mage::getModel('zendesk/api_users')->get($row->getRequesterId());
-                $users[] = $model;
-                Mage::unregister('zendesk_users');
-                Mage::register('zendesk_users', $users);
-                return $model['email'];
-            }
+    public function render(Varien_Object $row) {
+        $users = Mage::registry('zendesk_users');
+        $value = (int) $row->getData($this->getColumn()->getIndex());
+        
+        $found = array_filter($users, function($user) use($value) {
+            return (int) $user['id'] === $value;
+        });
+        
+        if( count($found) ) {
+            $user = array_shift($found);
+            
+            return $user['email'];
         }
         
-        return $maped_users[$row->getRequesterId()];
+        return '';
     }
 
 }

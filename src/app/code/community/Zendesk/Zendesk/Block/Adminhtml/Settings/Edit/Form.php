@@ -79,6 +79,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Settings_Edit_Form extends Mage_Adminhtml_
                 'text' => '<a href="' . $this->getUrl('*/*/checkConnection') . '">' . Mage::helper('zendesk')->__('Check Connection') . '</a>',
             ));
             
+            
             $form->setValues($this->_settings->getData());
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2012 Zendesk.
  *
@@ -14,27 +15,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+class Zendesk_Zendesk_Model_Api_Groups extends Zendesk_Zendesk_Model_Api_Abstract {
 
-class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_View extends Mage_Adminhtml_Block_Widget_Container
-{
-    protected $_view = null;
+    public function all() {
+        $page = 1;
+        $groups = array();
 
-    public function setView($view)
-    {
-        $this->_view = $view;
-        $this->setId('view-' . $view['id']);
+        while ($page) {
+            $response   = $this->_call('groups.json?page=' . $page);
+            $groups     = array_merge($groups, $response['groups']);
+            $page       = is_null($response['next_page']) ? 0 : $page + 1;
+        }
 
-        return $this;
+        return $groups;
     }
 
-    public function getView()
-    {
-        return $this->_view;
-    }
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('zendesk/dashboard/tabs/view.phtml');
-    }
 }

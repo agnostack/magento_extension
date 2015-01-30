@@ -54,7 +54,7 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             if( $settings->getUseGlobalSettings() === "0")
             {
                 $email = $settings->getUsername();
-                $password = Mage::helper('core')->decrypt( $settings->getPassword() );
+                $password = Mage::helper('core')->decrypt($settings->getPassword());
             }
             else
             {
@@ -91,15 +91,11 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
         );
         
         $response = $client->request();
+        
         $body = json_decode($response->getBody(), true);
 
         Mage::log(var_export($body, true), null, 'zendesk.log');
 
-        if( (!$settings || $settings->getUseGlobalSettings() === "0") && $response->isError())
-        {
-            return false;
-        }
-        
         if($response->isError()) {
             if(is_array($body) && isset($body['error'])) {
                 if(is_array($body['error']) && isset($body['error']['title'])) {

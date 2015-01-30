@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2012 Zendesk.
  *
@@ -15,83 +16,76 @@
  * limitations under the License.
  */
 
-class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Block_Widget_Tabs
-{
-    public function __construct()
-    {
+class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Block_Widget_Tabs {
+
+    public function __construct() {
         parent::__construct();
+        
         $this->setId('tickets_grid_tab');
         $this->setDestElementId('tickets_grid_tab_content');
         $this->setTemplate('widget/tabshoriz.phtml');
     }
     
-    protected function _prepareLayout()
-    {
+    protected function _prepareLayout() {
         // Check if we are on the main admin dashboard and, if so, whether we should be showing the grid
         // Note: an additional check in the template is needed, but this will prevent unnecessary API calls to Zendesk
-        if(!$this->getIsZendeskDashboard() && !Mage::getStoreConfig('zendesk/features/show_on_dashboard')) {
+        if (!$this->getIsZendeskDashboard() && !Mage::getStoreConfig('zendesk/features/show_on_dashboard')) {
             return parent::_prepareLayout();
         }
 
-        $views = null;
-        $first = true;
-        $configured = false;
-
-        if(Mage::getStoreConfig('zendesk/features/show_views')) {
-            $list = trim(trim(Mage::getStoreConfig('zendesk/features/show_views')), ',');
-            $views = explode(',', $list);
-        }
-
         //check if module is setted up
-        if( Mage::getStoreConfig('zendesk/general/domain') )
-            $configured = true;
+        $configured     = (bool) Mage::getStoreConfig('zendesk/general/domain');
+        $viewsIds       = Mage::getStoreConfig('zendesk/backend_features/show_views') ? Mage::helper('zendesk')->getChosenViews() : array(); 
 
-        if( Mage::getStoreConfig('zendesk/backend_features/show_all') && $configured )
-        {
-                $tab = array(
-                    'content' => $this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid')->toHtml()
-                );
-                
-                Mage::registry('zendesk_tickets_count') ? $count =  " (".Mage::registry('zendesk_tickets_count').")" : $count = "";
-                $tab['label'] = $this->__("All") . $count;
-                
-                //Clear total tickets count
-                Mage::unregister('zendesk_tickets_count');
-                    
-                if( $first )
-                {
-                    $tab['active'] = true;
-                    $first = false;
-                }
-                $this->addTab("all", $tab);
+        if( Mage::getStoreConfig('zendesk/backend_features/show_all') AND $configured) {
+            $this->addTab('all-tickets', array(
+                'label' => $this->__("All tickets"),
+                'class' => 'ajax',
+                'url'   => $this->getUrl('zendesk/adminhtml_zendesk/ticketsAll'),
+            ));
         }
 
-        if( $views && count($views) && $configured )
-        {
-            foreach( $views as $viewId )
-            {
-                try
-                {
-                    $view = Mage::getModel('zendesk/api_views')->get($viewId);
+        if(count($viewsIds) AND $configured) {
+            try {
+                $allTicketView = Mage::getModel('zendesk/api_views')->active();
+                $ticketsCounts = Mage::getModel('zendesk/api_views')->countByIds($viewsIds);
 
-                    $tab = array(
-                        'label'     => $this->__($view['title']),
-                        'content'   => $this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_view')->setView($view)->toHtml(),
-                    );
+            } catch (Exception $ex) {
+                $allTicketView = array();
+            }
+                
+            foreach($viewsIds as $viewId) {
+                $view = array_shift(array_filter($allTicketView, function($view) use($viewId) {
+                    return $view['id'] === (int) $viewId;
+                }));
+                
+                $count = array_shift(array_filter($ticketsCounts['view_counts'], function($view) use($viewId) {
+                    return $view['view_id'] === (int) $viewId;
+                }));
                     
-                    if($first) {
-                        $tab['active'] = true;
-                        $first = false;
+                $label = $view['title'] . ' (' . $count['value'] . ')';
+                
+                if( $count['value'] ) {
+                    $this->addTab($viewId, array(
+                        'label' => $label,
+                        'class' => 'ajax',
+                        'url'   => $this->getUrl('zendesk/adminhtml_zendesk/ticketsView', array('id' => $viewId)),
+                    ));
+                }
+                else {
+                    Mage::unregister('zendesk_tickets_view');
+                    Mage::register('zendesk_tickets_view', $viewId);
+
+                    $this->addTab($viewId, array(
+                        'label'     => $label,
+                        'content'   => $this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid_view')->toHtml()
+                    ));
                     }
 
-                    $this->addTab($viewId, $tab);
-
-                } catch(Exception $e) {
-                    // Just don't add the tab
                 }
             }
-        } else {
-            if($this->getIsZendeskDashboard()) {
+        else {
+            if ($this->getIsZendeskDashboard()) {
                 $block = $this->getLayout()->createBlock('core/template', 'zendesk_dashboard_empty')->setTemplate('zendesk/dashboard/empty.phtml');
                 $this->getLayout()->getBlock('zendesk_dashboard')->append($block);
             }
@@ -100,14 +94,8 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
         return parent::_prepareLayout();
     }
     
-    public function getIsZendeskDashboard()
-    {
-        $controller = Mage::app()->getFrontController()->getRequest()->getControllerName();
-
-        if($controller == 'zendesk') {
-            return true;
-        } else {
-            return false;
-        }
+    public function getIsZendeskDashboard() {
+        return Mage::app()->getFrontController()->getRequest()->getControllerName() === 'zendesk';
     }
-}
+
+        }

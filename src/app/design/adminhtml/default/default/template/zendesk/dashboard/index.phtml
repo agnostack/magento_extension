@@ -15,9 +15,10 @@
  * limitations under the License.
  */
 ?>
-<?php if(!$this->getIsZendeskDashboard() && Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard')): ?>
-<?php $totals = Mage::helper("zendesk")->getTicketTotals(); ?>
-<?php if($totals): ?>
+<?php if( $this->isConnected() ): ?>
+    <?php if (!$this->getIsZendeskDashboard() && Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard')): ?>
+        <?php $totals = $this->getTotals(); ?>
+        <?php if ($totals): ?>
 <div class="box" id="dashboard_diagram_ticket_totals">
     <div class="entry-edit">
         <p class="switcher a-right" style="padding:5px 10px;">
@@ -123,8 +124,9 @@ function checkStatistics() {
 </script>
 <?php endif; ?>
 <?php endif; ?>
-<?php if($this->getIsZendeskDashboard() || Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard')): ?>
-    <?php if($this->getIsZendeskDashboard()): ?>
+
+    <?php if ($this->getIsZendeskDashboard() || Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard')): ?>
+        <?php if ($this->getIsZendeskDashboard()): ?>
         <div class="content-header">
             <table cellspacing="0">
                 <tr>
@@ -137,7 +139,7 @@ function checkStatistics() {
         <?php echo $this->getChildHtml('zendesk_dashboard_grids') ?>
         <div id="tickets_grid_tab_content"></div>
 
-        <?php if(!$this->getIsZendeskDashboard()): ?>
+            <?php if (!$this->getIsZendeskDashboard()): ?>
             <div class="a-right" style="margin: 6px 0;">
                 <button style="" onclick="setLocation('<?php echo $this->getUrl('adminhtml/zendesk/create'); ?>');" class="scalable" type="button" id="zendesk-create-ticket">
                     <span><?php echo $this->__('New Support Ticket'); ?></span>
@@ -150,3 +152,4 @@ function checkStatistics() {
     </div>
     <?php echo $this->getChildHtml('zendesk_dashboard_empty'); ?>
 <?php endif; ?>
+<?php endif ?>

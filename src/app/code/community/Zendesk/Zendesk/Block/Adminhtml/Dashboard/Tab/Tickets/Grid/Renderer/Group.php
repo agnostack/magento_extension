@@ -16,20 +16,20 @@
  * limitations under the License.
  */
 
-class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_User extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
+class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_Group extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
 
     public function render(Varien_Object $row) {
-        $users = Mage::registry('zendesk_users');
-        $value = (int) $row->getData($this->getColumn()->getIndex());
+        $groups = Mage::registry('zendesk_groups');
+        $value  = (int) $row->getData($this->getColumn()->getIndex());
         
-        $found = array_filter($users, function($user) use($value) {
-            return (int) $user['id'] === $value;
+        $found = array_filter($groups, function($group) use($value) {
+            return (int) $group['id'] === $value;
         });
         
         if( count($found) ) {
-            $user = array_shift($found);
+            $group = array_shift($found);
             
-            return $user['name'];
+            return $group['name'];
         }
         
         return '';

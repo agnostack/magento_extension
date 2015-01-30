@@ -95,64 +95,9 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
     
     public function search($data)
     {
-        $options = array(
-            'sort_by'       =>  $data['sort_by'],
-            'sort_order'    =>  $data['sort_order'],
-            'per_page'      =>  $data['per_page'],
-            'page'          =>  $data['page']
-        );
-        
-        unset($data['per_page']);
-        unset($data['sort_by']);
-        unset($data['sort_order']);
-        unset($data['page']);
-        
-        $conditions = "type:ticket";
-        
-        if( isset($data['id']) )
-        {
-            $conditions .= " " . $data['id'];
-            unset($data['id']);
+        return $this->_call('search.json', $data);
         }
         
-        if( isset($data['created_at']) )
-        {
-            if( isset($data['created_at']['from']) && $data['created_at']['from'] !== "" )
-                $conditions .= " created>" . date('Y-m-d', strtotime( str_replace("/","-",$data['created_at']['from']) ));
-            
-            if( isset($data['created_at']['to']) && $data['created_at']['to'] !== "" )
-                $conditions .= " created<" . date('Y-m-d', strtotime( str_replace("/","-",$data['created_at']['to']) ));
-            
-            unset($data['created_at']);
-        }
-        
-        if( isset($data['updated_at']) )
-        {
-            if( isset($data['updated_at']['from']) && $data['updated_at']['from'] !== "" )
-                $conditions .= " updated>" . date('Y-m-d', strtotime( str_replace("/","-",$data['updated_at']['from']) ));
-            
-            if( isset($data['updated_at']['to']) && $data['updated_at']['to'] !== "" )
-                $conditions .= " updated<" . date('Y-m-d', strtotime( str_replace("/","-",$data['updated_at']['to']) ));
-            
-            unset($data['updated_at']);
-        }
-        
-        if( isset($data['email']) && $data['email'] !== "")
-        {
-            $conditions .= " requester:".$data['email'];
-            unset($data['email']);
-        }
-        
-        foreach( $data as $key => $value )
-        {
-            $conditions .= " " . $key . ":" . $value;
-        }
-        $options['query'] = $conditions;
-        
-        $response = $this->_call('search.json', $options);
-        return $response;
-    }
-    
     public function forOrder($orderIncrementId)
     {
         if(!$orderIncrementId) {
@@ -219,13 +164,21 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         }
     }
     
-    public function bulkUpdateStatus($data, $status)
+    public function updateMany($ids, $data) {
+        if( is_array($ids) ) {
+            $params['ids'] = implode(",", $ids);
+            $ticket['ticket'] = $data;
+            
+            $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
+        }
+    }
+    
+    public function bulkMarkAsSpam($data)
     {
         if ( is_array($data) )
         {
-            $ticket['ticket'] = array('status' => $status);
             $params['ids'] = implode(",",$data);
-            $response = $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
+            $this->_call('tickets/mark_many_as_spam.json', $params, 'PUT');
         }
     }
     

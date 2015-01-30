@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2015 Zendesk
+ * Copyright 2013 Zendesk.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +16,10 @@
  * limitations under the License.
  */
 
-class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_Action extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
-{
-    public function render(Varien_Object $row)
-    {
-        return "<a target='_blank' href='".Mage::helper('zendesk')->getUrl('ticket', $row->getId())."'>".Mage::helper('zendesk')->getExcerpt($row->getData())."</a>";    }
+class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_Action extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
+
+    public function render(Varien_Object $row) {
+        return '<a target="_blank" href="' . Mage::helper('zendesk')->getUrl('ticket', $row->getId()) . '">' . Mage::helper('zendesk')->getExcerpt($row->getData()) . '</a>';
+    }
 
 }

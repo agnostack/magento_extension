@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2015 Zendesk
  *
@@ -15,38 +16,134 @@
  * limitations under the License.
  */
 
-class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Collection
-{
+class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Collection {
+
     protected $_count;
+    protected $_search;
+    protected $_viewColumns = array();
+    protected static $_excludedColumns = array('score');
 
+    public function __construct() {
+        $this->_search = new Zendesk_Zendesk_Model_Search( Zendesk_Zendesk_Model_Search::TYPE_TICKET );
+    }
 
-    public function __construct($data)
-    {      
-        $all = Mage::getModel('zendesk/api_tickets')->search($data);
-        foreach ( $all['results'] as $ticket )
-        {
+    public function addFieldToFilter($fieldName, $condition = null) {
+        if(is_string($condition) OR is_array($condition)) {
+            
+            switch($fieldName) {
+                case 'subject':
+                case 'requester':
+                    $value = is_numeric($condition) ? $condition : '*' . $condition . '*';
+                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field($fieldName, $value) );
+                    break;
+                case 'tags':
+                case 'status':
+                case 'priority':
+                case 'status':
+                case 'group':
+                case 'assignee':
+                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field($fieldName, $condition) );
+                    break;
+                case 'type':
+                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field('ticket_type', $condition) );
+                    break;
+                case 'id':
+                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field('', $condition, '') );
+                    break;
+                case 'created_at':
+                case 'updated_at':
+                    $fields     = array();
+                    $fieldName  = substr($fieldName, 0, -3);
+                    
+                    if( isset($condition['from']) AND Mage::helper('zendesk')->isValidDate($condition['from']) ) {
+                        $value = Mage::helper('zendesk')->getFormatedDataForAPI( $condition['from'] );
+                        $fields[] = new Zendesk_Zendesk_Model_Search_Field($fieldName, $value, '>');
+                    }
+                    
+                    if( isset($condition['to']) AND Mage::helper('zendesk')->isValidDate($condition['to']) ) {
+                        $value = Mage::helper('zendesk')->getFormatedDataForAPI( $condition['to'] );
+                        $fields[] = new Zendesk_Zendesk_Model_Search_Field($fieldName, $value, '<');
+                    }
+                    
+                    $this->_search->addFields($fields);
+                    break;
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getCollection(array $params = array()) {
+        $searchQuery = array(
+            'query' => $this->_search->getString(),
+        );
+        
+        $params = array_merge($searchQuery, $params);
+        
+        $all = Mage::getModel('zendesk/api_tickets')->search($params);
+        
+        foreach ($all['results'] as $ticket) {
             $obj = new Varien_Object();
             $obj->setData($ticket);
             $this->addItem($obj);
         }
 
-        $this->setPageSize($data['per_page']);
-        $this->setCurPage($data['page']);
-        $this->setOrder($data['sort_by'],$data['sort_order']);
+        $this->setPageSize($params['per_page']);
+        $this->setCurPage($params['page']);
+        $this->setOrder($params['sort_by'], $params['sort_order']);
         $this->_count = $all['count'];
         
-        //Save the total tickets count value to make new request unnecessary
-        Mage::register('zendesk_tickets_count', $all['count']);
+        return $this;
     }
     
+    public function getCollectionFromView($viewId, array $params = array()) {
+        $view = Mage::getModel('zendesk/api_views')->execute($viewId, $params);
+        
+        foreach ($view['rows'] as $row) {
+            $ticket = array_merge($row, $row['ticket']);
+            
+            $this->appendParamsWithoutIdPostfix($ticket, array('requester', 'assignee', 'group'));
+            
+            $obj    = new Varien_Object();
+            $obj->setData($ticket);
+            $this->addItem($obj);
+        }
+        
+        $this->_viewColumns = $view['columns'];
+
+        $this->setPageSize($params['per_page']);
+        $this->setCurPage($params['page']);
+        $this->setOrder($params['sort_by'], $params['sort_order']);
+        $this->_count = $view['count'];
+        
+        return $this;
+    }
+    
+    protected function appendParamsWithoutIdPostfix(& $item, array $params = array()) {
+        foreach($params as $param) {
+            $name = $param . '_id';
+            
+            if( isset($item[$name]) ) {
+                $item[$param] = $item[$name];
+            }
+        }
+    }
+    
+    public function getColumnsForView() {
+        $excludedColumns = static::$_excludedColumns;
+        
+        return array_filter($this->_viewColumns, function($column) use($excludedColumns) {
+            return ! in_array($column['id'], $excludedColumns);
+        });
+    }
+
     /**
      * Retrieve collection all items count
      *
      * @return int
      */
-    public function getSize()
-    {
-        return $this->_count;
+    public function getSize() {
+        return (int) $this->_count;
     }
 
 }

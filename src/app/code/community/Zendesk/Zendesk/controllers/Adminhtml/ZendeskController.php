@@ -24,9 +24,22 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     public function indexAction()
     {
         $domain = Mage::getStoreConfig('zendesk/general/domain');
-        if( !$domain )
+        
+        if (!$domain) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Please set up Zendesk connection.'));
+        }
 
+        $connection = Mage::helper('zendesk')->getConnectionStatus();
+        
+        if( ! $connection['success'] ) {
+            $this->setFlag('', 'no-dispatch', true);
+            Mage::getSingleton('adminhtml/session')->addError( $connection['msg'] );
+            $this->_redirect('adminhtml/dashboard');
+            return;
+        }
+        
+        $this->storeDependenciesInCachedRegistry();
+        
         $this->_title($this->__('Zendesk Dashboard'));
         $this->loadLayout();
         $this->_setActiveMenu('zendesk/zendesk_dashboard');
@@ -410,27 +423,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function checkOutboundAction()
     {    
-        try 
-        {
-            // Try to retrieve a user with ID 1, which should always exist as a user account is needed to set up
-            // the API credentials in the first place.
-            $user = Mage::getModel('zendesk/api_users')->all();
+        $connection = Mage::helper('zendesk')->getConnectionStatus();
             
-            $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
-            $this->getResponse()->setBody(json_encode(array('success'=>true, 'msg'=>Mage::helper('zendesk')->__('Connection to Zendesk API successful'))));
-            
+        $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json', true);
+        $this->getResponse()->setBody(json_encode($connection));
         } 
-        catch(Exception $e) 
-        {
-            $error = Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
-                '<br />' . $e->getCode() . ': ' . $e->getMessage() .
-                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href=%s>%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987');
             
-            $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
-            $this->getResponse()->setBody(json_encode(array('success'=>false, 'msg'=>$error)));
-        }
-    }
-    
     /**
      * Loading page block
      */
@@ -559,7 +557,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 $post['password'] = '';
             }
 
-            if( $settings->getPassword() == $post['password'] )
+            if( $settings->getPassword() === $post['password'] )
             {
                 $post['password'] = "";
             }
@@ -593,14 +591,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function checkConnectionAction()
     {
-        $user = Mage::getModel('zendesk/api_users')->all();
+        $connection = Mage::helper('zendesk')->getConnectionStatus();
         
-        if( $user )
-        {
+        if($connection['success']) {
             Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zendesk')->__('Connection success'));
         }
-        else
-        {
+        else {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Connection has failed.'));
         }
 
@@ -725,16 +721,79 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $this->_redirectReferer();
     }
     
-    public function bulkChangestatusAction()
+    public function bulkChangeStatusAction()
     {
         $ids = $this->getRequest()->getParam('id');
         $status = $this->getRequest()->getParam('status');
+        
         try
         {
-            Mage::getModel('zendesk/api_tickets')->bulkUpdateStatus($ids, $status);
+            Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('status'));
             Mage::getSingleton('adminhtml/session')->addSuccess(
                     Mage::helper('zendesk')->__(
                             '%d ticket(s) were updated. Attention: closed and new tickets cannot be updated.', count($ids)
+                    )
+            );
+        }
+        catch ( Exception $e )
+        {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        $this->_redirect('adminhtml/zendesk/');
+    }
+    
+    public function bulkChangePriorityAction()
+    {
+        $ids = $this->getRequest()->getParam('id');
+        $priority = $this->getRequest()->getParam('priority');
+        
+        try
+        {
+            Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('priority'));
+            Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('zendesk')->__(
+                            '%d ticket(s) were updated.', count($ids)
+                    )
+            );
+        }
+        catch ( Exception $e )
+        {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        $this->_redirect('adminhtml/zendesk/');
+    }
+    
+    public function bulkChangeTypeAction()
+    {
+        $ids = $this->getRequest()->getParam('id');
+        $type = $this->getRequest()->getParam('type');
+        
+        try
+        {
+            Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('type'));
+            Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('zendesk')->__(
+                            '%d ticket(s) were updated.', count($ids)
+                    )
+            );
+        }
+        catch ( Exception $e )
+        {
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+        $this->_redirect('adminhtml/zendesk/');
+    }
+    
+    public function bulkMarkSpamAction()
+    {
+        $ids = $this->getRequest()->getParam('id');
+        
+        try
+        {
+            Mage::getModel('zendesk/api_tickets')->bulkMarkAsSpam($ids);
+            Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('zendesk')->__(
+                            '%d ticket(s) were marked as spam.', count($ids)
                     )
             );
         }
@@ -749,6 +808,47 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     {
         $this->loadLayout()->_setActiveMenu('zendesk/settings');
         return $this;
+    }
+
+    public function ticketsAllAction() {
+        $isAjax = Mage::app()->getRequest()->isAjax();
+        
+        if ($isAjax) {
+            $this->storeDependenciesInCachedRegistry();
+            $this->getResponse()->setBody($this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid_all')->toHtml());
+}
+    }
+    
+    public function ticketsViewAction() {
+        $isAjax = Mage::app()->getRequest()->isAjax();
+
+        if ($isAjax) {
+            $this->storeDependenciesInCachedRegistry();
+            $viewId = (int) $this->getRequest()->getParam('id');
+            Mage::register('zendesk_tickets_view', $viewId);
+            
+            $this->getResponse()->setBody($this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid_view')->toHtml());
+        }
+    }
+    
+    protected function storeDependenciesInCachedRegistry() {
+        $cache = Mage::app()->getCache();
+        
+        if( $cache->load('zendesk_users') === false) {
+            $users = serialize( Mage::getModel('zendesk/api_users')->all() );
+            $cache->save($users, 'zendesk_users', array('zendesk', 'zendesk_users'), 300);
+        }
+        
+        if( $cache->load('zendesk_groups') === false) {
+            $groups = serialize( Mage::getModel('zendesk/api_groups')->all() );
+            $cache->save($groups, 'zendesk_groups', array('zendesk', 'zendesk_groups'), 1200);
+        }
+        
+        $users  = unserialize( $cache->load('zendesk_users') );
+        $groups = unserialize( $cache->load('zendesk_groups') );
+        
+        Mage::register('zendesk_users', $users);
+        Mage::register('zendesk_groups', $groups);
     }
 
 }

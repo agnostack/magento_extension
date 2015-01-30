@@ -274,7 +274,12 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
      */
     public function getTicketTotals($type = null, $from = null, $to = null)
     {
+        try {
         $tickets = Mage::getModel('zendesk/api_tickets')->all();
+        }
+        catch(Exception $ex) {
+            return array();
+        }
         
         if( is_null($tickets) )
         {
@@ -353,7 +358,10 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         }
         else
         {
-            $subject = "";
+            $text       = explode("Comment:",$row['description']); 
+            $text       = explode("------------------", $text[count($text)-1]);
+            $text       = $text[0];
+            $subject    = strlen($text) > 30 ? substr($text, 0, 30) . '...' : $text;
             
             $text = explode("Comment:",$row['description']); 
             $text = explode("------------------", $text[count($text)-1]);
@@ -421,4 +429,69 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'urgent'    =>  'Urgent'
         );
     }
+    
+    public function getTypeMap()
+    {
+        return array(
+            'problem'   =>  'Problem',
+            'incident'  =>  'Incident',
+            'question'  =>  'Question',
+            'task'      =>  'Task'
+        );
+}
+    
+    public function getChosenViews() {
+        $list = trim(trim(Mage::getStoreConfig('zendesk/backend_features/show_views')), ',');
+        return explode(',', $list);
+    }
+    
+    public function getFormatedDataForAPI($dateToFormat) {
+        $myDateTime = DateTime::createFromFormat('d/m/Y', $dateToFormat);
+        return $myDateTime->format('Y-m-d');
+    }
+    
+    public function isValidDate($date) {
+        if( is_string($date) ) {
+            $d = DateTime::createFromFormat('d/m/Y', $date);
+            return $d && $d->format('d/m/Y') == $date;
+        }
+        
+        return false;
+    }
+    
+    public function getFormatedDateTime($dateToFormat) {
+        return Mage::helper('core')->formatDate($dateToFormat, 'medium', true);
+    }
+    
+    public function getConnectionStatus() {
+        try {
+            $user = Mage::getModel('zendesk/api_users')->me();
+            
+            if($user['id']) {
+                return array(
+                    'success'   => true,
+                    'msg'       => Mage::helper('zendesk')->__('Connection to Zendesk API successful'),
+                );
+            }
+            
+            $error = Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
+                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href=%s>%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987');
+            
+            return array(
+                'success'   => false,
+                'msg'       => $error,
+            );
+            
+        } catch (Exception $ex) {
+            $error = Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
+                '<br />' . $ex->getCode() . ': ' . $ex->getMessage() .
+                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href=%s>%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987');
+            
+            return array(
+                'success'   => false,
+                'msg'       => $error,
+            );
+        }
+    }
+    
 }

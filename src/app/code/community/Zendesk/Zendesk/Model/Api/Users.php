@@ -33,6 +33,13 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
         }
     }
 
+    public function me()
+    {
+        $response = $this->_call('users/me.json');
+
+        return $response['user'];
+    }
+
     public function get($id)
     {
         if(!Zend_Validate::is($id, 'NotEmpty')) {
@@ -46,8 +53,16 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
 
     public function all()
     {
-        $response = $this->_call('users.json');
-        return $response['users'];
+        $page = 1;
+        $users = array();
+        
+        while($page) {
+            $response   = $this->_call('users.json?page=' . $page);
+            $users      = array_merge($users, $response['users']);
+            $page       = is_null($response['next_page']) ? 0 : $page + 1;
+    }
+    
+        return $users;
     }
     
     public function end($id)
