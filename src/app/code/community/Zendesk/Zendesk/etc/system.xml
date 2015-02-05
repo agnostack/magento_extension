@@ -265,7 +265,7 @@
                             <label>Show support tickets on order view</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>5</sort_order>
+                            <sort_order>7</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -274,7 +274,7 @@
                             <label>Show support tickets on admin dashboard</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>2</sort_order>
+                            <sort_order>5</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -283,16 +283,34 @@
                             <label>Show "All" tab on dashboard</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_all> 
+                        <default_sort translate="label">
+                            <label>Default Sort Order</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>zendesk/source_sortorder</source_model>
                             <sort_order>2</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </show_all>
+                        </default_sort>
+                        <default_sort_dir translate="label">
+                            <label>Default Sort Direction</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>zendesk/source_sortdir</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </default_sort_dir>
                         <show_views translate="label">
                             <label>Views to show on dashboards</label>
                             <frontend_type>multiselect</frontend_type>
                             <source_model>zendesk/source_views</source_model>
-                            <sort_order>3</sort_order>
+                            <sort_order>4</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
@@ -302,11 +320,29 @@
                             <label>Show support tickets on customer view</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>4</sort_order>
+                            <sort_order>6</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
                         </show_on_customer>
+                        <show_statistics_on_zendesk_dashboard translate="label">
+                            <label>Show ticket statistics on Zendesk dashboard</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>8</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_statistics_on_zendesk_dashboard>
+                        <show_statistics_on_magento_dashboard translate="label">
+                            <label>Show ticket statistics on Magento dashboard</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>9</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_statistics_on_magento_dashboard>
                     </fields>
                 </backend_features>
                 <api translate="label comment">

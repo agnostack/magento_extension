@@ -39,6 +39,9 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
     public function __construct($attributes = array()) {
         parent::__construct($attributes);
         
+        $this->_defaultSort = Mage::getStoreConfig('zendesk/backend_features/default_sort');
+        $this->_defaultDir = Mage::getStoreConfig('zendesk/backend_features/default_sort_dir');
+        
         $this->setTemplate('zendesk/widget/grid.phtml');
         
         $this->_emptyText   = Mage::helper('zendesk')->__('No tickets found');

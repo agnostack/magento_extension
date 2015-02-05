@@ -46,3 +46,29 @@
     </li>
     <?php } ?>
 </ul>
+<?php if (Mage::getStoreConfig('zendesk/backend_features/show_statistics_on_zendesk_dashboard')): ?>
+<?php $totals = Mage::helper('zendesk')->getTicketTotals(); ?>
+<?php if ($totals): ?>
+<div id="dashboard_left_diagram_ticket_totals">
+    <div class="entry-edit">
+        <ul class="tabs">
+            <li onclick="$('statistics-table').toggle()"><span><?php echo $this->__('Ticket Statistics') ?></span></li>
+        </ul>
+        <table cellspacing="0" width="100%" height="100%" id="statistics-table">
+            <?php foreach ($totals as $status => $number) { ?>
+            <tr>
+                <td class="a-center bold">
+                    <span><?php echo $this->__(ucfirst($status)) ?></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="a-center bold">
+                    <span class="nowrap statistics-entry" id="tickets-<?php echo $status ?>"><?php echo $number; ?></span>
+                </td>
+            </tr>
+            <?php } ?>
+        </table>
+    </div>
+</div>
+<?php endif; ?>
+<?php endif; ?>

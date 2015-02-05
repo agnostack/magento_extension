@@ -29,10 +29,10 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
     protected function _prepareLayout() {
         // Check if we are on the main admin dashboard and, if so, whether we should be showing the grid
         // Note: an additional check in the template is needed, but this will prevent unnecessary API calls to Zendesk
-        if (!$this->getIsZendeskDashboard() && !Mage::getStoreConfig('zendesk/features/show_on_dashboard')) {
+        if (!$this->getIsZendeskDashboard() && !Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard')) {
             return parent::_prepareLayout();
         }
-
+        
         //check if module is setted up
         $configured     = (bool) Mage::getStoreConfig('zendesk/general/domain');
         $viewsIds       = Mage::getStoreConfig('zendesk/backend_features/show_views') ? Mage::helper('zendesk')->getChosenViews() : array(); 
@@ -85,7 +85,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
                 }
             }
         else {
-            if ($this->getIsZendeskDashboard()) {
+            if ($this->getIsZendeskDashboard() AND !Mage::getStoreConfig('zendesk/backend_features/show_all')) {
                 $block = $this->getLayout()->createBlock('core/template', 'zendesk_dashboard_empty')->setTemplate('zendesk/dashboard/empty.phtml');
                 $this->getLayout()->getBlock('zendesk_dashboard')->append($block);
             }
@@ -98,4 +98,4 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
         return Mage::app()->getFrontController()->getRequest()->getControllerName() === 'zendesk';
     }
 
-        }
+}

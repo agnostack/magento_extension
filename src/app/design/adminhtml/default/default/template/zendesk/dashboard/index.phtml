@@ -16,7 +16,7 @@
  */
 ?>
 <?php if( $this->isConnected() ): ?>
-    <?php if (!$this->getIsZendeskDashboard() && Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard')): ?>
+<?php if (!$this->getIsZendeskDashboard() && Mage::getStoreConfig('zendesk/backend_features/show_statistics_on_magento_dashboard')): ?>
         <?php $totals = $this->getTotals(); ?>
         <?php if ($totals): ?>
 <div class="box" id="dashboard_diagram_ticket_totals">
@@ -33,33 +33,17 @@
             <br>
         </p>
         <table cellspacing="0" width="100%">
-            <tbody><tr>
-                <td class="a-center bold">
-                    <span><?php echo $this->__('All') ?></span><br>
-                    <span class="nowrap statistics-entry" id="tickets-all"><?php echo $totals['all']; ?></span>
-                </td>
-                <td class="a-center bold">
-                    <span><?php echo $this->__('New') ?></span><br>
-                    <span class="nowrap statistics-entry" id="tickets-new"><?php echo $totals['new']; ?></span>
-                </td>
-                <td class="a-center bold">
-                    <span><?php echo $this->__('Open') ?></span><br>
-                    <span class="nowrap statistics-entry" id="tickets-open"><?php echo $totals['open']; ?></span>
-                </td>
-                            <td class="a-center bold">
-                    <span><?php echo $this->__('Pending') ?></span><br>
-                    <span class="nowrap statistics-entry" id="tickets-pending"><?php echo $totals['pending']; ?></span>
-                </td>
-                <td class="a-center bold">
-                    <span><?php echo $this->__('Solved') ?></span><br>
-                    <span class="nowrap statistics-entry" id="tickets-solved"><?php echo $totals['solved']; ?></span>
-                </td>
-                <td class="a-center bold">
-                    <span><?php echo $this->__('Closed') ?></span><br>
-                    <span class="nowrap statistics-entry" id="tickets-closed"><?php echo $totals['closed']; ?></span>
-                </td>
-                        </tr>
-        </tbody></table>
+            <tbody>
+                <tr>
+                    <?php foreach ($totals as $status => $number) { ?>
+                    <td class="a-center bold">
+                        <span><?php echo $this->__(ucfirst($status)) ?></span><br>
+                        <span class="nowrap statistics-entry" id="tickets-<?php echo $status; ?>"><?php echo $number; ?></span>
+                    </td>
+                    <?php } ?>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <script type="text/javascript">// <![CDATA[
