@@ -25,7 +25,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         $root = ($format === 'old') ? '' : '/agent/#';
 
         $base = $protocol . $domain . $root;
-
+       
         switch($object) {
             case '':
                 return $base;
@@ -345,23 +345,13 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
     
-    public function getExcerpt($row)
-    {
-        if( !$row )
-        {
-            return Mage::helper('zendesk')->__('Subject');
-        }
-        
-        $url = Mage::helper('zendesk')->getUrl('ticket', $row['id']);
-        
-        if( $row['subject'] )
-        {
-            return '<a href="' . $url . '" target="_blank">' . $row['subject'] ? $row['subject'] : $this->_('No Subject') . '</a>'; 
-        }
-        else
-        {
-            return '<a href="' . $url . '" target="_blank">' . $this->__('No Subject') . '</a>';
-        }
+    public function getTicketUrl($row)
+    {   
+        $path = Mage::getSingleton('admin/session')->getUser() ? 'adminhtml/zendesk/login' : '*/sso/login';
+        $url = Mage::helper('adminhtml')->getUrl($path, array("return_url" => Mage::helper('core')->urlEncode(Mage::helper('zendesk')->getUrl('ticket', $row['id']))));
+        $subject = $row['subject'] ? $row['subject'] : $this->__('No Subject');
+
+        return '<a href="' . $url . '" target="_blank">' .  $subject. '</a>';
     }
         
     public function getAdminSettings() {
@@ -386,7 +376,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'open'      =>  'Open',
             'pending'   =>  'Pending',
             'solved'    =>  'Solved',
-            'closed'    =>  'Closed'
+            'closed'    =>  'Closed',
+            'hold'      =>  'Hold'
         );
     }
         

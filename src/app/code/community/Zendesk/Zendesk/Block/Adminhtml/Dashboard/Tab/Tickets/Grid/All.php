@@ -49,11 +49,19 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_All extends Zen
             'renderer'  => 'zendesk/adminhtml_dashboard_tab_tickets_grid_renderer_action',
         ));
         
-        $this->addColumn('rrequester_id', array(
+        $this->addColumn('requester_id', array(
             'header'    => Mage::helper('zendesk')->__('Email'),
             'width'     => '60',
             'renderer'  => 'zendesk/adminhtml_dashboard_tab_tickets_grid_renderer_email',
             'index'     => 'requester_id',
+            'sortable'  => false,
+        ));
+                
+        $this->addColumn('type', array(
+            'header'    => Mage::helper('zendesk')->__('Type'),
+            'width'     => '100',
+            'renderer'  => 'zendesk/adminhtml_dashboard_tab_tickets_grid_renderer_type',
+            'index'     => 'type',
             'sortable'  => false,
         ));
 

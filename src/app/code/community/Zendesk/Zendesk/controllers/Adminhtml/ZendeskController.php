@@ -83,6 +83,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
         $domain = Mage::getStoreConfig('zendesk/general/domain');
         $token = Mage::getStoreConfig('zendesk/sso/token');
+        $return_url = Mage::helper('core')->urlDecode($this->getRequest()->getParam('return_url', ""));
 
         if(!Zend_Validate::is($domain, 'NotEmpty')) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Zendesk domain not set. Please add this to the settings page.'));
@@ -144,14 +145,15 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         Mage::log('Admin JWT: ' . var_export($payload, true), null, 'zendesk.log');
 
         $jwt = JWT::encode($payload, $token);
-
-        $url = "http://".$domain."/access/jwt?jwt=" . $jwt;
+        $return = $return_url ? "&return_to=".$return_url : "";
+        
+        $url = "http://".$domain."/access/jwt?jwt=" . $jwt . $return;
 
         Mage::log('Admin URL: ' . $url, null, 'zendesk.log');
 
         $this->_redirectUrl($url);
     }
-
+    
     /**
      * Wrapper for the existing authenticate action. Mirrors the login/logout actions available for customers.
      */

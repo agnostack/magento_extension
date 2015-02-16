@@ -96,7 +96,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
     public function search($data)
     {
         return $this->_call('search.json', $data);
-        }
+    }
         
     public function forOrder($orderIncrementId)
     {

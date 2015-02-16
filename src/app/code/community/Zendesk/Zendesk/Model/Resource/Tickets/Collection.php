@@ -32,9 +32,9 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
             
             switch($fieldName) {
                 case 'subject':
-                case 'requester':
+                case 'requester_id':
                     $value = is_numeric($condition) ? $condition : '*' . $condition . '*';
-                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field($fieldName, $value) );
+                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field("requester", $value) );
                     break;
                 case 'tags':
                 case 'status':
@@ -81,7 +81,7 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
         $params = array_merge($searchQuery, $params);
         
         $all = Mage::getModel('zendesk/api_tickets')->search($params);
-        
+
         foreach ($all['results'] as $ticket) {
             $obj = new Varien_Object();
             $obj->setData($ticket);

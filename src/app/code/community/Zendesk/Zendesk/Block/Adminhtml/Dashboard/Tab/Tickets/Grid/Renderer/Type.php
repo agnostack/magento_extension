@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_Action extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
+class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_Type extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
 
     public function render(Varien_Object $row) {
-        return Mage::helper('zendesk')->getTicketUrl($row->getData());
+        return ucfirst($row['type']);
     }
 
 }
