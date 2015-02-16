@@ -151,7 +151,7 @@ $numColumns = sizeof($this->getColumns());
         <tbody>
         <?php if (($this->getCollection()->getSize()>0) && (!$this->getIsCollapsed())): ?>
         <?php foreach ($this->getCollection() as $_index=>$_item): ?>
-            <tr title="<?php echo $this->getRowUrl($_item) ?>"<?php if ($_class = $this->getRowClass($_item)):?> class="<?php echo $_class; ?>"<?php endif;?> >
+            <tr  class="zendesk-grid-tr <?php if ($_class = $this->getRowClass($_item)):?><?php echo $_class; ?><?php endif;?>" >
             <?php $i=0;foreach ($this->getColumns() as $_column): ?>
 
                 <?php if ($this->shouldRenderCell($_item, $_column)):?>
@@ -224,4 +224,4 @@ $numColumns = sizeof($this->getColumns());
 //]]>
 </script>
 <?php endif; ?>
-<?php endif ?>
+<?php endif; ?>

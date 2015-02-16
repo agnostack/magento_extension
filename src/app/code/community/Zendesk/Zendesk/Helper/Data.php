@@ -275,7 +275,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function getTicketTotals($type = null, $from = null, $to = null)
     {
         try {
-        $tickets = Mage::getModel('zendesk/api_tickets')->all();
+            $tickets = Mage::getModel('zendesk/api_tickets')->all();
         }
         catch(Exception $ex) {
             return array();
@@ -351,47 +351,17 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         {
             return Mage::helper('zendesk')->__('Subject');
         }
+        
         $url = Mage::helper('zendesk')->getUrl('ticket', $row['id']);
+        
         if( $row['subject'] )
         {
-            return '<a href="' . $url . '" target="_blank">' . $row['subject']. '</a>'; 
+            return '<a href="' . $url . '" target="_blank">' . $row['subject'] ? $row['subject'] : $this->_('No Subject') . '</a>'; 
         }
         else
         {
-            $text       = explode("Comment:",$row['description']); 
-            $text       = explode("------------------", $text[count($text)-1]);
-            $text       = $text[0];
-            $subject    = strlen($text) > 30 ? substr($text, 0, 30) . '...' : $text;
-            
-            $text = explode("Comment:",$row['description']); 
-            $text = explode("------------------", $text[count($text)-1]);
-            $text = $text[0];
-           
-            if( strlen($text) > 30 )
-            {
-                for( $index = 0; $index <= 30; $index++ )
-                {
-                    if( $index === 30)
-                    {
-                        while( $text[$index] !== " " && $index <= strlen($text))
-                        {
-                            $subject .= $text[$index];
-                            $index++;
-                        }
-                        break;
-                    }
-                    $subject .= $text[$index];
-                }
-                $subject .= "...";
-            }
-            else
-            {
-                $subject = $text;
-            }
-            
-            return '<a href="' . $url . '" target="_blank">' . $subject . '</a>'; 
+            return '<a href="' . $url . '" target="_blank">' . $this->__('No Subject') . '</a>';
         }
-        
     }
         
     public function getAdminSettings() {

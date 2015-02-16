@@ -707,12 +707,9 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $ids = $this->getRequest()->getParam('id');
         try
         {
-            Mage::getModel('zendesk/api_tickets')->bulkDelete($ids);
-            Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('zendesk')->__(
-                            '%d ticket(s) were deleted.', count($ids)
-                    )
-            );
+            $response = Mage::getModel('zendesk/api_tickets')->bulkDelete($ids);
+            $message = '%d out of %d ticket(s) were deleted.';
+            $this->getMassactionResponse($response, $ids, $message);
         }
         catch ( Exception $e )
         {
@@ -728,12 +725,8 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         
         try
         {
-            Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('status'));
-            Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('zendesk')->__(
-                            '%d ticket(s) were updated. Attention: closed and new tickets cannot be updated.', count($ids)
-                    )
-            );
+            $response = Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('status'));
+            $this->getMassactionResponse($response, $ids);
         }
         catch ( Exception $e )
         {
@@ -749,12 +742,8 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         
         try
         {
-            Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('priority'));
-            Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('zendesk')->__(
-                            '%d ticket(s) were updated.', count($ids)
-                    )
-            );
+            $response = Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('priority'));
+            $this->getMassactionResponse($response, $ids);
         }
         catch ( Exception $e )
         {
@@ -770,12 +759,8 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         
         try
         {
-            Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('type'));
-            Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('zendesk')->__(
-                            '%d ticket(s) were updated.', count($ids)
-                    )
-            );
+            $response = Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('type'));
+            $this->getMassactionResponse($response, $ids);
         }
         catch ( Exception $e )
         {
@@ -790,12 +775,9 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         
         try
         {
-            Mage::getModel('zendesk/api_tickets')->bulkMarkAsSpam($ids);
-            Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('zendesk')->__(
-                            '%d ticket(s) were marked as spam.', count($ids)
-                    )
-            );
+            $response = Mage::getModel('zendesk/api_tickets')->bulkMarkAsSpam($ids);
+            $message = '%d out of %d ticket(s) were marked as spam.';
+            $this->getMassactionResponse($response, $ids, $message);
         }
         catch ( Exception $e )
         {
@@ -849,6 +831,55 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         
         Mage::register('zendesk_users', $users);
         Mage::register('zendesk_groups', $groups);
+    }
+    
+    protected function getMassactionResponse($response, $ids, $message = '%d out of %d ticket(s) were updated.')
+    {
+        if ( isset($response['job_status']) && isset($response['job_status']['url']) )
+        {
+            $job_status = Mage::getModel('zendesk/api_tickets')->getJobStatus($response['job_status']['url']);
+
+            $parsed = array();
+            $parsed['errors'] = array();
+            $parsed['success'] = 0;
+
+            if ( isset($job_status['job_status']['results']) )
+            {
+                foreach ( $job_status['job_status']['results'] as $result )
+                {
+                    if ( $result['success'] )
+                    {
+                        $parsed['success'] ++;
+                        continue;
+                    }
+
+                    if ( $result['errors'] )
+                        $parsed['errors'][] = $result['errors'];
+                }
+                $parsed['errors'] = array_unique($parsed['errors']);
+            }
+
+            Mage::getSingleton('adminhtml/session')->addSuccess(
+                    Mage::helper('zendesk')->__(
+                            $message, $parsed['success'], count($ids)
+                    )
+            );
+
+            foreach ( $parsed['errors'] as $error )
+            {
+                Mage::getSingleton('adminhtml/session')->addError(
+                        Mage::helper('zendesk')->__($error)
+                );
+            }
+        }
+        else
+        {
+            Mage::getSingleton('adminhtml/session')->addError(
+                    Mage::helper('zendesk')->__(
+                            'Request failed for %d ticket(s).', count($ids)
+                    )
+            );
+        }
     }
 
 }

@@ -98,3 +98,9 @@ button.zendesk span {
     background-color: #D8E6E6;
     background-image: url(images/tabs_link_over_bg.gif);
 }
+div.entry-edit-head .fright {
+    float: right;
+}
+#zendesk_tab_tickets_grid_all_table .zendesk-grid-tr:hover {
+    background: #fcf5dd;
+}

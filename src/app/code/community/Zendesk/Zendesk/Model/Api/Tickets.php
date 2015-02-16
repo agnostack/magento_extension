@@ -160,7 +160,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         if ( is_array($data) )
         {
             $params['ids'] = implode(",",$data);
-            $this->_call('tickets/destroy_many.json', $params, 'DELETE');
+            return $this->_call('tickets/destroy_many.json', $params, 'DELETE');
         }
     }
     
@@ -169,8 +169,15 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
             $params['ids'] = implode(",", $ids);
             $ticket['ticket'] = $data;
             
-            $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
+            return $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
         }
+    }
+    
+    public function getJobStatus($url)
+    {
+        $parts = explode("/", $url);
+        $link =  'job_statuses/'.end($parts);
+        return $this->_call($link);
     }
     
     public function bulkMarkAsSpam($data)
@@ -178,7 +185,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         if ( is_array($data) )
         {
             $params['ids'] = implode(",",$data);
-            $this->_call('tickets/mark_many_as_spam.json', $params, 'PUT');
+            return $this->_call('tickets/mark_many_as_spam.json', $params, 'PUT');
         }
     }
     

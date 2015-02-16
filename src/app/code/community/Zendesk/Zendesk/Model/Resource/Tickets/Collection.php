@@ -93,6 +93,9 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
         $this->setOrder($params['sort_by'], $params['sort_order']);
         $this->_count = $all['count'];
         
+        Mage::unregister('zendesk_tickets_all');
+        Mage::register('zendesk_tickets_all', $all['count']);
+        
         return $this;
     }
     
@@ -115,6 +118,9 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
         $this->setCurPage($params['page']);
         $this->setOrder($params['sort_by'], $params['sort_order']);
         $this->_count = $view['count'];
+            
+        Mage::unregister('zendesk_tickets_view_'.$viewId);
+        Mage::register('zendesk_tickets_view_'.$viewId, $view['count']);
         
         return $this;
     }
