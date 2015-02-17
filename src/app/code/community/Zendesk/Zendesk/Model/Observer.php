@@ -131,6 +131,9 @@ class Zendesk_Zendesk_Model_Observer
         
         //Get Customer Sales Statistics
         $order_totals = Mage::getResourceModel('sales/order_collection');
+        $lifetime_sale = 0;
+        $average_sale = 0;
+        
         if ( is_object($order_totals) )
         {
             $order_totals
@@ -139,8 +142,16 @@ class Zendesk_Zendesk_Model_Observer
             ->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_COMPLETE)
             ->addAttributeToSelect('grand_total')
             ->getColumnValues('grand_total');
-            $lifetime_sale = Mage::helper('core')->currency(array_sum($order_totals), true, false);
-            $average_sale = Mage::helper('core')->currency(array_sum($order_totals) / count($order_totals), true, false);
+            
+            $sum = 0;
+            foreach ( $order_totals as $total )
+            {
+                if ( isset($total['grand_total']) )
+                    $sum += (float)$total['grand_total'];
+            }
+            
+            $lifetime_sale = Mage::helper('core')->currency($sum, true, false);
+            $average_sale = Mage::helper('core')->currency($sum / count($order_totals), true, false);
         }
         
         $info['user'] = array(
@@ -151,8 +162,8 @@ class Zendesk_Zendesk_Model_Observer
                     "name"          =>  $customer->getFirstname() . " " . $customer->getLastname(),
                     "id"            =>  $customer->getId(),
                     "logged_in"     =>  date("Y-m-d\TH:i:s\Z",strtotime($log_customer->getLoginAt())),
-                    "average_sale"  =>  $average_sale ? $average_sale : 0,
-                    "lifetime_sale" =>  $lifetime_sale ? $lifetime_sale : 0
+                    "average_sale"  =>  $average_sale,
+                    "lifetime_sale" =>  $lifetime_sale
                 )
             ); 
         
