@@ -30,5 +30,6 @@
     <div><?php echo $this->getChildHtml(); ?></div>
 </div>
 <div class="buttons-set">
+    <a class="button" target="_blank" href="<?php echo $this->getSubmitAction() ?>"><span><span><?php echo $this->__('Open Ticket') ?></span></span></a>
     <a class="button" target="_blank" href="<?php echo Mage::helper('zendesk')->getSSOAuthUrlEndUsers(); ?>"><span><span><?php echo $this->__('Log In To Zendesk') ?></span></span></a>
 </div>
