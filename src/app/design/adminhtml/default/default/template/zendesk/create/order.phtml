@@ -25,21 +25,21 @@
     </div>
 </div>
 <script>
-document.getElementById('zendesk_create_order_search_grid').parentNode.style.display = 'none';
+document.getElementById('zendesk_create_order_search_grid').parentNode.className = 'no-display';
 function insertOrder(id) {
     var request = new Ajax.Request('<?php echo $this->getUrl('adminhtml/zendesk/getOrder'); ?>'+'id/'+id, {
         method: 'get',
         onSuccess: function(transport) {
             if (transport.responseJSON.success === true) {
                 document.getElementById('order').value = transport.responseJSON.order.number;
-                document.getElementById('zendesk_create_order_search_grid').parentNode.style.display = 'none';
-                document.getElementById('show-orders').style.display = 'block';
+                document.getElementById('zendesk_create_order_search_grid').parentNode.className = 'no-display';
+                document.getElementById('show-orders').className = '';
             }
         }
     });
 }
 function showOrders() {
-    document.getElementById('zendesk_create_order_search_grid').parentNode.style.display = 'block';
-    document.getElementById('show-orders').style.display = 'none';
+    document.getElementById('zendesk_create_order_search_grid').parentNode.className = '';
+    document.getElementById('show-orders').className = 'no-display';
 }
 </script>

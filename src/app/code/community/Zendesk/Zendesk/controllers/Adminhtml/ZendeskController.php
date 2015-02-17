@@ -397,7 +397,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     public function logAction()
     {
         $path = Mage::helper('zendesk/log')->getLogPath();
-
+        
         if(!file_exists($path)) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('The Zendesk log file has not been created. Check to see if logging has been enabled.'));
         }
@@ -608,6 +608,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     public function syncAction()
     {
         $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
+        Mage::log('Synchronization started', null, 'zendesk.log');
         try 
         {
             $settings = Mage::helper('zendesk')->getAdminSettings();
@@ -616,7 +617,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             
             $user = Mage::getModel('zendesk/api_users')->all();
             if (  is_null($user) )
-                throw new Exception;
+                throw new Exception("Connection Failed");
             
             $data = array();
             $data[] = array(
@@ -682,13 +683,16 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
             foreach( $data as $field )
             {
-                Mage::getModel('zendesk/api_users')->createUserField($field);
+                $response = Mage::getModel('zendesk/api_users')->createUserField($field);
+                if ( !isset($response['active']) || $response['active'] === false )
+                    Mage::log('Unable to create User Field with key '.$field['user_field']['key'], null, 'zendesk.log');
             }
             
             $customers = Mage::getModel('customer/customer')->getCollection();
             $customers->addAttributeToSelect(array('firstname', 'lastname', 'email'));
             foreach( $customers as $customer )
             {
+                Mage::log('Synchronizing customer with id '.$customer->getId(), null, 'zendesk.log');
                 Mage::dispatchEvent('customer_save_commit_after', array('customer' => $customer));
             }
             
@@ -698,9 +702,11 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
         catch (Exception $ex) 
         {
-            $this->getResponse()->setBody(json_encode(array('success'=>false, 'msg'=>Mage::helper('zendesk')->__('Synchronization failed'))));
+            Mage::log('Synchronization failed: '.$ex->getMessage(), null, 'zendesk.log');
+            $this->getResponse()->setBody(json_encode(array('success'=>false, 'msg'=>Mage::helper('zendesk')->__('Synchronization failed: ').$ex->getMessage())));
             return;
         }
+        Mage::log('Synchronization completed successfully', null, 'zendesk.log');
         $this->getResponse()->setBody(json_encode(array('success'=>true, 'msg'=>Mage::helper('zendesk')->__('Customers synchronization finished successfuly'))));
     }
 

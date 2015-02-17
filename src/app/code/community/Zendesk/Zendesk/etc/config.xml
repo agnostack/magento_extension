@@ -23,7 +23,7 @@
         </Zendesk_Zendesk>
     </modules>
     <zendesk>
-        <provision_url>https://support.zendesk.com/hc/en-us/articles/203660046-Magento-Integration-Installing-the-Zendesk-extension-for-Magento</provision_url>
+        <provision_url>https://signup.zendesk.com/provisioning/magento/welcome</provision_url>
     </zendesk>
     <global>
         <models>
