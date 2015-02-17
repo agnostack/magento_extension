@@ -275,8 +275,6 @@
                 <show_on_order>1</show_on_order>
                 <default_sort>created_at</default_sort>
                 <default_sort_dir>desc</default_sort_dir>
-                <show_statistics_on_magento_dashboard>1</show_statistics_on_magento_dashboard>
-                <show_statistics_on_zendesk_dashboard>1</show_statistics_on_zendesk_dashboard>
             </backend_features>
         </zendesk>
     </default>

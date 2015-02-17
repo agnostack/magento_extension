@@ -16,99 +16,6 @@
  */
 ?>
 <?php if( $this->isConnected() ): ?>
-<?php if (!$this->getIsZendeskDashboard() && Mage::getStoreConfig('zendesk/backend_features/show_statistics_on_magento_dashboard')): ?>
-        <?php $totals = $this->getTotals(); ?>
-        <?php if ($totals): ?>
-<div class="box" id="dashboard_diagram_ticket_totals">
-    <div class="entry-edit">
-        <p class="switcher a-right" style="padding:5px 10px;">
-            <span class="statistics-title"><?php echo $this->__('Ticket Statistics') ?></span>
-            <?php echo $this->__('From') ?>:&nbsp;<input type="text" name="ticket_from" id="ticket_from" value="" class="input-text input-text-range-date">
-            <img src="<?php echo Mage::getDesign()->getSkinUrl('images/grid-cal.gif') ?>" alt="Select Date" class="v-middle" title="Select Date" id="ticket_from_trig">
-            <?php echo $this->__('To') ?>:&nbsp;<input type="text" name="ticket_to" id="ticket_to" value="" class="input-text input-text-range-date">
-            <img src="<?php echo Mage::getDesign()->getSkinUrl('images/grid-cal.gif') ?>" alt="Select Date" class="v-middle" title="Select Date" id="ticket_to_trig">
-            &nbsp;<button style="" onclick="checkStatistics();" class="scalable" type="button" id="statistics">
-                <span><?php echo $this->__('Search') ?></span>
-            </button>
-            <br>
-        </p>
-        <table cellspacing="0" width="100%">
-            <tbody>
-                <tr>
-                    <?php foreach ($totals as $status => $number) { ?>
-                    <td class="a-center bold">
-                        <span><?php echo $this->__(ucfirst($status)) ?></span><br>
-                        <span class="nowrap statistics-entry" id="tickets-<?php echo $status; ?>"><?php echo $number; ?></span>
-                    </td>
-                    <?php } ?>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
-<script type="text/javascript">// <![CDATA[
-Calendar.setup({
-    inputField : 'ticket_from',
-    ifFormat : '%m/%e/%y',
-    button : 'ticket_from_trig',
-    align : 'Bl',
-    singleClick : true
-});
-
-Calendar.setup({
-    inputField : 'ticket_to',
-    ifFormat : '%m/%e/%y',
-    button : 'ticket_to_trig',
-    align : 'Bl',
-    singleClick : true
-});
-function setTotalValues(values) {
-    document.getElementById('tickets-open').innerHTML = values.open;
-    document.getElementById('tickets-new').innerHTML = values.new;
-    document.getElementById('tickets-closed').innerHTML = values.closed;
-    document.getElementById('tickets-solved').innerHTML = values.solved;
-    document.getElementById('tickets-all').innerHTML = values.all;
-    document.getElementById('tickets-pending').innerHTML = values.pending;
-}
-function checkStatistics() {
-    url = '<?php echo Mage::helper("adminhtml")->getUrl('/zendesk/gettotals/') ?>';
-        new Ajax.Request(url, {
-            method: 'get',
-            parameters: {from: document.getElementById('ticket_from').value, to: document.getElementById('ticket_to').value},
-            requestHeaders: {
-                Authorization: '<?php echo $this->getAuthHeader(); ?>'
-            },
-            onSuccess: function(transport) {
-                if (transport.responseJSON.success === true) {
-                    setTotalValues(transport.responseJSON.totals);
-                } else {
-                    var totals = new Object();
-                    totals.open = "0";
-                    totals.new = "0";
-                    totals.closed = "0";
-                    totals.solved = "0";
-                    totals.all = "0";
-                    totals.pending = "0";
-                    setTotalValues(totals);
-                }
-            },
-            onFailure: function() {
-                var totals = new Object();
-                totals.open = "0";
-                totals.new = "0";
-                totals.closed = "0";
-                totals.solved = "0";
-                totals.all = "0";
-                totals.pending = "0";
-                setTotalValues(totals);
-            }
-        });
-    }
-// ]]>
-</script>
-<?php endif; ?>
-<?php endif; ?>
-
     <?php if ($this->getIsZendeskDashboard() || Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard')): ?>
         <?php if ($this->getIsZendeskDashboard()): ?>
         <div class="content-header">
@@ -128,7 +35,7 @@ function checkStatistics() {
                 <button style="" onclick="setLocation('<?php echo $this->getUrl('adminhtml/zendesk/create'); ?>');" class="scalable" type="button" id="zendesk-create-ticket">
                     <span><?php echo $this->__('New Support Ticket'); ?></span>
                 </button>
-                <button style="" onclick="setLocation('<?php echo Mage::helper('zendesk')->getUrl(); ?>');" class="scalable" type="button" id="zendesk-view-all">
+                <button style="" onclick="setLocation('<?php echo Mage::getSingleton('adminhtml/url')->getUrl('adminhtml/zendesk/launch'); ?>');" class="scalable" type="button" id="zendesk-view-all">
                     <span><?php echo $this->__('View All Tickets'); ?></span>
                 </button>
             </div>

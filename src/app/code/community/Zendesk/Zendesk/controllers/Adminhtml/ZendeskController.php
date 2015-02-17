@@ -454,32 +454,6 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
     }
     
-    public function getTotalsAction()
-    {
-        $request = $this->getRequest();
-        $from = $request->getParam('from');
-        $to = $request->getParam('to');
-
-        $totals = Mage::helper("zendesk")->getTicketTotals(null, $from, $to);
-        if( $totals )
-        {
-            $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
-            $this->getResponse()->setBody(json_encode(array('success'=>true, 'totals'=> $totals)));
-        }
-        else
-        {
-            $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
-            $this->getResponse()->setBody(json_encode(array('success'=>false, 'totals'=>array(
-                'open'      =>  0,
-                'new'       =>  0,
-                'solved'    =>  0,
-                'closed'    =>  0,
-                'pending'   =>  0,
-                'all'       =>  0
-                ))));
-        }
-    }
-    
     public function getUserAction()
     {
         $request = $this->getRequest();

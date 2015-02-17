@@ -116,6 +116,11 @@
     </adminhtml_zendesk_create_load_block_customer_grid>        
 
     <adminhtml_zendesk_create>
+        <reference name="head">
+            <action method="addCss">
+                <stylesheet>zendesk/zendesk.css</stylesheet>
+            </action>
+        </reference>
         <reference name="left">
             <block type="zendesk/adminhtml_menu" name="adminhtml.left.menu">
                 <action method="setActiveItem">
