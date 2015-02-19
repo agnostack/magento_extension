@@ -159,6 +159,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
      */
     public function loginAction()
     {
+        if(!Mage::getStoreConfig('zendesk/sso/enabled')) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Single sign-on disabled.'));
+            $url = Mage::helper('core')->urlDecode($this->getRequest()->getParam('return_url', ""));
+            $this->_redirectUrl($url);
+            return;
+        }
         $this->authenticateAction();
     }
 
@@ -238,7 +244,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             return;
         }
         
-        if(Mage::helper('zendesk')->isSSOAdminUsersEnabled()) {
+        $sso = Mage::getStoreConfig('zendesk/sso/enabled');
+        
+        if ( !$sso )
+        {
+            $url = "http://".$domain;
+        } elseif(Mage::helper('zendesk')->isSSOAdminUsersEnabled()) {
             $url = Mage::helper('zendesk')->getSSOAuthUrlAdminUsers();
         } else {
             $url = Mage::helper('zendesk')->getZendeskUnauthUrl();
