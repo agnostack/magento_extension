@@ -32,6 +32,9 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
             
             switch($fieldName) {
                 case 'subject':
+                    $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field("subject", '"'.$condition.'"') );
+                    break;
+                case 'requester':
                 case 'requester_id':
                     $value = is_numeric($condition) ? $condition : '*' . $condition . '*';
                     $this->_search->addField( new Zendesk_Zendesk_Model_Search_Field("requester", $value) );
