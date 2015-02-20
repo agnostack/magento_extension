@@ -831,7 +831,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         if ( isset($response['job_status']) && isset($response['job_status']['url']) )
         {
             $job_status = Mage::getModel('zendesk/api_tickets')->getJobStatus($response['job_status']['url']);
-
+            
             $parsed = array();
             $parsed['errors'] = array();
             $parsed['success'] = 0;
