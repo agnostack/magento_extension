@@ -799,7 +799,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
         if ($isAjax) {
             $this->storeDependenciesInCachedRegistry();
-            $viewId = (int) $this->getRequest()->getParam('id');
+            $viewId = (int) $this->getRequest()->getParam('viewid');
             Mage::register('zendesk_tickets_view', $viewId);
             
             $this->getResponse()->setBody($this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid_view')->toHtml());

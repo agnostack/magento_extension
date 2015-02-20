@@ -80,7 +80,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
                     $this->addTab($viewId, array(
                         'label' => $label,
                         'class' => 'ajax',
-                        'url'   => $this->getUrl('zendesk/adminhtml_zendesk/ticketsView', array('id' => $viewId)),
+                        'url'   => $this->getUrl('zendesk/adminhtml_zendesk/ticketsView', array('viewid' => $viewId)),
                     ));
                 }
                 else {
