@@ -60,7 +60,8 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_All extends Zen
         $this->addColumn('type', array(
             'header'    => Mage::helper('zendesk')->__('Type'),
             'width'     => '100',
-            'renderer'  => 'zendesk/adminhtml_dashboard_tab_tickets_grid_renderer_type',
+            'type'      => 'options',
+            'options'   => Mage::helper('zendesk')->getTypeMap(),
             'index'     => 'type',
             'sortable'  => false,
         ));
