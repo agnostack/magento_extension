@@ -132,6 +132,10 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Order_Grid extends Mage_Adminhtml_B
     {
         return $this->getUrl('adminhtml/zendesk/loadBlock', array('block'=>'order_grid', '_current' => true, 'collapse' => null));
     }
-
+    
+    public function getRowUrl($row)
+    {
+        return "";
+    }
 
 }

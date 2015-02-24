@@ -76,6 +76,9 @@ button.zendesk span {
 div.entry-edit-head .fright {
     float: right;
 }
+#tickets_grid_tab_content tbody .zendesk-grid-tr:hover,
+#zendesk_create_customer_search_grid_table tbody tr:hover,
+#zendesk_create_order_search_grid_table tbody tr:hover, 
 #zendesk_tab_tickets_grid_all_table .zendesk-grid-tr:hover {
     background: #fcf5dd;
 }

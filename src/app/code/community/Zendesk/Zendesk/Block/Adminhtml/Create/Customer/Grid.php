@@ -94,5 +94,10 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Customer_Grid extends Mage_Adminhtm
     {
         return $this->getUrl('adminhtml/zendesk/loadBlock', array('block'=>'customer_grid', '_current' => true, 'collapse' => null));
     }
+    
+    public function getRowUrl($row)
+    {
+        return "";
+    }
 
 }
