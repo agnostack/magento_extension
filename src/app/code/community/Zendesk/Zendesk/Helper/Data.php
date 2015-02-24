@@ -281,18 +281,6 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
         return '<a href="' . $url . '" target="_blank">' .  $subject. '</a>';
     }
-        
-    public function getAdminSettings() {
-        $admin = Mage::getSingleton('admin/session')->getUser();
-        if($admin) {
-            $adminId    = $admin->getUserId();
-            $settings   = Mage::getModel('zendesk/settings')->loadByAdminId($adminId);
-            return $settings;
-        } else {
-            return false;
-        }
-        
-    }
     
     public function getStatusMap()
     {

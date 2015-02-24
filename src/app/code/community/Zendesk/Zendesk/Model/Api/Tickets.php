@@ -145,7 +145,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
     {
         $user = Mage::getModel('zendesk/api_users')->find($customerEmail);
         if(isset($user['id'])) {
-            $response = $this->_call('users/' . $user['id'] . '/requests.json', null, 'GET', null, false, true);
+            $response = $this->_call('users/' . $user['id'] . '/requests.json', null, 'GET', null, false);
             return $response['requests'];
         } else {
             return array();

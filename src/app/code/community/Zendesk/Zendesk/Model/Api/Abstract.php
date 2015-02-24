@@ -46,25 +46,10 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
                  'Content-Type' => 'application/json'
             )
         );
-        
-        $settings = Mage::helper('zendesk')->getAdminSettings();
-
-        if($settings && isset($settings) && $settings->isConfigured() && !$global) {
-            if($settings->getUseGlobalSettings() === "0") {
-                $email = $settings->getUsername();
-                $password = Mage::helper('core')->decrypt($settings->getPassword());
-            } else {
-                $email = Mage::getStoreConfig('zendesk/general/email'). '/token';
-                $password = Mage::getStoreConfig('zendesk/general/password');
-            }
-        } else {
-            $email = Mage::getStoreConfig('zendesk/general/email'). '/token';
-            $password = Mage::getStoreConfig('zendesk/general/password');
-        }
 
         $client->setAuth(
-            $email,
-            $password
+            Mage::getStoreConfig('zendesk/general/email'). '/token',
+            Mage::getStoreConfig('zendesk/general/password')
         );
 
         if($method == 'POST' || $method == "PUT") {

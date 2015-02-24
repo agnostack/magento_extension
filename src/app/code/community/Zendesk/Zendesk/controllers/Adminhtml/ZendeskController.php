@@ -98,31 +98,9 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $now = time();
         $jti = md5($now . rand());
 
-        $settings = Mage::helper('zendesk')->getAdminSettings();
         $user = Mage::getSingleton('admin/session')->getUser();
         $name = $user->getName();
-        if($settings && $settings->getUsername()) {
-            $email = $settings->getUsername();
-        } else {
-            $email = Mage::getStoreConfig('zendesk/general/email');
-        }
-
-        if($settings && isset($settings) && $settings->isConfigured() && $settings->getUseGlobalSettings() === "0") {
-            try {
-                $check = Mage::getModel('zendesk/api_users')->all();
-                
-                if( $check ) {
-                    $email = $settings->getUsername();
-                } else {
-                    throw new Exception;
-                }
-            } catch( Exception $exc ) {
-                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Could not connect to Zendesk'));
-                $this->_redirect('adminhtml/dashboard');
-                return;
-            }
-        }
-
+        $email = $user->getEmail();
         $externalId = $user->getId();
 
         $payload = array(
@@ -492,86 +470,11 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
     }
     
-    public function settingsAction() {
-        $settings = Mage::helper('zendesk')->getAdminSettings();
-        Mage::register('zendesk_settings', $settings);
-        $this->_initAction();
-        $this->renderLayout();
-    }
-    
-    public function editAction()
-    {
-        $settings = Mage::helper('zendesk')->getAdminSettings();
-        
-        Mage::register('zendesk_settings', $settings);
-
-        $this->_initAction();
-        $this->renderLayout();
-    }
-
-    public function saveSettingsAction()
-    {
-        $post = $this->getRequest()->getPost();
-
-        try {
-            if(empty($post)) {
-                Mage::throwException($this->__('Invalid form data.'));
-            }
-
-            $settings = Mage::helper('zendesk')->getAdminSettings();
-
-            if(isset($post['use_global_settings']) AND $post['use_global_settings'] === '1') {
-                $post['username'] = '';
-                $post['password'] = '';
-            }
-
-            if($settings->getPassword() === $post['password']) {
-                $post['password'] = "";
-            }
-            
-            if(!empty($post['password'])) {
-                $post['password'] = Mage::helper('core')->encrypt($post['password']);
-            } else {
-                unset($post['password']);
-            }
-            
-            $settings->setData($post);
-            $settings->save();
-            Mage::register('zendesk_settings', $settings);
-            
-            if(!$settings->getId()) {
-                Mage::throwException(Mage::helper('zendesk')->__('Error saving settings.'));
-            }
-
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zendesk')->__('Settings was successfully saved.'));
-        } catch( Exception $e ) {
-            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-        }
-        $this->_redirectReferer();
-    }
-
-    public function checkConnectionAction()
-    {
-        $connection = Mage::helper('zendesk')->getConnectionStatus();
-        
-        if($connection['success']) {
-            Mage::getSingleton('adminhtml/session')->addSuccess(Mage::helper('zendesk')->__('Connection success'));
-        } else {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Connection has failed.'));
-        }
-
-        $this->_redirectReferer();
-    }
-    
     public function syncAction()
     {
         $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
         Mage::log('Synchronization started', null, 'zendesk.log');
-        try {
-            $settings = Mage::helper('zendesk')->getAdminSettings();
-            $settings->setUseGlobalSettings("1");
-            $settings->save();
-            
+        try {           
             $user = Mage::getModel('zendesk/api_users')->all();
             if (is_null($user))
                 throw new Exception("Connection Failed");
@@ -651,9 +554,6 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 Mage::dispatchEvent('customer_save_commit_after', array('customer' => $customer));
             }
             
-            $settings->setUseGlobalSettings("0");
-            $settings->save();
-            
         } catch (Exception $ex) {
             Mage::log('Synchronization failed: '.$ex->getMessage(), null, 'zendesk.log');
             $this->getResponse()->setBody(json_encode(array('success'=>false, 'msg'=>Mage::helper('zendesk')->__('Synchronization failed: ').$ex->getMessage())));
@@ -730,12 +630,6 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
         }
         $this->_redirectReferer();
-    }
-    
-    protected function _initAction()
-    {
-        $this->loadLayout()->_setActiveMenu('zendesk/settings');
-        return $this;
     }
 
     public function ticketsAllAction() {

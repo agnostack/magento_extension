@@ -29,18 +29,8 @@
         <models>
             <zendesk>
                 <class>Zendesk_Zendesk_Model</class>
-                <resourceModel>zendesk_resource</resourceModel>
             </zendesk>
-            <zendesk_resource>
-                <class>Zendesk_Zendesk_Model_Resource</class>
-                <entities>
-                    <settings>
-                        <table>zendesk_settings</table>
-                    </settings>
-                </entities>
-            </zendesk_resource>
         </models>
-        
         <helpers>
             <zendesk>
                 <class>Zendesk_Zendesk_Helper</class>
@@ -200,11 +190,6 @@
                         <action>adminhtml/zendesk/launch</action>
                         <sort_order>3</sort_order>
                     </zendesk_launch>
-                    <zendesk_settings module="zendesk">
-                        <title>User Settings</title>
-                        <action>adminhtml/zendesk/settings</action>
-                        <sort_order>4</sort_order>
-                    </zendesk_settings>
                     <zendesk_configurations module="zendesk">
                         <title>Configuration</title>
                         <action>adminhtml/system_config/edit/section/zendesk</action>
