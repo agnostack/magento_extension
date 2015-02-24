@@ -79,3 +79,6 @@ div.entry-edit-head .fright {
 #zendesk_tab_tickets_grid_all_table .zendesk-grid-tr:hover {
     background: #fcf5dd;
 }
+#zendesk_create_order_search_grid_table tr.filter .range .range-line {
+    min-width: 124px;
+}

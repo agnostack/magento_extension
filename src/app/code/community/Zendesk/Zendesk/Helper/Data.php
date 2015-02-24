@@ -269,10 +269,14 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         return Mage::getStoreConfig('zendesk/general/use_external_id');
     }
 
-    public function getTicketUrl($row)
+    public function getTicketUrl($row, $url = false)
     {   
         $path = Mage::getSingleton('admin/session')->getUser() ? 'adminhtml/zendesk/login' : '*/sso/login';
         $url = Mage::helper('adminhtml')->getUrl($path, array("return_url" => Mage::helper('core')->urlEncode(Mage::helper('zendesk')->getUrl('ticket', $row['id']))));
+        
+        if ( $url )
+            return $url;
+        
         $subject = $row['subject'] ? $row['subject'] : $this->__('No Subject');
 
         return '<a href="' . $url . '" target="_blank">' .  $subject. '</a>';

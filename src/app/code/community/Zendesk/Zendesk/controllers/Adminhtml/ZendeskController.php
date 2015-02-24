@@ -354,7 +354,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 $response = Mage::getModel('zendesk/api_tickets')->create($ticket);
 
                 $text = Mage::helper('zendesk')->__('Ticket #%s Created', $response['id']);
-                $text .= ' <a href="' . Mage::helper('zendesk')->getUrl('ticket', $response['id']) . '" target="_blank">';
+                $text .= ' <a href="' . Mage::helper('zendesk')->getTicketUrl($response) . '" target="_blank">';
                 $text .= Mage::helper('zendesk')->__('View ticket in Zendesk');
                 $text .= '</a>';
 
@@ -835,7 +835,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             $parsed = array();
             $parsed['errors'] = array();
             $parsed['success'] = 0;
-
+            
             if ( isset($job_status['job_status']['results']) )
             {
                 foreach ( $job_status['job_status']['results'] as $result )
@@ -847,9 +847,8 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                     }
 
                     if ( $result['errors'] )
-                        $parsed['errors'][] = $result['errors'];
+                        $parsed['errors'][] = $result['errors']." (ID:".$result['id'].")";
                 }
-                $parsed['errors'] = array_unique($parsed['errors']);
             }
 
             Mage::getSingleton('adminhtml/session')->addSuccess(

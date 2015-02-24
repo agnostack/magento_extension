@@ -90,7 +90,14 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             'zendesk.log'
         );
         
-        $response = $client->request();
+        try
+        {
+            $response = $client->request();
+        }
+        catch ( Exception $ex )
+        {
+            return array();
+        }
         
         $body = json_decode($response->getBody(), true);
 
