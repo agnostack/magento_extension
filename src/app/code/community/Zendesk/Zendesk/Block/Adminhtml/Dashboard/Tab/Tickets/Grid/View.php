@@ -33,8 +33,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_View extends Ze
         return $this->getUrl('*/*/ticketsView', array('_current' => true));
     }
     
-    protected function _prepareGrid()
-    {
+    protected function _prepareGrid() {
         parent::_prepareGrid();
         $this->_prepareDynamicColumns();
         $this->_prepareCollection();

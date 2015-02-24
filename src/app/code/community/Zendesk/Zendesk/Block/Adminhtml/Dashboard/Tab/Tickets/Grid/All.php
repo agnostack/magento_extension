@@ -17,21 +17,21 @@
  */
 
 class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_All extends Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstract {
-    
+
     public function __construct($attributes = array()) {
         $this->setViewId('all');
-        
+
         parent::__construct($attributes);
     }
-    
+
     protected function _getCollection($collection) {
         return $collection->getCollection($this->getGridParams());
     }
-    
+
     public function getGridUrl() {
         return $this->getUrl('*/*/ticketsAll', array('_current' => true));
     }
-    
+
     protected function _prepareColumns() {
         $this->addColumn('id', array(
             'header'    => Mage::helper('zendesk')->__('Ticket ID'),
@@ -40,7 +40,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_All extends Zen
             'width'     => '30px',
             'index'     => 'id',
         ));
-        
+
         $this->addColumn('subject', array(
             'header'    => Mage::helper('zendesk')->__('Subject'),
             'sortable'  => false,
@@ -48,7 +48,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_All extends Zen
             'type'      => 'text',
             'renderer'  => 'zendesk/adminhtml_dashboard_tab_tickets_grid_renderer_action',
         ));
-        
+
         $this->addColumn('requester_id', array(
             'header'    => Mage::helper('zendesk')->__('Email'),
             'width'     => '60',
@@ -56,7 +56,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_All extends Zen
             'index'     => 'requester_id',
             'sortable'  => false,
         ));
-                
+
         $this->addColumn('type', array(
             'header'    => Mage::helper('zendesk')->__('Type'),
             'width'     => '100',

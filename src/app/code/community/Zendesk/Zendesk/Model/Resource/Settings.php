@@ -30,8 +30,7 @@ class Zendesk_Zendesk_Model_Resource_Settings extends Mage_Core_Model_Mysql4_Abs
 
         $settingsId = $this->_getReadAdapter()->fetchOne($select);
 
-        if( $settingsId )
-        {
+        if($settingsId) {
             $this->load($settings, $settingsId);
         }
 

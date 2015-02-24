@@ -20,19 +20,20 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
 
     public function __construct() {
         parent::__construct();
-        
+
         $this->setId('tickets_grid_tab');
         $this->setDestElementId('tickets_grid_tab_content');
         $this->setTemplate('widget/tabshoriz.phtml');
     }
-    
+
     protected function _prepareLayout() {
         // Check if we are on the main admin dashboard and, if so, whether we should be showing the grid
         // Note: an additional check in the template is needed, but this will prevent unnecessary API calls to Zendesk
-        if (!$this->getIsZendeskDashboard() && !Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard')) {
+        if ( !$this->getIsZendeskDashboard() && !Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard') )
+        {
             return parent::_prepareLayout();
         }
-        
+
         //check if module is setted up
         $configured     = (bool) Mage::getStoreConfig('zendesk/general/domain');
         $viewsIds       = Mage::getStoreConfig('zendesk/backend_features/show_views') ? Mage::helper('zendesk')->getChosenViews() : array(); 
@@ -45,8 +46,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
             $label = $this->__("All tickets");
             
             $all_count = Mage::registry('zendesk_tickets_all');
-            if ( !$all_count )
-            {
+            if (!$all_count) {
                 $this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid_all')->toHtml();
                 $all_count = Mage::registry('zendesk_tickets_all');
             }
@@ -75,15 +75,14 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
                     return $view['view_id'] === (int) $viewId;
                 }));
                 
-                if( $count['value'] ) {
+                if($count['value']) {
                     $label = $view['title'] . ' (' . $count['value'] . ')';
                     $this->addTab($viewId, array(
                         'label' => $label,
                         'class' => 'ajax',
                         'url'   => $this->getUrl('zendesk/adminhtml_zendesk/ticketsView', array('viewid' => $viewId)),
                     ));
-                }
-                else {
+                } else {
                     Mage::unregister('zendesk_tickets_view');
                     Mage::register('zendesk_tickets_view', $viewId);
 
@@ -106,5 +105,4 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
     public function getIsZendeskDashboard() {
         return Mage::app()->getFrontController()->getRequest()->getControllerName() === 'zendesk';
     }
-
 }

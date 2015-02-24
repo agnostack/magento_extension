@@ -274,7 +274,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         $path = Mage::getSingleton('admin/session')->getUser() ? 'adminhtml/zendesk/login' : '*/sso/login';
         $url = Mage::helper('adminhtml')->getUrl($path, array("return_url" => Mage::helper('core')->urlEncode(Mage::helper('zendesk')->getUrl('ticket', $row['id']))));
         
-        if ( $link )
+        if ($link)
             return $url;
         
         $subject = $row['subject'] ? $row['subject'] : $this->__('No Subject');
@@ -284,14 +284,11 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         
     public function getAdminSettings() {
         $admin = Mage::getSingleton('admin/session')->getUser();
-        if( $admin )
-        {
+        if($admin) {
             $adminId    = $admin->getUserId();
             $settings   = Mage::getModel('zendesk/settings')->loadByAdminId($adminId);
             return $settings;
-        }
-        else
-        {
+        } else {
             return false;
         }
         
@@ -327,7 +324,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'question'  =>  'Question',
             'task'      =>  'Task'
         );
-}
+    }
     
     public function getChosenViews() {
         $list = trim(trim(Mage::getStoreConfig('zendesk/backend_features/show_views')), ',');
@@ -340,7 +337,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     }
     
     public function isValidDate($date) {
-        if( is_string($date) ) {
+        if(is_string($date)) {
             $d = DateTime::createFromFormat('d/m/Y', $date);
             return $d && $d->format('d/m/Y') == $date;
         }

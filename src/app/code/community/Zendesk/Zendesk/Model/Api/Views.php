@@ -46,7 +46,7 @@ class Zendesk_Zendesk_Model_Api_Views extends Zendesk_Zendesk_Model_Api_Abstract
     }
     
     public function countByIds(array $ids) {
-        if( empty($ids) ) {
+        if(empty($ids)) {
             throw new InvalidArgumentException('View ID not provided');
 }
         

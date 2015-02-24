@@ -113,7 +113,7 @@ class Zendesk_Zendesk_Model_Observer
     
     public function changeIdentity(Varien_Event_Observer $event)
     {
-        if( !Mage::getStoreConfig('zendesk/general/customer_sync') )
+        if(!Mage::getStoreConfig('zendesk/general/customer_sync'))
             return;
         
         $user = null;
@@ -134,8 +134,7 @@ class Zendesk_Zendesk_Model_Observer
         $lifetime_sale = 0;
         $average_sale = 0;
         
-        if ( is_object($order_totals) )
-        {
+        if (is_object($order_totals)) {
             $order_totals
             ->addFieldToSelect('*')
             ->addFieldToFilter('customer_id', $customer->getId())
@@ -144,9 +143,8 @@ class Zendesk_Zendesk_Model_Observer
             ->getColumnValues('grand_total');
             
             $sum = 0;
-            foreach ( $order_totals as $total )
-            {
-                if ( isset($total['grand_total']) )
+            foreach ($order_totals as $total) {
+                if (isset($total['grand_total']))
                     $sum += (float)$total['grand_total'];
             }
             
@@ -167,36 +165,29 @@ class Zendesk_Zendesk_Model_Observer
                 )
             ); 
         
-        if( $orig_email && $orig_email !== $email )
-        {
+        if($orig_email && $orig_email !== $email) {
             $user = Mage::getModel('zendesk/api_users')->find($orig_email);
             
-            if( isset($user['id']) )
-            {
+            if(isset($user['id'])) {
                 $data['identity'] = array(
                     'type'      =>  'email',
                     'value'     =>  $email,
                     'verified'  =>  true
                 );
                 $identity = Mage::getModel('zendesk/api_users')->addIdentity($user['id'],$data);
-                if( isset($identity['id']) )
-                {
+                if(isset($identity['id'])) {
                     Mage::getModel('zendesk/api_users')->setPrimaryIdentity($user['id'], $identity['id']);
                 }
             }
         }
 
-        if( !$user )
-        {
+        if(!$user) {
             $user = Mage::getModel('zendesk/api_users')->find($email);
         }
         
-        if( isset($user['id']) )
-        {
+        if(isset($user['id'])) {
             $this->syncData($user['id'], $info);
-        }
-        else
-        {
+        } else {
             $info['user']['verified'] = true;
             $this->createAccount($info);
         }

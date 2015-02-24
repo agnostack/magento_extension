@@ -42,15 +42,14 @@ class Zendesk_Zendesk_Block_Adminhtml_Settings_Edit_Form extends Mage_Adminhtml_
             'value' => Mage::getSingleton('admin/session')->getUser()->getUserId()
         ));
         
-        if( Mage::getSingleton('admin/session')->isAllowed('zendesk/main_api_credentials') ) {
+        if(Mage::getSingleton('admin/session')->isAllowed('zendesk/main_api_credentials')) {
             $fieldset->addField('use_global_settings', 'select', array(
                 'name'      => 'use_global_settings',
                 'label'     => Mage::helper('zendesk')->__('Use Global Settings'),
                 'options'   => Mage::getModel('adminhtml/system_config_source_yesno')->toArray(),
                 'value'     => 1
             ));
-        }
-        else {
+        } else {
             $fieldset->addField('use_global_settings', 'hidden', array(
                 'name'      => 'use_global_settings',
                 'value'     => 0

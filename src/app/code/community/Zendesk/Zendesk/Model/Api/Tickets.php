@@ -144,28 +144,24 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
     public function forRequester($customerEmail)
     {
         $user = Mage::getModel('zendesk/api_users')->find($customerEmail);
-        if( isset($user['id']) )
-        {
+        if(isset($user['id'])) {
             $response = $this->_call('users/' . $user['id'] . '/requests.json', null, 'GET', null, false, true);
             return $response['requests'];
-        }
-        else
-        {
+        } else {
             return array();
         }
     }
     
     public function bulkDelete($data)
     {
-        if ( is_array($data) )
-        {
+        if (is_array($data)) {
             $params['ids'] = implode(",",$data);
             return $this->_call('tickets/destroy_many.json', $params, 'DELETE');
         }
     }
     
     public function updateMany($ids, $data) {
-        if( is_array($ids) ) {
+        if(is_array($ids)) {
             $params['ids'] = implode(",", $ids);
             $ticket['ticket'] = $data;
             
@@ -182,8 +178,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
     
     public function bulkMarkAsSpam($data)
     {
-        if ( is_array($data) )
-        {
+        if (is_array($data)) {
             $params['ids'] = implode(",",$data);
             return $this->_call('tickets/mark_many_as_spam.json', $params, 'PUT');
         }

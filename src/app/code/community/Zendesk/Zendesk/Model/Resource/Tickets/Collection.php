@@ -132,7 +132,7 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
         foreach($params as $param) {
             $name = $param . '_id';
             
-            if( isset($item[$name]) ) {
+            if(isset($item[$name])) {
                 $item[$param] = $item[$name];
             }
         }

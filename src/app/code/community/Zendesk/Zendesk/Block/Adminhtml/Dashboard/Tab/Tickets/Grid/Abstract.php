@@ -31,14 +31,14 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
     protected function _getCollectionModel() {
         return Mage::getModel('zendesk/resource_tickets_collection');
     }
-    
+
     public function setViewId($id = null) {
         $this->_viewId = (is_null($id) ? uniqid() : $id);
     }
-    
+
     public function __construct($attributes = array()) {
         parent::__construct($attributes);
-        
+
         $this->_defaultSort = Mage::getStoreConfig('zendesk/backend_features/default_sort');
         $this->_defaultDir = Mage::getStoreConfig('zendesk/backend_features/default_sort_dir');
         
@@ -49,7 +49,7 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
     
     protected function _construct() {
         parent::_construct();
-        
+
         $this->setMassactionBlockName('zendesk/adminhtml_dashboard_tab_tickets_grid_massaction');
         $this->setId('zendesk_tab_tickets_grid_' . $this->_viewId);
         $this->setSaveParametersInSession(true);
@@ -65,11 +65,11 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
     
     protected function _preparePage() {
         parent::_preparePage();
-        
-        $this->_page    = (int) $this->getParam( $this->getVarNamePage(), $this->_defaultPage);
-        $this->_limit   = (int) $this->getParam( $this->getVarNameLimit(), $this->_defaultLimit);
+
+        $this->_page = (int) $this->getParam($this->getVarNamePage(), $this->_defaultPage);
+        $this->_limit = (int) $this->getParam($this->getVarNameLimit(), $this->_defaultLimit);
     }
-    
+
     protected function _prepareCollection() {
         if( ! $this->getCollection() ) {
             $collection     = $this->_getCollectionModel();
@@ -89,7 +89,7 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
     
     protected function _prepareMassaction() {
         parent::_prepareMassaction();
-        
+
         $this->setMassactionIdField('id');
         $this->getMassactionBlock()->setFormFieldName('id');
         
