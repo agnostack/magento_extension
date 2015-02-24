@@ -113,9 +113,13 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 
                 if( $check ) {
                     $email = $settings->getUsername();
+                } else {
+                    throw new Exception;
                 }
             } catch( Exception $exc ) {
-                //just do nothing
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Could not connect to Zendesk'));
+                $this->_redirect('adminhtml/dashboard');
+                return;
             }
         }
 

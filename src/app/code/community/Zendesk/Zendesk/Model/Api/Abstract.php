@@ -97,21 +97,27 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
         if($response->isError()) {
             if(is_array($body) && isset($body['error'])) {
                 if(is_array($body['error']) && isset($body['error']['title'])) {
-                    if (!$silent)
-                        throw new Exception($body['error']['title'], $response->getStatus());
-                    else
+                    if (!$silent) {
+                        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__($body['error']['title'],$response->getStatus()));
+                        return;
+                    } else {
                         return $body;
+                    }
                 } else {
-                    if (!$silent)
-                        throw new Exception($body['error'], $response->getStatus());
-                    else
+                    if (!$silent) {
+                        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__($body['error'],$response->getStatus()));
+                        return;
+                    } else {
                         return $body;
+                    }
                 }
             } else {
-                if (!$silent)
-                    throw new Exception($body, $response->getStatus());
-                else
+                if (!$silent) {
+                    Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__($body, $response->getStatus()));
+                    return;
+                } else {
                     return $body;
+                }
             }
         }
 
