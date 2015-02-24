@@ -702,7 +702,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         {
             $response = Mage::getModel('zendesk/api_tickets')->bulkDelete($ids);
             $message = '%d out of %d ticket(s) were deleted.';
-            $this->getMassactionResponse($response, $ids, $message);
+            $this->getMassActionResponse($response, $ids, $message);
         }
         catch ( Exception $e )
         {
@@ -719,7 +719,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         try
         {
             $response = Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('status'));
-            $this->getMassactionResponse($response, $ids);
+            $this->getMassActionResponse($response, $ids);
         }
         catch ( Exception $e )
         {
@@ -736,7 +736,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         try
         {
             $response = Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('priority'));
-            $this->getMassactionResponse($response, $ids);
+            $this->getMassActionResponse($response, $ids);
         }
         catch ( Exception $e )
         {
@@ -753,7 +753,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         try
         {
             $response = Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('type'));
-            $this->getMassactionResponse($response, $ids);
+            $this->getMassActionResponse($response, $ids);
         }
         catch ( Exception $e )
         {
@@ -770,7 +770,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         {
             $response = Mage::getModel('zendesk/api_tickets')->bulkMarkAsSpam($ids);
             $message = '%d out of %d ticket(s) were marked as spam.';
-            $this->getMassactionResponse($response, $ids, $message);
+            $this->getMassActionResponse($response, $ids, $message);
         }
         catch ( Exception $e )
         {
@@ -826,7 +826,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         Mage::register('zendesk_groups', $groups);
     }
     
-    protected function getMassactionResponse($response, $ids, $message = '%d out of %d ticket(s) were updated.')
+    protected function getMassActionResponse($response, $ids, $message = '%d out of %d ticket(s) were updated.')
     {
         if ( isset($response['job_status']) && isset($response['job_status']['url']) )
         {
@@ -852,9 +852,11 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             }
 
             Mage::getSingleton('adminhtml/session')->addSuccess(
-                    Mage::helper('zendesk')->__(
-                            $message, $parsed['success'], count($ids)
-                    )
+                Mage::helper('zendesk')->__(
+                    $message, 
+                    $parsed['success'], 
+                    count($ids)
+                )
             );
 
             foreach ( $parsed['errors'] as $error )

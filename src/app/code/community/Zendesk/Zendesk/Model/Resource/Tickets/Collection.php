@@ -110,7 +110,7 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
             
             $this->appendParamsWithoutIdPostfix($ticket, array('requester', 'assignee', 'group'));
             
-            $obj    = new Varien_Object();
+            $obj = new Varien_Object();
             $obj->setData($ticket);
             $this->addItem($obj);
         }
