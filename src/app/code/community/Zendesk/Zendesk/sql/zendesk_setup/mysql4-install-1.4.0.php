@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-//Separate User Settings
+
 $installer = $this;
 $installer->startSetup();
 $installer->run("CREATE TABLE IF NOT EXISTS `{$installer->getTable('zendesk_settings')}` (
