@@ -223,7 +223,7 @@
                 <show_on_customer>1</show_on_customer>
                 <show_on_order>1</show_on_order>
                 <feedback_tab_code_active>0</feedback_tab_code_active>
-                <widget_code_active>0</widget_code_active>
+                <web_widget_code_active>0</web_widget_code_active>
                 <contact_us>0</contact_us>
             </features>
         </zendesk>

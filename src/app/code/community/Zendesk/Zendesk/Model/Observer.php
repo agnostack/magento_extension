@@ -96,6 +96,19 @@ class Zendesk_Zendesk_Model_Observer
                 Mage::getModel('core/config')->saveConfig('contacts/email/recipient_email', $oldEmail, $scope, $scopeId);
             }
         }
+
+        // Process the feedback tab hidden field: if it's hidden and the feedback tab setting is ON, it means that the
+        // user decided to switch OFF the feedback tab. The FBT toggle became invisible and disabled. Save the change.
+        // We will also switch OFF the Feedback Tab config if it's ON but the Web Wdiget gets enabled.
+        $feedbackTabHidden = Mage::getStoreConfig('zendesk/features/feedback_tab_hidden', $storeCode);
+        $feedbackTab = Mage::getStoreConfig('zendesk/features/feedback_tab_code_active', $storeCode);
+        $webWidget = Mage::getStoreConfig('zendesk/features/web_widget_code_active', $storeCode);
+
+        if($feedbackTab && ($feedbackTabHidden === 'true' || $webWidget))
+        {
+            Mage::getModel('core/config')->saveConfig('zendesk/features/feedback_tab_code_active', 0, $scope, $scopeId);
+        }
+
     }
 
     public function addTicketButton(Varien_Event_Observer $event)
