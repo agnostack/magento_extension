@@ -111,9 +111,11 @@ $numColumns = sizeof($this->getColumns());
         </tr>
     </table>
 <?php endif; ?>
-<?php if($this->getMassactionBlock()->isAvailable()): ?>
-<?php echo $this->getMassactionBlockHtml() ?>
-<?php endif ?>
+<?php 
+if($this->getMassactionBlock()->isAvailable()){
+    echo $this->getMassactionBlockHtml();
+} 
+?>
 <div class="grid">
     <div class="hor-scroll">
     <table cellspacing="0" class="data" id="<?php echo $this->getId() ?>_table">
@@ -180,7 +182,7 @@ $numColumns = sizeof($this->getColumns());
 
             <?php if ($this->shouldRenderSubTotal($_item)): ?>
                 <tr class="subtotals">
-                    <?php $i = 0; foreach ($this->getSubTotalColumns() as $_column): ?>
+                    <?php $i=0;foreach ($this->getSubTotalColumns() as $_column): ?>
                         <td class="<?php echo $_column->getCssProperty() ?> <?php echo ++$i == $numColumns ? 'last' : '' ?>">
                             <?php echo ($_column->hasSubtotalsLabel() ? $_column->getSubtotalsLabel() :
                                 $_column->getRowField($this->getSubTotalItem($_item))
@@ -205,22 +207,7 @@ $numColumns = sizeof($this->getColumns());
 </div>
 <script type="text/javascript">
 //<![CDATA[
-    <?php echo $this->getJsObjectName() ?> = new varienGrid('<?php echo $this->getId() ?>', '<?php echo $this->getGridUrl() ?>', '<?php echo $this->getVarNamePage() ?>', '<?php echo $this->getVarNameSort() ?>', '<?php echo $this->getVarNameDir() ?>', '<?php echo $this->getVarNameFilter() ?>');
-    <?php echo $this->getJsObjectName() ?>.useAjax = '<?php echo $this->getUseAjax() ?>';
-    <?php if($this->getRowClickCallback()): ?>
-        <?php echo $this->getJsObjectName() ?>.rowClickCallback = <?php echo $this->getRowClickCallback() ?>;
-    <?php endif; ?>
-    <?php if($this->getCheckboxCheckCallback()): ?>
-        <?php echo $this->getJsObjectName() ?>.checkboxCheckCallback = <?php echo $this->getCheckboxCheckCallback() ?>;
-    <?php endif; ?>
-    <?php if($this->getRowInitCallback()): ?>
-        <?php echo $this->getJsObjectName() ?>.initRowCallback = <?php echo $this->getRowInitCallback() ?>;
-        <?php echo $this->getJsObjectName() ?>.initGridRows();
-    <?php endif; ?>
-    <?php if($this->getMassactionBlock()->isAvailable()): ?>
-    <?php echo $this->getMassactionBlock()->getJavaScript() ?>
-    <?php endif ?>
-    <?php echo $this->getAdditionalJavaScript(); ?>
+    <?php echo $this->getGridJavascript() ?>
 //]]>
 </script>
 <?php endif; ?>

@@ -38,7 +38,7 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
 
     public function __construct($attributes = array()) {
         parent::__construct($attributes);
-
+        
         $this->_defaultSort = Mage::getStoreConfig('zendesk/backend_features/default_sort');
         $this->_defaultDir = Mage::getStoreConfig('zendesk/backend_features/default_sort_dir');
         
@@ -211,6 +211,30 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
             'sort_order'    => $this->getParam( $this->getVarNameDir(), $this->_defaultDir),
             'sort_by'       => $this->getParam( $this->getVarNameSort(), $this->_defaultSort),
         );
+    }
+    
+    public function getGridJavascript()
+    {
+        $js = $this->getJsObjectName()."= new varienGrid('".$this->getId()."', '".$this->getGridUrl()."', '".$this->getVarNamePage()."', '".$this->getVarNameSort()."', '".$this->getVarNameDir()."', '".$this->getVarNameFilter()."');";
+        $js .= $this->getJsObjectName() .".useAjax = '".$this->getUseAjax()."';";
+        
+        if($this->getRowClickCallback())
+            $js .= $this->getJsObjectName() .".rowClickCallback = ".$this->getRowClickCallback().";";
+  
+        if($this->getCheckboxCheckCallback())
+            $js .= $this->getJsObjectName().".checkboxCheckCallback = ".$this->getCheckboxCheckCallback().";";
+        
+        if($this->getRowInitCallback()) {
+            $js .= $this->getJsObjectName().".initRowCallback = ".$this->getRowInitCallback().";";
+            $js .= $this->getJsObjectName().".initGridRows();";
+        }
+        
+        if($this->getMassactionBlock()->isAvailable())
+            $js .= $this->getMassactionBlock()->getJavaScript();
+        
+        $js .= $this->getAdditionalJavaScript();
+        
+        return $js;
     }
     
 }

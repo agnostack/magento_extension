@@ -23,10 +23,8 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function indexAction()
     {
-        $domain = Mage::getStoreConfig('zendesk/general/domain');
-        
-        if (!$domain) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Please set up Zendesk connection.'));
+        if (!$this->_domainConfigured()) {
+            return;
         }
 
         $connection = Mage::helper('zendesk')->getConnectionStatus();
@@ -159,20 +157,10 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function createAction()
     {
-        try {
-            $domain = Mage::getStoreConfig('zendesk/general/domain');
-            if(!$domain) {
-                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Please set up Zendesk connection.'));
-                $this->_redirect('adminhtml/zendesk/index');
-                return;
-            }
-        } catch( Exception $ex ) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Please set up Zendesk connection.'));
-            $this->_redirect('adminhtml/zendesk/index');
+        if (!$this->_domainConfigured()) {
             return;
         }
         
- 
         // Check if we have been passed an order ID, in which case we can preload some of the form details
         if($orderId = $this->getRequest()->getParam('order_id')) {
             $order = Mage::getModel('sales/order')->load($orderId);
@@ -206,10 +194,8 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function launchAction()
     {
-        $domain = Mage::getStoreConfig('zendesk/general/domain');
-        if(!$domain) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Please set up Zendesk connection.'));
-            $this->_redirect("adminhtml/zendesk/index");
+        $domain = $this->_domainConfigured();
+        if (!$domain) {
             return;
         }
         
@@ -713,6 +699,18 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                             'Request failed for %d ticket(s).', count($ids)
                     )
             );
+        }
+    }
+    
+    private function _domainConfigured()
+    {
+        $domain = Mage::getStoreConfig('zendesk/general/domain');
+        if(!$domain) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Please set up Zendesk connection.'));
+            $this->_redirect('adminhtml/dashboard');
+            return false;
+        } else {
+            return $domain;
         }
     }
 
