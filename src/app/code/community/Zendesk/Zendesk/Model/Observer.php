@@ -127,7 +127,11 @@ class Zendesk_Zendesk_Model_Observer
         $group = Mage::getModel('customer/group')->load($group_id);
         
         //Get Customer Last Login Date
-        $log_customer = Mage::getModel('log/customer')->loadByCustomer($customer);  
+        $log_customer = Mage::getModel('log/customer')->loadByCustomer($customer); 
+        if ($log_customer->getLoginAt())
+            $logged_in = date("Y-m-d\TH:i:s\Z",strtotime($log_customer->getLoginAt()));
+        else
+            $logged_in = "";
         
         //Get Customer Sales Statistics
         $order_totals = Mage::getResourceModel('sales/order_collection');
@@ -159,7 +163,7 @@ class Zendesk_Zendesk_Model_Observer
                     "group"         =>  $group->getCode(),
                     "name"          =>  $customer->getFirstname() . " " . $customer->getLastname(),
                     "id"            =>  $customer->getId(),
-                    "logged_in"     =>  date("Y-m-d\TH:i:s\Z",strtotime($log_customer->getLoginAt())),
+                    "logged_in"     =>  $logged_in,
                     "average_sale"  =>  $average_sale,
                     "lifetime_sale" =>  $lifetime_sale
                 )
