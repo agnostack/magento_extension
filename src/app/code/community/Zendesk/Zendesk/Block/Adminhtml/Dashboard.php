@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2012 Zendesk.
  *
@@ -14,24 +15,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+class Zendesk_Zendesk_Block_Adminhtml_Dashboard extends Mage_Adminhtml_Block_Template {
 
-class Zendesk_Zendesk_Block_Adminhtml_Dashboard extends Mage_Adminhtml_Block_Template
-{
-
-    public function __construct()
-    {
+    public function __construct() {
         parent::__construct();
+
         $this->setTemplate('zendesk/dashboard/index.phtml');
     }
 
-    public function getIsZendeskDashboard()
-    {
-        $controller = Mage::app()->getFrontController()->getRequest()->getControllerName();
+    public function getIsZendeskDashboard() {
+        return Mage::app()->getFrontController()->getRequest()->getControllerName() === 'zendesk';
+    }
 
-        if($controller == 'zendesk') {
-            return true;
-        } else {
-            return false;
-        }
+    public function getAuthHeader() {
+        return 'Token token="' . Mage::helper('zendesk')->getApiToken(false) . '"';
+    }
+
+    public function isConnected() {
+        $connection = Mage::helper('zendesk')->getConnectionStatus();
+        return $connection['success'];
+    }
+
+    public function getTotals() {
+        return Mage::helper("zendesk")->getTicketTotals();
     }
 }

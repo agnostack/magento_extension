@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright 2012 Zendesk.
  *
@@ -70,7 +71,7 @@ class Zendesk_Zendesk_Model_Observer
             $scopeId = $store->getId();
         }
 
-        $enableEmail = Mage::getStoreConfig('zendesk/features/contact_us', $storeCode);
+        $enableEmail = Mage::getStoreConfig('zendesk/frontend_features/contact_us', $storeCode);
         $currentEmail = Mage::getStoreConfig('contacts/email/recipient_email', $storeCode);
         $oldEmail = Mage::getStoreConfig('zendesk/hidden/contact_email_old', $storeCode);
         $zendeskEmail = Mage::helper('zendesk')->getSupportEmail($storeCode);
@@ -101,7 +102,7 @@ class Zendesk_Zendesk_Model_Observer
     public function addTicketButton(Varien_Event_Observer $event)
     {
         $block = $event->getBlock();
-        if ($block instanceof Mage_Adminhtml_Block_Sales_Order_View && Mage::getStoreConfig('zendesk/features/show_on_order')) {
+        if ($block instanceof Mage_Adminhtml_Block_Sales_Order_View && Mage::getStoreConfig('zendesk/backend_features/show_on_order')) {
             $block->addButton('ticket_new', array(
              'label'     => Mage::helper('zendesk')->__('Create Ticket'),
              'onclick'   => 'setLocation(\'' . $block->getUrl('adminhtml/zendesk/create') . '\')',
@@ -109,4 +110,101 @@ class Zendesk_Zendesk_Model_Observer
             ));
         }
     }
+    
+    public function changeIdentity(Varien_Event_Observer $event)
+    {
+        if(!Mage::getStoreConfig('zendesk/general/customer_sync'))
+            return;
+        
+        $user = null;
+        $customer = $event->getCustomer();
+        $email = $customer->getEmail();
+        $orig_email = $customer->getOrigData();
+        $orig_email = $orig_email['email'];
+        
+        //Get Customer Group
+        $group_id = $customer->getGroupId();
+        $group = Mage::getModel('customer/group')->load($group_id);
+        
+        //Get Customer Last Login Date
+        $log_customer = Mage::getModel('log/customer')->loadByCustomer($customer); 
+        if ($log_customer->getLoginAt())
+            $logged_in = date("Y-m-d\TH:i:s\Z",strtotime($log_customer->getLoginAt()));
+        else
+            $logged_in = "";
+        
+        //Get Customer Sales Statistics
+        $order_totals = Mage::getResourceModel('sales/order_collection');
+        $lifetime_sale = 0;
+        $average_sale = 0;
+        
+        if (is_object($order_totals)) {
+            $order_totals
+            ->addFieldToSelect('*')
+            ->addFieldToFilter('customer_id', $customer->getId())
+            ->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_COMPLETE)
+            ->addAttributeToSelect('grand_total')
+            ->getColumnValues('grand_total');
+            
+            $sum = 0;
+            foreach ($order_totals as $total) {
+                if (isset($total['grand_total']))
+                    $sum += (float)$total['grand_total'];
+            }
+            
+            $lifetime_sale = Mage::helper('core')->currency($sum, true, false);
+            $average_sale = Mage::helper('core')->currency($sum / count($order_totals), true, false);
+        }
+        
+        $info['user'] = array(
+                "name"          =>  $customer->getFirstname() . " " . $customer->getLastname(),
+                "email"         =>  $email,
+                "user_fields"       =>  array(
+                    "group"         =>  $group->getCode(),
+                    "name"          =>  $customer->getFirstname() . " " . $customer->getLastname(),
+                    "id"            =>  $customer->getId(),
+                    "logged_in"     =>  $logged_in,
+                    "average_sale"  =>  $average_sale,
+                    "lifetime_sale" =>  $lifetime_sale
+                )
+            ); 
+        
+        if($orig_email && $orig_email !== $email) {
+            $user = Mage::getModel('zendesk/api_users')->find($orig_email);
+            
+            if(isset($user['id'])) {
+                $data['identity'] = array(
+                    'type'      =>  'email',
+                    'value'     =>  $email,
+                    'verified'  =>  true
+                );
+                $identity = Mage::getModel('zendesk/api_users')->addIdentity($user['id'],$data);
+                if(isset($identity['id'])) {
+                    Mage::getModel('zendesk/api_users')->setPrimaryIdentity($user['id'], $identity['id']);
+                }
+            }
+        }
+
+        if(!$user) {
+            $user = Mage::getModel('zendesk/api_users')->find($email);
+        }
+        
+        if(isset($user['id'])) {
+            $this->syncData($user['id'], $info);
+        } else {
+            $info['user']['verified'] = true;
+            $this->createAccount($info);
+        }
+    }
+    
+    public function syncData($user_id, $data)
+    {
+        Mage::getModel('zendesk/api_users')->update($user_id, $data);
+    }
+    
+    public function createAccount($data)
+    {
+        Mage::getModel('zendesk/api_users')->create($data);
+    }
+    
 }

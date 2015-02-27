@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright 2013 Zendesk.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+?>
+<script type="text/javascript">
+    function sync() {
+        var request = new Ajax.Request('<?php echo $this->getTestUrl(); ?>', {
+            method: 'get',
+
+            onCreate: function() {
+                document.getElementById('zendesk-sync-results').innerHTML = '';
+            },
+            onSuccess: function(transport) {
+                if (transport.responseJSON.success === true) {
+                    var message = '<ul class="messages"><li class="success-msg">' + transport.responseJSON.msg + '</li></ul>';
+                    document.getElementById('zendesk-sync-results').innerHTML = message;
+                } else {
+                    var message = '<ul class="messages"><li class="error-msg">' + transport.responseJSON.msg +
+                              '</li></ul>';
+                    document.getElementById('zendesk-sync-results').innerHTML = message;
+                }
+            }
+        });
+    }
+</script>
+<button style="" onclick="javascript:sync(); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
+    <span><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
+</button>
+<div id="zendesk-sync-results"></div>
+

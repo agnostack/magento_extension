@@ -15,6 +15,28 @@
  * limitations under the License.
  */
 ?>
-<button style="" onclick="setLocation('<?php echo $this->getUrl('adminhtml/zendesk/checkOutbound'); ?>');" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
+<button style="" onclick="javascript:checkZendApiConnection(); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
     <span><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
 </button>
+<script type="text/javascript">
+    function checkZendApiConnection() {
+        var request = new Ajax.Request('<?php echo $this->getUrl('adminhtml/zendesk/checkOutbound'); ?>', {
+            method: 'get',
+            onCreate: function() {
+                document.getElementById('zendesk-api-connection-results').innerHTML = '';
+            },
+            onSuccess: function(transport) {
+                if (transport.responseJSON.success === true) {
+                    var message = '<ul class="messages"><li class="success-msg">' + transport.responseJSON.msg + '</li></ul>';
+                    document.getElementById('zendesk-api-connection-results').innerHTML = message;
+                } else {
+                    var message = '<ul class="messages"><li class="error-msg">' + transport.responseJSON.msg +
+                              '</li></ul>';
+                    document.getElementById('zendesk-api-connection-results').innerHTML = message;
+                }
+            }
+        });
+    }
+</script>
+<div id="zendesk-api-connection-results"></div>
+

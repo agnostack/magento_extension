@@ -35,7 +35,7 @@
             <show_in_website>1</show_in_website>
             <show_in_store>1</show_in_store>
             <groups>
-        		<general translate="label comment">
+                    <general translate="label comment">
                     <expanded>1</expanded>
                     <label>General</label>
                     <comment>General settings that are required to connect Zendesk and Magento.</comment>
@@ -44,7 +44,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-					<fields>
+                    <fields>
                         <domain translate="label comment">
                             <label>Zendesk Domain</label>
                             <frontend_type>text</frontend_type>
@@ -80,7 +80,7 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </test>
-                        <use_external_id>
+                        <use_external_id translate="label comment">
                             <label>Use External ID</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
@@ -90,6 +90,26 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Depending on your Zendesk configuration under "Settings / Security / JSON Web Token / Update of external IDs?" ]]></comment>
                         </use_external_id>
+                        <customer_sync translate="label comment">
+                            <label>Synchronize Customers</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Synchronize magento customer accounts with zendesk end-users? ]]></comment>
+                        </customer_sync>
+                        <sync_now translate="button_label comment">
+                            <label></label>
+                            <button_label>Sync All Customers And Create User Fields</button_label>
+                            <frontend_model>zendesk/adminhtml_config_buttons_sync</frontend_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Only if customers synchronization is enabled ]]></comment>
+                        </sync_now>
                     </fields>
                 </general>
                 <sso translate="label comment">
@@ -150,53 +170,16 @@
                         </token>
                     </fields>
                 </sso_frontend>
-                <features translate="label">
+                <frontend_features translate="label comment">
                     <expanded>1</expanded>
-                    <label>Features</label>
+                    <label>Customer Frontend</label>
                     <comment>Decide which features you would like turned on in your Magento store.</comment>
                     <frontend_type>text</frontend_type>
                     <sort_order>30</sort_order>
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields>
-                        <show_on_dashboard translate="label">
-                            <label>Show support tickets on admin dashboard</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>1</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </show_on_dashboard>
-                        <show_views translate="label">
-                            <label>Views to show on dashboards</label>
-                            <frontend_type>multiselect</frontend_type>
-                            <source_model>zendesk/source_views</source_model>
-                            <sort_order>2</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                            <can_be_empty>1</can_be_empty>
-                        </show_views>
-                        <show_on_customer translate="label">
-                            <label>Show support tickets on customer view</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>3</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </show_on_customer>
-                        <show_on_order translate="label">
-                            <label>Show support tickets on order view</label>
-                            <frontend_type>select</frontend_type>
-                            <source_model>adminhtml/system_config_source_yesno</source_model>
-                            <sort_order>4</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>0</show_in_store>
-                        </show_on_order>
+                    <fields> 
                         <contact_us translate="label">
                             <label>Create tickets from Contact Us form</label>
                             <frontend_type>select</frontend_type>
@@ -247,15 +230,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </footer_link_enabled>
-                        <order_field_id translate="label comment">
-                            <label>Zendesk Order Number field ID</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>10</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <comment><![CDATA[Used to link order in Magento with tickets in Zendesk]]></comment>
-                        </order_field_id>
                         <customer_tickets translate="label comment">
                             <label>Show Tickets in Customer Accounts</label>
                             <frontend_type>select</frontend_type>
@@ -266,8 +240,93 @@
                             <show_in_store>1</show_in_store>
                             <comment><![CDATA[Display Customer's tickets in My Account]]></comment>
                         </customer_tickets>
+                        <order_field_id translate="label comment">
+                            <label>Zendesk Order Number field ID</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[Used to link order in Magento with tickets in Zendesk]]></comment>
+                        </order_field_id>
                     </fields>
-                </features>
+                </frontend_features>
+                <backend_features translate="label comment">
+                    <expanded>1</expanded>
+                    <label>Admin Backend</label>
+                    <comment>Decide which features you would like turned on in your admin panel.</comment>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>35</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <show_on_order translate="label">
+                            <label>Show support tickets on order view</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>7</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_on_order>   
+                        <show_on_dashboard translate="label">
+                            <label>Show support tickets on admin dashboard</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>5</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_on_dashboard>
+                        <show_all translate="label">
+                            <label>Show "All" tab on dashboard</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>1</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_all> 
+                        <default_sort translate="label">
+                            <label>Default Sort Order</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>zendesk/source_sortorder</source_model>
+                            <sort_order>2</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </default_sort>
+                        <default_sort_dir translate="label">
+                            <label>Default Sort Direction</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>zendesk/source_sortdir</source_model>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </default_sort_dir>
+                        <show_views translate="label">
+                            <label>Views to show on dashboards</label>
+                            <frontend_type>multiselect</frontend_type>
+                            <source_model>zendesk/source_views</source_model>
+                            <sort_order>4</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                            <can_be_empty>1</can_be_empty>
+                        </show_views>
+                        <show_on_customer translate="label">
+                            <label>Show support tickets on customer view</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <sort_order>6</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>0</show_in_store>
+                        </show_on_customer>
+                    </fields>
+                </backend_features>
                 <api translate="label comment">
                     <label>API Details</label>
                     <comment>Required for Magento App inside Zendesk to work.</comment>
@@ -296,7 +355,7 @@
                         </token>
                         <sign_up translate="button_label">
                             <label></label>
-                            <button_label>Generate new token</button_label>
+                            <button_label>Generate New Token</button_label>
                             <frontend_model>zendesk/adminhtml_config_buttons_generate</frontend_model>
                             <sort_order>3</sort_order>
                             <show_in_default>1</show_in_default>
@@ -417,7 +476,7 @@
                     <fields>
                         <sign_up translate="button_label">
                             <label></label>
-                            <button_label>Setup guide</button_label>
+                            <button_label>Setup Guide</button_label>
                             <frontend_model>zendesk/adminhtml_config_buttons_signup</frontend_model>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Copyright 2012 Zendesk.
+ * Copyright 2015 Zendesk
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,26 +16,10 @@
  * limitations under the License.
  */
 
-class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_View extends Mage_Adminhtml_Block_Widget_Container
-{
-    protected $_view = null;
-
-    public function setView($view)
+class Zendesk_Zendesk_Model_Resource_Tickets extends Mage_Core_Model_Resource_Db_Abstract {
+    
+    protected function _construct()
     {
-        $this->_view = $view;
-        $this->setId('view-' . $view['id']);
-
-        return $this;
-    }
-
-    public function getView()
-    {
-        return $this->_view;
-    }
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setTemplate('zendesk/dashboard/tabs/view.phtml');
+        $this->_init('zendesk/tickets', 'id');
     }
 }

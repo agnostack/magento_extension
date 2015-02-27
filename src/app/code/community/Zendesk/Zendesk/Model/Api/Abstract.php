@@ -24,16 +24,8 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
         return $base_url . '/' . $path;
     }
 
-    protected function _call(
-        $endpoint, 
-        $params = null, 
-        $method = 'GET', 
-        $data = null, 
-        $headers = null
-    )
+    protected function _call($endpoint, $params = null, $method = 'GET', $data = null, $silent = false, $global = false)
     {
-        $usingRawData = false;
-
         if($params && is_array($params) && count($params) > 0) {
             $args = array();
             foreach($params as $arg => $val) {
@@ -41,37 +33,27 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             }
             $endpoint .= '?' . implode('&', $args);
         }
-
-        if (empty($headers)) {
-            $headers = array(
-                 'Accept'       => 'application/json',
-                 'Content-Type' => 'application/json',
-            );
-        }
-
+        
         $url = $this->_getUrl($endpoint);
 
         $method = strtoupper($method);
 
         $client = new Zend_Http_Client($url);
         $client->setMethod($method);
-        $client->setHeaders($headers);
+        $client->setHeaders(
+            array(
+                 'Accept' => 'application/json',
+                 'Content-Type' => 'application/json'
+            )
+        );
 
         $client->setAuth(
-            Mage::getStoreConfig('zendesk/general/email') . '/token',
+            Mage::getStoreConfig('zendesk/general/email'). '/token',
             Mage::getStoreConfig('zendesk/general/password')
         );
 
-        if($method == 'POST' || $method == 'PUT') {
-            $contentType = $client->getHeader('Content-Type');
-
-            if ($contentType == 'application/json' && !preg_match('/^[\{\[]/', $contentType)) {
-                $data = json_encode($data);
-            }
-
-            $client->setRawData($data, $client->getHeader('Content-Type'));
-
-            $usingRawData = true;
+        if($method == 'POST' || $method == "PUT") {
+            $client->setRawData(json_encode($data), 'application/json');
         }
 
         Mage::log(
@@ -79,15 +61,20 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
                 array(
                    'url' => $url,
                    'method' => $method,
-                   'data' => $usingRawData ? '' : json_encode($data),
+                   'data' => json_encode($data),
                 ),
                 true
             ),
             null,
             'zendesk.log'
         );
-
-        $response = $client->request();
+        
+        try {
+            $response = $client->request();
+        } catch ( Exception $ex ) {
+            return array();
+        }
+        
         $body = json_decode($response->getBody(), true);
 
         Mage::log(var_export($body, true), null, 'zendesk.log');
@@ -95,12 +82,27 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
         if($response->isError()) {
             if(is_array($body) && isset($body['error'])) {
                 if(is_array($body['error']) && isset($body['error']['title'])) {
-                    throw new Exception($body['error']['title'], $response->getStatus());
+                    if (!$silent) {
+                        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__($body['error']['title'],$response->getStatus()));
+                        return;
+                    } else {
+                        return $body;
+                    }
                 } else {
-                    throw new Exception($body['error'], $response->getStatus());
+                    if (!$silent) {
+                        Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__($body['error'],$response->getStatus()));
+                        return;
+                    } else {
+                        return $body;
+                    }
                 }
             } else {
-                throw new Exception($body, $response->getStatus());
+                if (!$silent) {
+                    Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__($body, $response->getStatus()));
+                    return;
+                } else {
+                    return $body;
+                }
             }
         }
 
