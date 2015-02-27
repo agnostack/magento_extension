@@ -88,6 +88,14 @@ parts:
       title: "Configuration form: link to let them customize their feedback tab"
       value: "Customize Feedback Tab"
   - translation:
+      key: "txt.integrations.magento.config.features.web_widget"
+      title: "Configuration form: label asking if they would like to display the web widget"
+      value: "Include Web Widget"
+  - translation:
+      key: "txt.integrations.magento.config.features.web_widget_customize"
+      title: "Configuration form: link to let them customize their web widget"
+      value: "Customize Web Widget"
+  - translation:
       key: "txt.integrations.magento.config.features.display_link_to_zendesk"
       title: "Configuration form: link to let them toggle the display of a link to Zendesk in the footer"
       value: "Display link to Zendesk in Magento footer"
