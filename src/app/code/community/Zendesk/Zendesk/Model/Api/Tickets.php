@@ -87,6 +87,17 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         return $response['tickets'];
     }
 
+    public function all()
+    {
+        $response = $this->_call('tickets.json');
+        return $response['tickets'];
+    }
+    
+    public function search($data)
+    {
+        return $this->_call('search.json', $data);
+    }
+        
     public function forOrder($orderIncrementId)
     {
         if(!$orderIncrementId) {
@@ -103,7 +114,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
 
         // Now check through the tickets to make sure the appropriate field has been filled out with the order number
         $tickets = array();
-        $fieldId = Mage::getStoreConfig('zendesk/features/order_field_id');
+        $fieldId = Mage::getStoreConfig('zendesk/frontend_features/order_field_id');
 
         if(!$fieldId) {
             return false;
@@ -132,25 +143,51 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
 
     public function forRequester($customerEmail)
     {
-        if(!$customerEmail || strlen(trim($customerEmail)) === 0) {
-            throw new InvalidArgumentException('Customer email address not valid');
+        $user = Mage::getModel('zendesk/api_users')->find($customerEmail);
+        if(isset($user['id'])) {
+            $response = $this->_call('users/' . $user['id'] . '/requests.json', null, 'GET', null, false);
+            return $response['requests'];
+        } else {
+            return array();
         }
-
-        $response = $this->_call('search.json',
-            array(
-                 'query' => 'requester:' . $customerEmail . ' type:ticket',
-                 'sort_order' => 'desc',
-                 'sort_by' => 'updated_at',
-            )
-        );
-
-        return $response['results'];
     }
-
+    
+    public function bulkDelete($data)
+    {
+        if (is_array($data)) {
+            $params['ids'] = implode(",",$data);
+            return $this->_call('tickets/destroy_many.json', $params, 'DELETE');
+        }
+    }
+    
+    public function updateMany($ids, $data) {
+        if(is_array($ids)) {
+            $params['ids'] = implode(",", $ids);
+            $ticket['ticket'] = $data;
+            
+            return $this->_call('tickets/update_many.json', $params, 'PUT', $ticket);
+        }
+    }
+    
+    public function getJobStatus($url)
+    {
+        $parts = explode("/", $url);
+        $link =  'job_statuses/'.end($parts);
+        return $this->_call($link);
+    }
+    
+    public function bulkMarkAsSpam($data)
+    {
+        if (is_array($data)) {
+            $params['ids'] = implode(",",$data);
+            return $this->_call('tickets/mark_many_as_spam.json', $params, 'PUT');
+        }
+    }
+    
     public function create($data)
     {
         $response = $this->_call('tickets.json', null, 'POST', $data);
-
+        
         return $response['ticket'];
     }
 

@@ -1,0 +1,46 @@
+<?php
+/**
+ * Copyright 2015 Zendesk
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+?>
+<div class="entry-edit">
+    <div class="entry-edit-head">
+        <div class="fright"><?php echo $this->getButtonsHtml() ?></div>
+        <h4 class="fieldset-legend <?php echo ($this->getHeaderCssClass()) ? $this->getHeaderCssClass().' icon-head' : '' ?>"><?php echo $this->getHeaderText() ?></h4>
+    </div>
+    <div class="fieldset">
+        <?php echo $this->getChildHtml('', true, true) ?>
+    </div>
+</div>
+<script>
+document.getElementById('zendesk_create_customer_search_grid').parentNode.style.display = 'none';
+function insertUser(id) {
+        var request = new Ajax.Request('<?php echo $this->getUrl('adminhtml/zendesk/getUser'); ?>'+'id/'+id, {
+            method: 'get',
+            onSuccess: function(transport) {
+                if (transport.responseJSON.success === true) {
+                    document.getElementById('requester_name').value = transport.responseJSON.usr.firstname;
+                    document.getElementById('requester').value = transport.responseJSON.usr.email;
+                    document.getElementById('zendesk_create_customer_search_grid').parentNode.style.display = 'none';
+                    document.getElementById('show-users').style.display = 'block';
+                }
+            }
+        });
+}
+function showUsers() {
+    document.getElementById('zendesk_create_customer_search_grid').parentNode.style.display = 'block';
+    document.getElementById('show-users').style.display = 'none';
+}
+</script>

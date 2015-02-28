@@ -19,7 +19,7 @@
 <config>
     <modules>
         <Zendesk_Zendesk>
-            <version>1.3.1</version>
+            <version>1.4.0</version>
         </Zendesk_Zendesk>
     </modules>
     <zendesk>
@@ -79,6 +79,24 @@
                 </zendesk>
             </updates>
         </layout>
+        <events>
+            <customer_save_commit_after>
+                <observers>
+                    <zendesk>
+                        <class>zendesk/observer</class>
+                        <method>changeIdentity</method>
+                    </zendesk>
+                </observers>
+            </customer_save_commit_after>
+            <customer_login>
+                <observers>
+                    <zendesk>
+                        <class>zendesk/observer</class>
+                        <method>changeIdentity</method>
+                    </zendesk>
+                </observers>
+            </customer_login>
+        </events>
     </frontend>
     <admin>
         <routers>
@@ -109,6 +127,7 @@
             </modules>
         </translate>
         <events>
+
             <core_block_abstract_prepare_layout_before>
                 <observers>
                     <zendesk>
@@ -141,6 +160,15 @@
                     </zendesk>
                 </observers>
             </admin_system_config_changed_section_zendesk>
+            <customer_save_commit_after>
+                <observers>
+                    <zendesk>
+                        <class>zendesk/observer</class>
+                        <method>changeIdentity</method>
+                    </zendesk>
+                </observers>
+            </customer_save_commit_after>
+
         </events>
         <menu>
             <zendesk translate="title" module="zendesk">
@@ -162,11 +190,11 @@
                         <action>adminhtml/zendesk/launch</action>
                         <sort_order>3</sort_order>
                     </zendesk_launch>
-                    <zendesk_settings module="zendesk">
-                        <title>Settings</title>
+                    <zendesk_configurations module="zendesk">
+                        <title>Configuration</title>
                         <action>adminhtml/system_config/edit/section/zendesk</action>
                         <sort_order>4</sort_order>
-                    </zendesk_settings>
+                    </zendesk_configurations>
                     <zendesk_log module="zendesk">
                         <title>Log Viewer</title>
                         <action>adminhtml/zendesk/log</action>
@@ -218,13 +246,21 @@
     </adminhtml>
     <default>
         <zendesk>
-            <features>
-                <show_on_dashboard>1</show_on_dashboard>
-                <show_on_customer>1</show_on_customer>
-                <show_on_order>1</show_on_order>
+            <general>
+                <customer_sync>0</customer_sync>
+            </general>
+            <frontend_features>
                 <feedback_tab_code_active>0</feedback_tab_code_active>
                 <contact_us>0</contact_us>
-            </features>
+            </frontend_features>
+            <backend_features>
+                <show_on_dashboard>0</show_on_dashboard>
+                <show_all>1</show_all>
+                <show_on_customer>1</show_on_customer>
+                <show_on_order>1</show_on_order>
+                <default_sort>created_at</default_sort>
+                <default_sort_dir>desc</default_sort_dir>
+            </backend_features>
         </zendesk>
     </default>
 </config>

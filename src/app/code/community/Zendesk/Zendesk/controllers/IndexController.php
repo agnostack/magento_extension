@@ -22,7 +22,12 @@ class Zendesk_Zendesk_IndexController extends Mage_Core_Controller_Front_Action
      */
     public function indexAction()
     {
-        $url = Mage::helper('zendesk')->getUrl();
+        if(Mage::helper('zendesk')->isSSOEndUsersEnabled()) {
+            $url = Mage::helper('zendesk')->getSSOAuthUrlEndUsers();
+        } else {
+            $url = Mage::helper('zendesk')->getUrl();
+        }
         $this->_redirectUrl($url);
     }
+
 }

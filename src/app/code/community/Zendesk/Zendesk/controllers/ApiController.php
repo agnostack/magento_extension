@@ -32,6 +32,10 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         if(!$tokenString && isset($_SERVER['HTTP_AUTHORIZATION'])) {
             $tokenString = $_SERVER['HTTP_AUTHORIZATION'];
         }
+        
+        if (!$tokenString && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            $tokenString = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+        }
 
         if (!$tokenString) {
             // Certain server configurations fail to extract headers from the request, see PR #24.
@@ -308,7 +312,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         if(!isset($data['order_field_id'])) {
             $missingFields[] = 'order_field_id';
         } else {
-            $configUpdates['zendesk/features/order_field_id'] = $data['order_field_id'];
+            $configUpdates['zendesk/frontend_features/order_field_id'] = $data['order_field_id'];
         }
 
         // Check that the required fields were provided and send back an error if not
@@ -339,15 +343,15 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         }
 
         if(isset($data['magento_footer_link'])) {
-            $configUpdates['zendesk/features/footer_link_enabled'] = ($data['magento_footer_link'] == 'true');
+            $configUpdates['zendesk/frontend_features/footer_link_enabled'] = ($data['magento_footer_link'] == 'true');
         }
 
         if(isset($data['email_forwarding'])) {
-            $configUpdates['zendesk/features/contact_us'] = ($data['email_forwarding'] == 'true');
+            $configUpdates['zendesk/frontend_features/contact_us'] = ($data['email_forwarding'] == 'true');
 
             // Process this now, since it otherwise won't be triggered until the config page is saved
             // Unlike in the observer, we only need to deal with the case where the setting is enabled
-            if($configUpdates['zendesk/features/contact_us']) {
+            if($configUpdates['zendesk/frontend_features/contact_us']) {
 
                 $currentEmail = Mage::getStoreConfig('contacts/email/recipient_email');
                 $zendeskEmail = 'support@' . $configUpdates['zendesk/general/domain'];
@@ -364,11 +368,11 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         }
 
         if(isset($data['feedback_tab'])) {
-            $configUpdates['zendesk/features/feedback_tab_code_active'] = ($data['feedback_tab'] === 'true');
+            $configUpdates['zendesk/frontend_features/feedback_tab_code_active'] = ($data['feedback_tab'] === 'true');
         }
 
         if(isset($data['feedback_tab_html'])) {
-            $configUpdates['zendesk/features/feedback_tab_code'] = $data['feedback_tab_html'];
+            $configUpdates['zendesk/frontend_features/feedback_tab_code'] = $data['feedback_tab_html'];
         }
 
 

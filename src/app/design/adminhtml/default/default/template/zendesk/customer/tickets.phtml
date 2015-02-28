@@ -17,7 +17,7 @@
 ?>
 <?php
 
-if(!Mage::getStoreConfig('zendesk/features/show_on_customer')) {
+if(!Mage::getStoreConfig('zendesk/backend_features/show_on_customer')) {
     return;
 }
 
@@ -54,16 +54,16 @@ if($customer = Mage::registry('current_customer')) {
                     </thead>
                     <tbody class="odd">
                         <?php foreach($tickets as $ticket): ?>
-                        <?php $t = Mage::getModel('zendesk/api_tickets')->get($ticket['id'], true); ?>
-                        <tr class="border">
-                            <td><?php echo ucwords($ticket['priority']); ?></td>
-                            <td><a href="<?php echo Mage::helper('zendesk')->getUrl('ticket', $ticket['id']); ?>" target="_blank"><?php echo $ticket['subject']; ?></a></td>
-                            <td><?php echo Mage::helper('core')->formatDate($ticket['created_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
-                            <td><?php echo Mage::helper('core')->formatDate($ticket['updated_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
-                            <td><?php echo ucwords($ticket['status']); ?></td>
-                            <td><?php echo ($ticket['group_id']) ? $t['group']['name'] : ''; ?></td>
-                            <td><?php echo ($ticket['assignee_id']) ? $t['assignee']['name'] : ''; ?></td>
-                        </tr>
+                            <?php $t = Mage::getModel('zendesk/api_tickets')->get($ticket['id'], true); ?>
+                            <tr class="border">
+                                <td><?php echo ucwords($ticket['priority']); ?></td>
+                                <td><?php echo Mage::helper('zendesk')->getTicketUrl($ticket); ?></td>
+                                <td><?php echo Mage::helper('core')->formatDate($ticket['created_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
+                                <td><?php echo Mage::helper('core')->formatDate($ticket['updated_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
+                                <td><?php echo ucwords($ticket['status']); ?></td>
+                                <td><?php echo ($ticket['group_id']) ? $t['group']['name'] : ''; ?></td>
+                                <td><?php echo ($ticket['assignee_id']) ? $t['assignee']['name'] : ''; ?></td>
+                            </tr>
                         <?php endforeach; ?>
                     </tbody>
                 </table>

@@ -61,7 +61,7 @@ class Zendesk_Zendesk_Block_Customer_Tickets_List extends Mage_Core_Block_Templa
         $customer = $this->getCustomer();
         $tickets = null;
 
-        if($customer) {
+        if($customer && $customer->getEmail()) {
             $tickets = Mage::getModel('zendesk/api_tickets')->forRequester($customer->getEmail());
         }
 
