@@ -27,17 +27,17 @@
 $config = new Mage_Core_Model_Config();
 
 // We won't need the Feedback Tab code snippet anymore
-$config->deleteConfig('zendesk/features/feedback_tab_code');
+$config->deleteConfig('zendesk/frontend_features/feedback_tab_code');
 
 // We won't check in our code whether to show or not the Feedback Tab
-$config->deleteConfig('zendesk/features/feedback_tab_code_active');
+$config->deleteConfig('zendesk/frontend_features/feedback_tab_code_active');
 
 // Retrieve the domain from the config settings
 $domain = Mage::getStoreConfig('zendesk/general/domain');
 
 if($domain) {
     // We are activating the Web Widget by default
-    $config->saveConfig('zendesk/features/web_widget_code_active', 1);
+    $config->saveConfig('zendesk/frontend_features/web_widget_code_active', 1);
 
     // The Web Widget code snippet, using the account zendesk domain from settings
     $webWidgetSnippet=<<<EOJS
@@ -46,10 +46,10 @@ if($domain) {
 <!-- End of zendesk Zendesk Widget script -->
 EOJS;
 
-    $config->saveConfig('zendesk/features/web_widget_code_snippet', $webWidgetSnippet);
+    $config->saveConfig('zendesk/frontend_features/web_widget_code_snippet', $webWidgetSnippet);
 } else {
     // There is no domain on the settings, we can't activate the Web Widget
     // The user should probably re-run the Setup from the Zendesk extension settings page
-    $config->saveConfig('zendesk/features/web_widget_code_active', 0);
-    $config->saveConfig('zendesk/features/web_widget_code_snippet', '');
+    $config->saveConfig('zendesk/frontend_features/web_widget_code_active', 0);
+    $config->saveConfig('zendesk/frontend_features/web_widget_code_snippet', '');
 }
