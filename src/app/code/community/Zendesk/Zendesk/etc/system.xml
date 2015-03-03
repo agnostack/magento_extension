@@ -179,7 +179,7 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <fields> 
+                    <fields>
                         <contact_us translate="label">
                             <label>Create tickets from Contact Us form</label>
                             <frontend_type>select</frontend_type>
@@ -189,38 +189,25 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </contact_us>
-                        <feedback_tab_code_active translate="label">
-                            <label>Code to display Feedback Tab</label>
+                        <web_widget_code_active translate="label">
+                            <label>Include Web Widget</label>
                             <frontend_type>select</frontend_type>
                             <source_model>adminhtml/system_config_source_yesno</source_model>
                             <sort_order>6</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </feedback_tab_code_active>
-                        <feedback_tab_code>
-                            <frontend_type>textarea</frontend_type>
+                        </web_widget_code_active>
+                        <web_widget_customise translate="label value">
+                            <label></label>
+                            <frontend_model>zendesk/adminhtml_config_link</frontend_model>
+                            <destination><![CDATA[agent/admin/widget]]></destination>
+                            <value>Customize Web Widget</value>
                             <sort_order>7</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                            <depends>
-                                <feedback_tab_code_active>1</feedback_tab_code_active>
-                            </depends>
-                        </feedback_tab_code>
-                        <feedback_tab_customise translate="label value">
-                            <label></label>
-                            <frontend_model>zendesk/adminhtml_config_link</frontend_model>
-                            <destination><![CDATA[account/dropboxes/new]]></destination>
-                            <value>Customize Feedback Tab</value>
-                            <sort_order>8</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                            <depends>
-                                <feedback_tab_code_active>1</feedback_tab_code_active>
-                            </depends>
-                        </feedback_tab_customise>
+                        </web_widget_customise>
                         <footer_link_enabled translate="label">
                             <label>Display link to Zendesk in Magento footer</label>
                             <frontend_type>select</frontend_type>
@@ -269,7 +256,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </show_on_order>   
+                        </show_on_order>
                         <show_on_dashboard translate="label">
                             <label>Show support tickets on admin dashboard</label>
                             <frontend_type>select</frontend_type>
@@ -287,7 +274,7 @@
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>0</show_in_store>
-                        </show_all> 
+                        </show_all>
                         <default_sort translate="label">
                             <label>Default Sort Order</label>
                             <frontend_type>select</frontend_type>
@@ -442,16 +429,16 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </voice>
-                        <feedback_tab translate="label value">
-                            <label>Feedback Tab</label>
+                        <web_widget translate="label value">
+                            <label>Web Widget</label>
                             <frontend_model>zendesk/adminhtml_config_link</frontend_model>
-                            <destination><![CDATA[account/dropboxes/new]]></destination>
+                            <destination><![CDATA[agent/admin/widget]]></destination>
                             <value>Configure</value>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </feedback_tab>
+                        </web_widget>
                         <api translate="label value">
                             <label>API</label>
                             <frontend_model>zendesk/adminhtml_config_link</frontend_model>

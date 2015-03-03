@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright 2012 Zendesk.
+ * Copyright 2015 Zendesk.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,14 @@
  * limitations under the License.
  */
 
-class Zendesk_Zendesk_Block_Supporttab extends Mage_Core_Block_Template
+class Zendesk_Zendesk_Block_WebWidget extends Mage_Core_Block_Template
 {
     protected function _toHtml()
     {
-        if(!Mage::getStoreConfig('zendesk/frontend_features/feedback_tab_code_active')) {
+        if(!Mage::getStoreConfig('zendesk/frontend_features/web_widget_code_active')) {
             return '';
         }
 
-        return Mage::getStoreConfig('zendesk/frontend_features/feedback_tab_code');
+        return Mage::getStoreConfig('zendesk/frontend_features/web_widget_code_snippet');
     }
 }

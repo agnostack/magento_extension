@@ -27,7 +27,7 @@
             </action>
         </reference>
         <reference name="before_body_end">
-            <block type="zendesk/supporttab" name="zendesk_support_tab"/>
+            <block type="zendesk/webWidget" name="zendesk_web_widget"/>
         </reference>
     </default>
 
