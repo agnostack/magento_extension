@@ -367,12 +367,12 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
             }
         }
 
-        if(isset($data['feedback_tab'])) {
-            $configUpdates['zendesk/frontend_features/feedback_tab_code_active'] = ($data['feedback_tab'] === 'true');
+        if(isset($data['web_widget_code_active'])) {
+            $configUpdates['zendesk/frontend_features/web_widget_code_active'] = ($data['web_widget_code_active'] === 'true');
         }
 
-        if(isset($data['feedback_tab_html'])) {
-            $configUpdates['zendesk/frontend_features/feedback_tab_code'] = $data['feedback_tab_html'];
+        if(isset($data['web_widget_code_snippet'])) {
+            $configUpdates['zendesk/frontend_features/web_widget_code_snippet'] = $data['web_widget_code_snippet'];
         }
 
 
