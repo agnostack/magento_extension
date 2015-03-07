@@ -341,7 +341,7 @@ parts:
   - translation:
         key: "txt.integrations.magento.tickets.order_number"
         title: "Label for order number field"
-        value: "Order Number"
+        value: "Order number"
   - translation:
         key: "txt.integrations.magento.tickets.description"
         title: "Label for the description of a ticket"
