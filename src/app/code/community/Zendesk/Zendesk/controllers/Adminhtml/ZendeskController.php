@@ -282,9 +282,11 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             }
 
             try {
+                $admin = Mage::getModel('zendesk/api_users')->me();
                 $ticket = array(
                     'ticket' => array(
                         'requester_id' => $requesterId,
+                        'submitter_id' => $admin['id'],
                         'subject' => $data['subject'],
                         'status' => $data['status'],
                         'priority' => $data['priority'],
