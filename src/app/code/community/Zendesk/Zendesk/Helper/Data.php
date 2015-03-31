@@ -116,11 +116,15 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
      *
      * @return string Zendesk Account login unauthenticated form url
      */
-    public function getZendeskUnauthUrl()
+    public function getZendeskUnauthUrl($return_url = "")
     {
         $protocol = 'https://';
         $domain = $this->getZendeskDomain();
         $route = '/access/unauthenticated';
+
+        if ($return_url) {
+            $route .= '?return_to='.$return_url;
+        }
 
         return $protocol . $domain . $route;
     }
