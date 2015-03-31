@@ -27,7 +27,7 @@ class Zendesk_Zendesk_SsoController extends Mage_Core_Controller_Front_Action
     {
         $return_url = Mage::helper('core')->urlDecode($this->getRequest()->getParam('return_url', ""));
         if(!Mage::getStoreConfig('zendesk/sso_frontend/enabled')) {
-            $this->_redirectUrl(Mage::helper('zendesk')->getZendeskUnauthUrl($return_url));
+            $this->_redirectUrl($return_url ? $return_url : Mage::helper('zendesk')->getZendeskUnauthUrl());
             return $this;
         }
 
