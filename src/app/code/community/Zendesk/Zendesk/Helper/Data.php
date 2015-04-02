@@ -120,7 +120,9 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $protocol = 'https://';
         $domain = $this->getZendeskDomain();
-        $route = '/access/unauthenticated';
+        //Zendesk will automatically redirect to login if user is not logged in
+        //previous URL followed to login page even if user has already logged in
+        $route = '/home';
 
         return $protocol . $domain . $route;
     }
@@ -279,7 +281,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         
         $subject = $row['subject'] ? $row['subject'] : $this->__('No Subject');
 
-        return '<a href="' . $url . '" target="_blank">' .  $subject. '</a>';
+        return '<a href="' . $url . '" target="_blank">' .  Mage::helper('core')->escapeHtml($subject) . '</a>';
     }
     
     public function getStatusMap()

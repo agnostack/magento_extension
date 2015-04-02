@@ -116,8 +116,11 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Edit_form extends Mage_Adminhtml_Bl
             'title'    => Mage::helper('zendesk')->__('Description'),
             'required' => true
         ));
+        
+        if (Mage::registry('zendesk_create_data')) {
+            $form->setValues(Mage::registry('zendesk_create_data'));
+        }
 
-        $form->setValues(Mage::registry('zendesk_create_data'));
         $form->setUseContainer(true);
         $form->setMethod('post');
         $this->setForm($form);

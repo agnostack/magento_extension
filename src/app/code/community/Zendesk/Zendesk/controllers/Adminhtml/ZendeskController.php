@@ -98,7 +98,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
         $user = Mage::getSingleton('admin/session')->getUser();
         $name = $user->getName();
-        $email = $user->getEmail();
+        $email = Mage::getStoreConfig('zendesk/general/email');
         $externalId = $user->getId();
 
         $payload = array(
@@ -107,7 +107,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             "name" => $name,
             "email" => $email
         );
-
+        
         // Validate if we need to include external_id param
         $externalIdEnabled = Mage::helper('zendesk')->isExternalIdEnabled();
         if($externalIdEnabled) {
@@ -282,9 +282,11 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             }
 
             try {
+                $admin = Mage::getModel('zendesk/api_users')->me();
                 $ticket = array(
                     'ticket' => array(
                         'requester_id' => $requesterId,
+                        'submitter_id' => $admin['id'],
                         'subject' => $data['subject'],
                         'status' => $data['status'],
                         'priority' => $data['priority'],
