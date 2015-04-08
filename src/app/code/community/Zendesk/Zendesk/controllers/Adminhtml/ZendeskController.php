@@ -366,8 +366,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $path = Mage::helper('zendesk/log')->getLogPath();
 
         if(!file_exists($path)) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('The Zendesk log file has not been created. Check to see if logging has been enabled.'));
-            file_put_contents(" ",$path);
+            if (is_writable($path)) {
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Creating a Zendesk log file.'));
+                file_put_contents(" ",$path);
+            } else {
+                Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Magento logging has been disabled or Magento log folder has incorrect permissions.'));
+            }
         }
 
         if(Mage::helper('zendesk/log')->isLogTooLarge()) {
