@@ -26,6 +26,9 @@
                 <script>zendesk/validation.js</script>
             </action>
         </reference>
+        <reference name="content">
+            <block type="core/template" name="test" template="zendesk/translations.phtml"></block>
+        </reference>
     </adminhtml_system_config_edit>
 
     <adminhtml_sales_order_view>

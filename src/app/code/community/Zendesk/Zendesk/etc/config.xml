@@ -115,6 +115,9 @@
                 <zendesk>
                     <file>zendesk.xml</file>
                 </zendesk>
+                <jstranslate>
+                    <file>jstranslate.xml</file>
+                </jstranslate>
             </updates>
         </layout>
         <translate>
