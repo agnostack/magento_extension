@@ -22,6 +22,12 @@
             <action method="addCss">
                 <stylesheet>zendesk/zendesk.css</stylesheet>
             </action>
+            <action method="addJs">
+                <script>zendesk/validation.js</script>
+            </action>
+        </reference>
+        <reference name="content">
+            <block type="core/template" template="zendesk/translations.phtml"></block>
         </reference>
     </adminhtml_system_config_edit>
 

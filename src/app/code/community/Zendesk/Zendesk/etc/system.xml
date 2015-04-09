@@ -135,6 +135,7 @@
                             <label>Remote Authentication Token</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>2</sort_order>
+                            <validate>validate-zendesk-sso-token</validate>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
@@ -164,6 +165,7 @@
                             <label>Remote Authentication Token</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>2</sort_order>
+                            <validate>validate-zendesk-sso-frontend-token</validate>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
