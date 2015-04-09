@@ -27,7 +27,7 @@
             </action>
         </reference>
         <reference name="content">
-            <block type="core/template" name="test" template="zendesk/translations.phtml"></block>
+            <block type="core/template" template="zendesk/translations.phtml"></block>
         </reference>
     </adminhtml_system_config_edit>
 
