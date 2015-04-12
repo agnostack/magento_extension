@@ -119,7 +119,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $jwt = JWT::encode($payload, $token);
         $return = $return_url ? "&return_to=".$return_url : "";
         
-        $url = "http://".$domain."/access/jwt?jwt=" . $jwt . $return;
+        $url = "https://".$domain."/access/jwt?jwt=" . $jwt . $return;
 
         Mage::log('Admin URL: ' . $url, null, 'zendesk.log');
 
@@ -202,7 +202,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $sso = Mage::getStoreConfig('zendesk/sso/enabled');
         
         if (!$sso) {
-            $url = "http://".$domain;
+            $url = "https://".$domain;
         } elseif(Mage::helper('zendesk')->isSSOAdminUsersEnabled()) {
             $url = Mage::helper('zendesk')->getSSOAuthUrlAdminUsers();
         } else {

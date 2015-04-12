@@ -80,7 +80,7 @@ class Zendesk_Zendesk_SsoController extends Mage_Core_Controller_Front_Action
         $jwt = JWT::encode($payload, $token);
         $return_url = $return_url ? "&return_to=".$return_url : "";
         
-        $url = "http://".$domain."/access/jwt?jwt=" . $jwt.$return_url;
+        $url = "https://".$domain."/access/jwt?jwt=" . $jwt.$return_url;
 
         Mage::log('End-user URL: ' . $url, null, 'zendesk.log');
 

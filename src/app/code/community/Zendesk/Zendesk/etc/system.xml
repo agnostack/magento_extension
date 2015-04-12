@@ -170,6 +170,15 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </token>
+                        <new translate="label comment">
+                            <label>New Ticket Link</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>3</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                            <comment><![CDATA[ https://yourdomain.zendesk.com/requests/new will be used by default]]></comment>
+                        </new>
                     </fields>
                 </sso_frontend>
                 <frontend_features translate="label comment">
