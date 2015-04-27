@@ -57,15 +57,17 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
             $this->addTab('all-tickets', $all);
         }
 
-        if(count($viewsIds) AND $configured) {
-            try {
-                $allTicketView = Mage::getModel('zendesk/api_views')->active();
-                $ticketsCounts = Mage::getModel('zendesk/api_views')->countByIds($viewsIds);
+        try {
+            $allTicketView = Mage::getModel('zendesk/api_views')->active();
+            $ticketsCounts = Mage::getModel('zendesk/api_views')->countByIds($viewsIds);
 
-            } catch (Exception $ex) {
-                $allTicketView = array();
-            }
+        } catch (Exception $ex) {
+            $allTicketView = array();
+        }
 
+        $viewFound = false;
+
+        if(count($viewsIds) && !empty($allTicketView) && $configured) {
             // Loop through each view ID as per config
             foreach($viewsIds as $viewId) {
                 // Searches for the view's details by matching all views retrieved from the api to the current view id
@@ -75,11 +77,18 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
                 // Return only the first value (usually returns just 1)
                 $view = array_shift($view);
 
+                // Don't display the tab if the view data was not retrieved
+                if (empty($view)) {
+                    continue;
+                }
+
+                $viewFound = true;
+
                 $count = array_filter($ticketsCounts['view_counts'], function($view) use($viewId) {
                     return $view['view_id'] === (int) $viewId;
                 });
                 $count = array_shift($count);
-                
+
                 if($count['value']) {
                     $label = $view['title'] . ' (' . $count['value'] . ')';
                     $this->addTab($viewId, array(
@@ -97,11 +106,12 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
                     ));
                 }
             }
-        } else {
-            if ($this->getIsZendeskDashboard() AND !Mage::getStoreConfig('zendesk/backend_features/show_all')) {
-                $block = $this->getLayout()->createBlock('core/template', 'zendesk_dashboard_empty')->setTemplate('zendesk/dashboard/empty.phtml');
-                $this->getLayout()->getBlock('zendesk_dashboard')->append($block);
-            }
+        }
+
+        // Show the empty screen, if no views are activated or no views are selected, and show all is disabled
+        if (!$viewFound && $this->getIsZendeskDashboard() && !Mage::getStoreConfig('zendesk/backend_features/show_all')) {
+            $block = $this->getLayout()->createBlock('core/template', 'zendesk_dashboard_empty')->setTemplate('zendesk/dashboard/empty.phtml');
+            $this->getLayout()->getBlock('zendesk_dashboard')->append($block);
         }
 
         return parent::_prepareLayout();
