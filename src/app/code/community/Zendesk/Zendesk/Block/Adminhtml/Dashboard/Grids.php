@@ -65,15 +65,20 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
             } catch (Exception $ex) {
                 $allTicketView = array();
             }
-                
+
+            // Loop through each view ID as per config
             foreach($viewsIds as $viewId) {
-                $view = array_shift(array_filter($allTicketView, function($view) use($viewId) {
-                    return $view['id'] === (int) $viewId;
-                }));
-                
-                $count = array_shift(array_filter($ticketsCounts['view_counts'], function($view) use($viewId) {
+                // Searches for the view's details by matching all views retrieved from the api to the current view id
+                $view = array_filter($allTicketView, function($ticketView) use($viewId) {
+                    return $ticketView['id'] === (int) $viewId;
+                });
+                // Return only the first value (usually returns just 1)
+                $view = array_shift($view);
+
+                $count = array_filter($ticketsCounts['view_counts'], function($view) use($viewId) {
                     return $view['view_id'] === (int) $viewId;
-                }));
+                });
+                $count = array_shift($count);
                 
                 if($count['value']) {
                     $label = $view['title'] . ' (' . $count['value'] . ')';
