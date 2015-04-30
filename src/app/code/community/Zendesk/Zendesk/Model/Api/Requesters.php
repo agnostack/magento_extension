@@ -17,7 +17,7 @@
 
 class Zendesk_Zendesk_Model_Api_Requesters extends Zendesk_Zendesk_Model_Api_Users
 {
-    public function create($email, $name)
+    public function create($email, $name = null)
     {
         if(!Zend_Validate::is($email, 'EmailAddress')) {
             throw new InvalidArgumentException('Invalid email address provided');
