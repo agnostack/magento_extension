@@ -646,10 +646,6 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
     }
     
-    protected function storeDependenciesInCachedRegistry() {
-        
-    }
-    
     protected function getMassActionResponse($response, $ids, $message = '%d out of %d ticket(s) were updated.')
     {
         if (isset($response['job_status']) && isset($response['job_status']['url'])) {
