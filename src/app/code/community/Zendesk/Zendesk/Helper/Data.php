@@ -372,21 +372,25 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     
     public function storeDependenciesInCachedRegistry() {
         $cache = Mage::app()->getCache();
-        
-        if( $cache->load('zendesk_users') === false) {
-            $users = serialize( Mage::getModel('zendesk/api_users')->all() );
-            $cache->save($users, 'zendesk_users', array('zendesk', 'zendesk_users'), 300);
+
+        if (null == Mage::registry('zendesk_users')) {
+            if( $cache->load('zendesk_users') === false) {
+                $users = serialize( Mage::getModel('zendesk/api_users')->all() );
+                $cache->save($users, 'zendesk_users', array('zendesk', 'zendesk_users'), 300);
+            }
+
+            $users  = unserialize( $cache->load('zendesk_users') );
+            Mage::register('zendesk_users', $users);
         }
-        
-        if( $cache->load('zendesk_groups') === false) {
-            $groups = serialize( Mage::getModel('zendesk/api_groups')->all() );
-            $cache->save($groups, 'zendesk_groups', array('zendesk', 'zendesk_groups'), 1200);
+
+        if (null == Mage::registry('zendesk_groups')) {
+            if( $cache->load('zendesk_groups') === false) {
+                $groups = serialize( Mage::getModel('zendesk/api_groups')->all() );
+                $cache->save($groups, 'zendesk_groups', array('zendesk', 'zendesk_groups'), 1200);
+            }
+            
+            $groups = unserialize( $cache->load('zendesk_groups') );
+            Mage::register('zendesk_groups', $groups);
         }
-        
-        $users  = unserialize( $cache->load('zendesk_users') );
-        $groups = unserialize( $cache->load('zendesk_groups') );
-        
-        Mage::register('zendesk_users', $users);
-        Mage::register('zendesk_groups', $groups);
     }
 }
