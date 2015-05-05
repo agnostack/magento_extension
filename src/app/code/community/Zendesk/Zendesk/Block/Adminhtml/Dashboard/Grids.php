@@ -34,6 +34,8 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
             return parent::_prepareLayout();
         }
 
+        Mage::helper('zendesk')->storeDependenciesInCachedRegistry();
+
         //check if module is setted up
         $configured     = (bool) Mage::getStoreConfig('zendesk/general/domain');
         $viewsIds       = Mage::getStoreConfig('zendesk/backend_features/show_views') ? Mage::helper('zendesk')->getChosenViews() : array(); 
