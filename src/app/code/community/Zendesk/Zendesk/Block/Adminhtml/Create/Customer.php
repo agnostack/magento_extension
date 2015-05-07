@@ -20,6 +20,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Customer extends Mage_Adminhtml_Blo
 
     public function __construct()
     {
+        $this->_controller = false;
         parent::__construct();
         $this->setId('zendesk_create_customer_search');
     }

@@ -20,6 +20,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Order extends Mage_Adminhtml_Block_
 
     public function __construct()
     {
+        $this->_controller = false;
         parent::__construct();
         $this->setId('zendesk_create_order_search');
     }
