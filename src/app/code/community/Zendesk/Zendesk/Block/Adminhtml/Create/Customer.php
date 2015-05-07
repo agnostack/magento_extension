@@ -30,7 +30,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Customer extends Mage_Adminhtml_Blo
         return Mage::helper('zendesk')->__('Please Select User to Add');
     }
     
-    public function getButtonsHtml($area = NULL)
+    public function getButtonsHtml($area = null)
     {
         $addButtonData = array(
             'label' => Mage::helper('zendesk')->__('Select User'),

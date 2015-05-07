@@ -132,9 +132,7 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
     
     public function getCollectionFromView($viewId, array $params = array()) {
         $view = Mage::getModel('zendesk/api_views')->execute($viewId, $params);
-        
-        // Loop through the rows if the view is found and active
-        if (!empty($view)) {
+        if (is_array($view['rows'])) {
             foreach ($view['rows'] as $row) {
                 $ticket = array_merge($row, $row['ticket']);
                 
@@ -144,10 +142,9 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
                 $obj->setData($ticket);
                 $this->addItem($obj);
             }
-
-            $this->_viewColumns = $view['columns'];
         }
         
+        $this->_viewColumns = $view['columns'] ? $view['columns'] : array();
 
         $this->setPageSize($params['per_page']);
         $this->setCurPage($params['page']);
