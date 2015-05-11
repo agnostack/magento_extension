@@ -155,6 +155,7 @@ parts:
         key: "txt.integrations.magento.config.support_channels.facebook"
         title: "Configuration form: label for a link to our Facebook channel"
         value: "Facebook"
+        hidden: true
   - translation:
         key: "txt.integrations.magento.config.support_channels.chat"
         title: "Configuration form: label for a link to our chat channel"
@@ -167,6 +168,7 @@ parts:
         key: "txt.integrations.magento.config.support_channels.twitter"
         title: "Configuration form: label for a link to our twitter channel"
         value: "Twitter"
+        hidden: true
   - translation:
         key: "txt.integrations.magento.config.support_channels.email"
         title: "Configuration form: label for a link to our email channel"
