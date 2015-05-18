@@ -307,4 +307,4 @@ Please submit bug reports to <a href="https://support.zendesk.com/requests/new">
 
 ## Copyright and License
 
-Copyright 2012, Zendesk Inc. Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License Version 2.0</a>.
+Copyright 2012-present, Zendesk Inc. Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0">Apache License Version 2.0</a>.
