@@ -25,14 +25,14 @@ class Zendesk_Zendesk_SsoController extends Mage_Core_Controller_Front_Action
      */
     public function loginAction()
     {
+        $return_url = Mage::helper('core')->urlDecode($this->getRequest()->getParam('return_url', ""));
         if(!Mage::getStoreConfig('zendesk/sso_frontend/enabled')) {
-            $this->_redirect('/');
+            $this->_redirectUrl($return_url ? $return_url : Mage::helper('zendesk')->getZendeskUnauthUrl());
             return $this;
         }
 
         $domain = Mage::getStoreConfig('zendesk/general/domain');
         $token = Mage::getStoreConfig('zendesk/sso_frontend/token');
-        $return_url = Mage::helper('core')->urlDecode($this->getRequest()->getParam('return_url', ""));
         
         if(!Zend_Validate::is($domain, 'NotEmpty')) {
             Mage::log(Mage::helper('zendesk')->__('Zendesk domain not set. Please add this to the settings page.'), null, 'zendesk.log');
@@ -80,7 +80,7 @@ class Zendesk_Zendesk_SsoController extends Mage_Core_Controller_Front_Action
         $jwt = JWT::encode($payload, $token);
         $return_url = $return_url ? "&return_to=".$return_url : "";
         
-        $url = "http://".$domain."/access/jwt?jwt=" . $jwt.$return_url;
+        $url = "https://".$domain."/access/jwt?jwt=" . $jwt.$return_url;
 
         Mage::log('End-user URL: ' . $url, null, 'zendesk.log');
 

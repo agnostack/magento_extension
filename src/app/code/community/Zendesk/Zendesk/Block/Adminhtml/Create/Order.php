@@ -20,6 +20,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Order extends Mage_Adminhtml_Block_
 
     public function __construct()
     {
+        $this->_controller = false;
         parent::__construct();
         $this->setId('zendesk_create_order_search');
     }
@@ -29,7 +30,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Order extends Mage_Adminhtml_Block_
         return Mage::helper('zendesk')->__('Please Select Order to Add');
     }
     
-    public function getButtonsHtml()
+    public function getButtonsHtml($area = null)
     {
         $addButtonData = array(
             'label' => Mage::helper('zendesk')->__('Select Order'),

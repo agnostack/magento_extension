@@ -120,7 +120,9 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $protocol = 'https://';
         $domain = $this->getZendeskDomain();
-        $route = '/access/unauthenticated';
+        //Zendesk will automatically redirect to login if user is not logged in
+        //previous URL followed to login page even if user has already logged in
+        $route = '/home';
 
         return $protocol . $domain . $route;
     }
@@ -279,7 +281,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         
         $subject = $row['subject'] ? $row['subject'] : $this->__('No Subject');
 
-        return '<a href="' . $url . '" target="_blank">' .  $subject. '</a>';
+        return '<a href="' . $url . '" target="_blank">' .  Mage::helper('core')->escapeHtml($subject) . '</a>';
     }
     
     public function getStatusMap()
@@ -368,4 +370,27 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         }
     }
     
+    public function storeDependenciesInCachedRegistry() {
+        $cache = Mage::app()->getCache();
+
+        if (null == Mage::registry('zendesk_users')) {
+            if( $cache->load('zendesk_users') === false) {
+                $users = serialize( Mage::getModel('zendesk/api_users')->all() );
+                $cache->save($users, 'zendesk_users', array('zendesk', 'zendesk_users'), 300);
+            }
+
+            $users  = unserialize( $cache->load('zendesk_users') );
+            Mage::register('zendesk_users', $users);
+        }
+
+        if (null == Mage::registry('zendesk_groups')) {
+            if( $cache->load('zendesk_groups') === false) {
+                $groups = serialize( Mage::getModel('zendesk/api_groups')->all() );
+                $cache->save($groups, 'zendesk_groups', array('zendesk', 'zendesk_groups'), 1200);
+            }
+            
+            $groups = unserialize( $cache->load('zendesk_groups') );
+            Mage::register('zendesk_groups', $groups);
+        }
+    }
 }

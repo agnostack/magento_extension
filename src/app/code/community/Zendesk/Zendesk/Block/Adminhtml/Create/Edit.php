@@ -19,6 +19,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Create_Edit extends Mage_Adminhtml_Block_W
 {
     protected function _construct()
     {
+        $this->_controller = false;
         parent::_construct(); 
     }
 

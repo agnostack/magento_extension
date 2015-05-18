@@ -26,15 +26,8 @@ The API can be enabled in the Zendesk settings page in the Magento admin panel. 
 
 ### Single Sign-on (SSO)
 
-* Admins & Agents
-
-  Remote login URL: http://your_site_base_url/admin/zendesk/authenticate
-  Remote logout URL: http://your_site_base_url/admin/zendesk/logout
-
-* End-user
-
-  Remote login URL: http://your_site_base_url/zendesk/sso/login
-  Remote logout URL: http://your_site_base_url/zendesk/sso/logout
+  **Remote login URL** http://your_site_base_url/zendesk/sso/login
+  **Remote logout URL** http://your_site_base_url/zendesk/sso/logout
 
 ### Responses
 

@@ -132,18 +132,19 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
     
     public function getCollectionFromView($viewId, array $params = array()) {
         $view = Mage::getModel('zendesk/api_views')->execute($viewId, $params);
-        
-        foreach ($view['rows'] as $row) {
-            $ticket = array_merge($row, $row['ticket']);
-            
-            $this->appendParamsWithoutIdPostfix($ticket, array('requester', 'assignee', 'group'));
-            
-            $obj = new Varien_Object();
-            $obj->setData($ticket);
-            $this->addItem($obj);
+        if (is_array($view['rows'])) {
+            foreach ($view['rows'] as $row) {
+                $ticket = array_merge($row, $row['ticket']);
+                
+                $this->appendParamsWithoutIdPostfix($ticket, array('requester', 'assignee', 'group'));
+                
+                $obj = new Varien_Object();
+                $obj->setData($ticket);
+                $this->addItem($obj);
+            }
         }
         
-        $this->_viewColumns = $view['columns'];
+        $this->_viewColumns = $view['columns'] ? $view['columns'] : array();
 
         $this->setPageSize($params['per_page']);
         $this->setCurPage($params['page']);
@@ -168,7 +169,7 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
     
     public function getColumnsForView() {
         $excludedColumns = static::$_excludedColumns;
-        
+
         return array_filter($this->_viewColumns, function($column) use($excludedColumns) {
             return ! in_array($column['id'], $excludedColumns);
         });

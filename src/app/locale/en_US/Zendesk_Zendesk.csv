@@ -109,3 +109,5 @@
 "Decide which features you would like turned on in your admin panel.","Decide which features you would like turned on in your admin panel."
 "Show "All" tab on dashboard","Show "All" tab on dashboard"
 "Generate New Token","Generate New Token"
+"Token cannot be empty","Token cannot be empty"
+"New Ticket Link","New Ticket Link"
