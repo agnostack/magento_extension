@@ -111,6 +111,8 @@ EOJS;
 
             Mage::getModel('core/config')->saveConfig('zendesk/frontend_features/web_widget_code_active', 1);
             Mage::getModel('core/config')->saveConfig('zendesk/frontend_features/web_widget_code_snippet', $webWidgetSnippet);
+        } elseif (empty($zDomain)) {
+            Mage::getModel('core/config')->saveConfig('zendesk/frontend_features/web_widget_code_snippet', '');
         }
     }
 
