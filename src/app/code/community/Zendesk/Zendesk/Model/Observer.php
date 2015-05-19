@@ -109,6 +109,7 @@ class Zendesk_Zendesk_Model_Observer
 <!-- End of Zendesk Widget script -->
 EOJS;
 
+            Mage::getModel('core/config')->saveConfig('zendesk/frontend_features/web_widget_code_active', 1);
             Mage::getModel('core/config')->saveConfig('zendesk/frontend_features/web_widget_code_snippet', $webWidgetSnippet);
         }
     }
