@@ -19,7 +19,7 @@
 <config>
     <modules>
         <Zendesk_Zendesk>
-            <version>1.4.2</version> 
+            <version>2.0.0</version>
         </Zendesk_Zendesk>
     </modules>
     <zendesk>
@@ -253,7 +253,7 @@
                 <customer_sync>0</customer_sync>
             </general>
             <frontend_features>
-                <feedback_tab_code_active>0</feedback_tab_code_active>
+                <web_widget_code_active>0</web_widget_code_active>
                 <contact_us>0</contact_us>
             </frontend_features>
             <backend_features>

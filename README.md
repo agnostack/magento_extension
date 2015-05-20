@@ -6,7 +6,7 @@ This extension makes Zendesk work seamlessly with Magento to enable stores to de
 - Create support tickets without leaving Magento
 - Display relevant support tickets on order & customer dashboards
 - Create support tickets from Contact Us requests
-- Easily add a feedback tab to your site
+- Easily add the [Embeddables](https://www.zendesk.com/embeddables) Web Widget to your site
 
 The latest stable version of the extension can be installed via the [Magento Connect](http://www.magentocommerce.com/magento-connect/catalog/product/view/id/15129/) marketplace.
 
