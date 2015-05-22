@@ -28,7 +28,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
 
         $connection = Mage::helper('zendesk')->getConnectionStatus();
-        
+
         if(!$connection['success']) {
             $this->setFlag('', 'no-dispatch', true);
             Mage::getSingleton('adminhtml/session')->addError( $connection['msg'] );
@@ -37,7 +37,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
 
         Mage::helper('zendesk')->storeDependenciesInCachedRegistry();
-        
+
         $this->_title($this->__('Zendesk Dashboard'));
         $this->loadLayout();
         $this->_setActiveMenu('zendesk/zendesk_dashboard');
@@ -98,7 +98,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
         $user = Mage::getSingleton('admin/session')->getUser();
         $name = $user->getName();
-        $email = Mage::getStoreConfig('zendesk/general/email');
+        $email = $user->getEmail();
         $externalId = $user->getId();
 
         $payload = array(
@@ -107,7 +107,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             "name" => $name,
             "email" => $email
         );
-        
+
         // Validate if we need to include external_id param
         $externalIdEnabled = Mage::helper('zendesk')->isExternalIdEnabled();
         if($externalIdEnabled) {
@@ -118,14 +118,14 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
         $jwt = JWT::encode($payload, $token);
         $return = $return_url ? "&return_to=".$return_url : "";
-        
+
         $url = "https://".$domain."/access/jwt?jwt=" . $jwt . $return;
 
         Mage::log('Admin URL: ' . $url, null, 'zendesk.log');
 
         $this->_redirectUrl($url);
     }
-    
+
     /**
      * Wrapper for the existing authenticate action. Mirrors the login/logout actions available for customers.
      */
@@ -160,7 +160,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         if (!$this->_domainConfigured()) {
             return;
         }
-        
+
         // Check if we have been passed an order ID, in which case we can preload some of the form details
         if($orderId = $this->getRequest()->getParam('order_id')) {
             $order = Mage::getModel('sales/order')->load($orderId);
@@ -198,9 +198,9 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         if (!$domain) {
             return;
         }
-        
+
         $sso = Mage::getStoreConfig('zendesk/sso/enabled');
-        
+
         if (!$sso) {
             $url = "https://".$domain;
         } elseif(Mage::helper('zendesk')->isSSOAdminUsersEnabled()) {
@@ -396,13 +396,13 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     }
 
     public function checkOutboundAction()
-    {    
+    {
         $connection = Mage::helper('zendesk')->getConnectionStatus();
-            
+
         $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json', true);
         $this->getResponse()->setBody(json_encode($connection));
-        } 
-            
+        }
+
     /**
      * Loading page block
      */
@@ -425,16 +425,16 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             $this->getResponse()->setBody($result);
         }
     }
-    
+
     public function getUserAction()
     {
         $request = $this->getRequest();
         $id = $request->getParam('id');
-        
+
         $user = Mage::getModel('customer/customer')->load($id);
-        
+
         $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
-        
+
         if($user->getId()) {
             $this->getResponse()->setBody(json_encode(array('success'=>true, 'usr'=> array(
                 'firstname' =>  $user->getFirstname(),
@@ -445,14 +445,14 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             $this->getResponse()->setBody(json_encode(array('success'=>false, 'msg'=>Mage::helper('zendesk')->__('User does not exist'))));
         }
     }
-        
+
     public function getOrderAction()
     {
         $request = $this->getRequest();
         $id= $request->getParam('id');
-        
+
         $order = Mage::getModel('sales/order')->load($id);
-        
+
         $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
         if($order->getId()) {
             $this->getResponse()->setBody(json_encode(array('success'=>true, 'order'=> array(
@@ -462,16 +462,16 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             $this->getResponse()->setBody(json_encode(array('success'=>false, 'msg'=>Mage::helper('zendesk')->__('Order does not exist'))));
         }
     }
-    
+
     public function syncAction()
     {
         $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
         Mage::log('Synchronization started', null, 'zendesk.log');
-        try {           
+        try {
             $user = Mage::getModel('zendesk/api_users')->all();
             if (is_null($user))
                 throw new Exception("Connection Failed");
-            
+
             $data = array();
             $data[] = array(
                 'user_field' => array(
@@ -539,14 +539,14 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
                 if (!isset($response['active']) || $response['active'] === false)
                     Mage::log('Unable to create User Field with key '.$field['user_field']['key'], null, 'zendesk.log');
             }
-            
+
             $customers = Mage::getModel('customer/customer')->getCollection();
             $customers->addAttributeToSelect(array('firstname', 'lastname', 'email'));
             foreach($customers as $customer) {
                 Mage::log('Synchronizing customer with id '.$customer->getId(), null, 'zendesk.log');
                 Mage::dispatchEvent('customer_save_commit_after', array('customer' => $customer));
             }
-            
+
         } catch (Exception $ex) {
             Mage::log('Synchronization failed: '.$ex->getMessage(), null, 'zendesk.log');
             $this->getResponse()->setBody(json_encode(array('success'=>false, 'msg'=>Mage::helper('zendesk')->__('Synchronization failed: ').$ex->getMessage())));
@@ -568,12 +568,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
         $this->_redirectReferer();
     }
-    
+
     public function bulkChangeStatusAction()
     {
         $ids = $this->getRequest()->getParam('id');
         $status = $this->getRequest()->getParam('status');
-        
+
         try {
             $response = Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('status'));
             $this->getMassActionResponse($response, $ids);
@@ -582,12 +582,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
         $this->_redirect('adminhtml/zendesk/');
     }
-    
+
     public function bulkChangePriorityAction()
     {
         $ids = $this->getRequest()->getParam('id');
         $priority = $this->getRequest()->getParam('priority');
-        
+
         try {
             $response = Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('priority'));
             $this->getMassActionResponse($response, $ids);
@@ -596,12 +596,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
         $this->_redirect('adminhtml/zendesk/');
     }
-    
+
     public function bulkChangeTypeAction()
     {
         $ids = $this->getRequest()->getParam('id');
         $type = $this->getRequest()->getParam('type');
-        
+
         try {
             $response = Mage::getModel('zendesk/api_tickets')->updateMany($ids, compact('type'));
             $this->getMassActionResponse($response, $ids);
@@ -610,11 +610,11 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         }
         $this->_redirect('adminhtml/zendesk/');
     }
-    
+
     public function bulkMarkSpamAction()
     {
         $ids = $this->getRequest()->getParam('id');
-        
+
         try {
             $response = Mage::getModel('zendesk/api_tickets')->bulkMarkAsSpam($ids);
             $message = '%d out of %d ticket(s) were marked as spam.';
@@ -627,13 +627,13 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function ticketsAllAction() {
         $isAjax = Mage::app()->getRequest()->isAjax();
-        
+
         if ($isAjax) {
             Mage::helper('zendesk')->storeDependenciesInCachedRegistry();
             $this->getResponse()->setBody($this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid_all')->toHtml());
         }
     }
-    
+
     public function ticketsViewAction() {
         $isAjax = Mage::app()->getRequest()->isAjax();
 
@@ -641,20 +641,20 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             Mage::helper('zendesk')->storeDependenciesInCachedRegistry();
             $viewId = (int) $this->getRequest()->getParam('viewid');
             Mage::register('zendesk_tickets_view', $viewId);
-            
+
             $this->getResponse()->setBody($this->getLayout()->createBlock('zendesk/adminhtml_dashboard_tab_tickets_grid_view')->toHtml());
         }
     }
-    
+
     protected function getMassActionResponse($response, $ids, $message = '%d out of %d ticket(s) were updated.')
     {
         if (isset($response['job_status']) && isset($response['job_status']['url'])) {
             $job_status = Mage::getModel('zendesk/api_tickets')->getJobStatus($response['job_status']['url']);
-            
+
             $parsed = array();
             $parsed['errors'] = array();
             $parsed['success'] = 0;
-            
+
             if (isset($job_status['job_status']['results'])) {
                 foreach ($job_status['job_status']['results'] as $result) {
                     if ($result['success']) {
@@ -669,8 +669,8 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
             Mage::getSingleton('adminhtml/session')->addSuccess(
                 Mage::helper('zendesk')->__(
-                    $message, 
-                    $parsed['success'], 
+                    $message,
+                    $parsed['success'],
                     count($ids)
                 )
             );
@@ -688,7 +688,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             );
         }
     }
-    
+
     private function _domainConfigured()
     {
         $domain = Mage::getStoreConfig('zendesk/general/domain');
