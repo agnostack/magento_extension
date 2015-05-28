@@ -43,7 +43,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
         if( Mage::getStoreConfig('zendesk/backend_features/show_all') AND $configured) {
             $all = array(
                 'class' => 'ajax',
-                'url'   => $this->getUrl('zendesk/adminhtml_zendesk/ticketsAll'),
+                'url'   => $this->getUrl('adminhtml/zendesk/ticketsAll'),
             );
             $label = $this->__("All tickets");
             
@@ -96,7 +96,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
                     $this->addTab($viewId, array(
                         'label' => $label,
                         'class' => 'ajax',
-                        'url'   => $this->getUrl('zendesk/adminhtml_zendesk/ticketsView', array('viewid' => $viewId)),
+                        'url'   => $this->getUrl('adminhtml/zendesk/ticketsView', array('viewid' => $viewId)),
                     ));
                 } else {
                     Mage::unregister('zendesk_tickets_view');
