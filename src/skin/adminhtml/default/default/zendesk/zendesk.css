@@ -34,7 +34,7 @@ ul.tabs a.zendesk-section:hover span {
 }
 
 h3.zendesk-header {
-    background: url(http://cdn.zendesk.com/images/zendesk-logo.png) no-repeat scroll 0 0 transparent;
+    background: url(zendesk-logo.png) no-repeat scroll 0 0 transparent;
     height: 65px;
     overflow: hidden;
     padding: 0;
