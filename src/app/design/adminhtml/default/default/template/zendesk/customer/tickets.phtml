@@ -61,7 +61,7 @@ if($customer = Mage::registry('current_customer')) {
                                 <td><?php echo Mage::helper('core')->formatDate($ticket['created_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
                                 <td><?php echo Mage::helper('core')->formatDate($ticket['updated_at'], Mage_Core_Model_Locale::FORMAT_TYPE_MEDIUM, true); ?></td>
                                 <td><?php echo ucwords($ticket['status']); ?></td>
-                                <td><?php echo ($ticket['group_id']) ? $t['group']['name'] : ''; ?></td>
+                                <td><?php echo (isset($ticket['group_id'])) ? $t['group']['name'] : ''; ?></td>
                                 <td><?php echo ($ticket['assignee_id']) ? $t['assignee']['name'] : ''; ?></td>
                             </tr>
                         <?php endforeach; ?>
