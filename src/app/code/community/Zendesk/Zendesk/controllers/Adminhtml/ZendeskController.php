@@ -691,8 +691,9 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     private function _domainConfigured()
     {
-        $domain = Mage::getStoreConfig('zendesk/general/domain');
-        if(!$domain) {
+        $authenticated = Mage::getStoreConfig('zendesk/general/authenticated');
+
+        if(!$authenticated) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Please set up Zendesk connection.'));
             $this->_redirect('adminhtml/dashboard');
             return false;
