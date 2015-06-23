@@ -114,10 +114,6 @@ EOJS;
         } elseif (empty($zDomain)) {
             Mage::getModel('core/config')->saveConfig('zendesk/frontend_features/web_widget_code_snippet', '');
         }
-
-        // Save the connection status, used to check if it's okay to load pages that calls the API
-        $connectionStatus = Mage::helper('zendesk')->getConnectionStatus();
-        Mage::getModel('core/config')->saveConfig('zendesk/general/authenticated', (int) $connectionStatus['success'], $scope, $scopeId);
     }
 
     public function addTicketButton(Varien_Event_Observer $event)

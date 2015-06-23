@@ -29,9 +29,8 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
     protected function _prepareLayout() {
         // Check if we are on the main admin dashboard and, if so, whether we should be showing the grid
         // Note: an additional check in the template is needed, but this will prevent unnecessary API calls to Zendesk
-        if (!Mage::getStoreConfig('zendesk/general/authenticated') 
-            || (!$this->getIsZendeskDashboard() && !Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard'))
-        ) {
+        if ( !$this->getIsZendeskDashboard() && !Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard') )
+        {
             return parent::_prepareLayout();
         }
 

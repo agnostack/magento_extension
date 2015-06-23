@@ -32,7 +32,8 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard extends Mage_Adminhtml_Block_Tem
     }
 
     public function isConnected() {
-        return Mage::getStoreConfig('zendesk/general/authenticated');
+        $connection = Mage::helper('zendesk')->getConnectionStatus();
+        return $connection['success'];
     }
 
     public function getTotals() {
