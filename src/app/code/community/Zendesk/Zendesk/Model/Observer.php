@@ -224,4 +224,18 @@ EOJS;
         Mage::getModel('zendesk/api_users')->create($data);
     }
     
+    public function checkSsoRedirect($user)
+    {
+        if (
+            Mage::helper('zendesk')->isSSOAdminUsersEnabled() && 
+            Mage::app()->getRequest()->getControllerName() === 'zendesk' && 
+            Mage::app()->getRequest()->getActionName() === 'authenticate'
+        ) {
+            Mage::app()->getResponse()
+                ->setRedirect(Mage::helper('adminhtml')->getUrl('*/zendesk/authenticate'))
+                ->sendHeaders()
+                ->sendResponse();
+            exit();
+        }
+    }
 }

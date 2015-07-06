@@ -61,6 +61,16 @@
                 </connection>
             </zendesk_read>
         </resources>
+        <events>
+            <admin_session_user_login_success>
+                <observers>
+                    <zendesk>
+                        <class>zendesk/observer</class>
+                        <method>checkSsoRedirect</method>
+                    </zendesk>
+                </observers>
+            </admin_session_user_login_success>
+        </events>
     </global>
     <frontend>
         <routers>
@@ -171,7 +181,6 @@
                     </zendesk>
                 </observers>
             </customer_save_commit_after>
-
         </events>
         <menu>
             <zendesk translate="title" module="zendesk">
