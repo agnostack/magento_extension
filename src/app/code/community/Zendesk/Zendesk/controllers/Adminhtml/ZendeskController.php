@@ -19,7 +19,7 @@ require_once(Mage::getModuleDir('', 'Zendesk_Zendesk') . DS . 'Helper' . DS . 'J
 
 class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Controller_Action
 {
-    protected $_publicActions = array('redirect', 'authenticate');
+    protected $_publicActions = array('redirect', 'logout');
 
     public function indexAction()
     {
@@ -147,12 +147,13 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
     {
         // Admin sessions do not currently have an explicit "logout" method (unlike customer sessions) so do this
         // manually with the session object
+
         $adminSession = Mage::getSingleton('admin/session');
         $adminSession->unsetAll();
         $adminSession->getCookie()->delete($adminSession->getSessionName());
         $adminSession->addSuccess(Mage::helper('adminhtml')->__('You have logged out.'));
 
-        $this->_redirect('adminhtml/zendesk/*');
+        $this->_redirect('adminhtml/zendesk/authenticate');
     }
 
     public function createAction()
