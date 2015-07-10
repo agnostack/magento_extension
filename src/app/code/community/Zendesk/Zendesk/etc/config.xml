@@ -202,11 +202,12 @@
                         <action>adminhtml/zendesk/launch</action>
                         <sort_order>3</sort_order>
                     </zendesk_launch>
-                    <zendesk_configurations module="zendesk">
+                    <zendesk_configuration module="zendesk">
+                        <resource>system/config/zendesk</resource>
                         <title>Configuration</title>
                         <action>adminhtml/system_config/edit/section/zendesk</action>
                         <sort_order>4</sort_order>
-                    </zendesk_configurations>
+                    </zendesk_configuration>
                     <zendesk_log module="zendesk">
                         <title>Log Viewer</title>
                         <action>adminhtml/zendesk/log</action>
@@ -225,6 +226,12 @@
                                 <zendesk_dashboard translate="title" module="zendesk">
                                     <title>Dashboard</title>
                                     <sort_order>1</sort_order>
+                                    <children>
+                                        <bulk_actions>
+                                            <title>Bulk Actions</title>
+                                            <sort_order>1</sort_order>
+                                        </bulk_actions>
+                                    </children>
                                 </zendesk_dashboard>
                                 <zendesk_create translate="title" module="zendesk">
                                     <title>Create Ticket</title>
@@ -234,10 +241,10 @@
                                     <title>Launch Zendesk</title>
                                     <sort_order>3</sort_order>
                                 </zendesk_launch>
-                                <zendesk_settings translate="title" module="zendesk">
-                                    <title>Settings</title>
+                                <zendesk_log>
+                                    <title>View Logs</title>
                                     <sort_order>4</sort_order>
-                                </zendesk_settings>
+                                </zendesk_log>
                             </children>
                         </zendesk>
                         <system>

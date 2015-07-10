@@ -45,5 +45,12 @@
         </a>
     </li>
     <?php } ?>
+        <?php if ($this->isAllowed('log')) { ?>
+    <li>
+        <a href="<?php echo $this->getUrl('adminhtml/zendesk/log'); ?>" class="tab-item-link">
+            <span><?php echo $this->__('Log Viewer'); ?></span>
+        </a>
+    </li>
+    <?php } ?>
 </ul>
 

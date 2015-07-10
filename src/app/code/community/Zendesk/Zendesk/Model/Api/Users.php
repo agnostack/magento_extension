@@ -56,8 +56,7 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
         $page = 1;
         $users = array();
         
-        while($page) {
-            $response   = $this->_call('users.json?page=' . $page);
+        while($page && $response = $this->_call('users.json?page=' . $page)) {
             $users      = array_merge($users, $response['users']);
             $page       = is_null($response['next_page']) ? 0 : $page + 1;
     }
@@ -109,6 +108,11 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
     public function createUserField($field)
     {
         $response = $this->_call('user_fields.json', null, 'POST', $field, true);
+
+        if(!isset($response['user_field'])) {
+            throw new Exception('No User Field specified.');
+        }
+ 
         return $response['user_field'];
     }
 }

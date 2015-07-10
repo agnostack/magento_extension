@@ -90,6 +90,11 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
     protected function _prepareMassaction() {
         parent::_prepareMassaction();
 
+        // Disable mass actions if not allowed for the current user's role
+        if ( ! Mage::getSingleton('admin/session')->isAllowed('zendesk/zendesk_dashboard/bulk_actions')) {
+            return;
+        }
+
         $this->setMassactionIdField('id');
         $this->getMassactionBlock()->setFormFieldName('id');
         
