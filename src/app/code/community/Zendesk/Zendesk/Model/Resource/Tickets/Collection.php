@@ -35,16 +35,24 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
             switch($fieldName) {
                 case 'subject':
                     $searchFields[] = array(
-                        'field' =>  'subject',
-                        'value' =>  '"'.$condition.'"'
+                        'field' => 'subject',
+                        'value' => '"'.$condition.'"'
                     );
                     break;
                 case 'requester':
                 case 'requester_id':
-                    $value = is_numeric($condition) ? $condition : '*' . $condition . '*';
+                    if (is_array($condition)) {
+                        break;
+                    }
+
                     $searchFields[] = array(
-                        'field' =>  'requester',
-                        'value' =>  $value
+                        'field' => 'requester',
+                        'value' => '*' . $condition,
+                    );
+
+                    $searchFields[] = array(
+                        'field' => 'requester',
+                        'value' => $condition . '*',
                     );
                     break;
                 case 'tags':
@@ -54,14 +62,14 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
                 case 'group':
                 case 'assignee':
                     $searchFields[] = array(
-                        'field' =>  $fieldName,
-                        'value' =>  $condition
+                        'field' => $fieldName,
+                        'value' => $condition
                     );
                     break;
                 case 'type':
                     $searchFields[] = array(
-                        'field' =>  'ticket_type',
-                        'value' =>  $condition
+                        'field' => 'ticket_type',
+                        'value' => $condition
                     );
                     break;
                 case 'id':
