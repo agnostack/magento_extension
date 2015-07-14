@@ -18,3 +18,4 @@ src/app/locale/ru_RU/Zendesk_Zendesk.csv                          app/locale/ru_
 src/app/locale/zh_CN/Zendesk_Zendesk.csv                          app/locale/zh_CN/Zendesk_Zendesk.csv
 src/app/locale/zh_TW/Zendesk_Zendesk.csv                          app/locale/zh_TW/Zendesk_Zendesk.csv
 src/skin/adminhtml/default/default/zendesk                        skin/adminhtml/default/default/zendesk
+src/js/zendesk                                                    js/zendesk
