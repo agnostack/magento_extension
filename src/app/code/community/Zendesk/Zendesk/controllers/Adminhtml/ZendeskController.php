@@ -19,7 +19,64 @@ require_once(Mage::getModuleDir('', 'Zendesk_Zendesk') . DS . 'Helper' . DS . 'J
 
 class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Controller_Action
 {
-    protected $_publicActions = array('redirect', 'logout');
+    protected $_publicActions = array('redirect', 'logout', 'authenticate', 'login');
+
+    protected function _isAllowed()
+    {
+        $action = strtolower($this->getRequest()->getActionName());
+
+        // Disable ACL check for public actions
+        if (in_array($action, $this->_publicActions)) {
+            return true;
+        }
+
+        switch ($action) {
+            case 'launch':
+                $aclAction = 'launch';
+                break;
+            // When users have access to the zendesk_dashboard they must also be able to access the viewing actions on this controller
+            case 'index':
+            case 'ticketsall':
+            case 'ticketsview':
+                $aclAction = 'dashboard';
+                break;
+            // User must have bulk_actions permission
+            case 'bulkchangepriority':
+            case 'bulkchangestatus':
+            case 'bulkchangetype':
+            case 'bulkdelete':
+            case 'bulkmarkspam':
+                $aclAction = 'dashboard/bulk_actions';
+                break;
+            // Actions accessible to roles with the zendesk_create permission
+            case 'autocomplete':
+            case 'create':
+            case 'getorder':
+            case 'getuser':
+            case 'loadblock':
+            case 'save':
+                $aclAction = 'create';
+                break;
+            // Configuration actions, role must have Configuration > Zendesk permissions
+            case 'checkoutbound':
+            case 'clearlog';
+            case 'configuration':
+            case 'generate':
+            case 'sync':
+                $aclAction = 'settings';
+                break;
+            default:
+                return false;
+        }
+
+        $acl = "zendesk/zendesk_$aclAction";
+
+        if ($acl == 'zendesk/zendesk_settings') {
+            $acl = 'admin/system/config/zendesk';
+        }
+
+        return Mage::getSingleton('admin/session')->isAllowed($acl);
+    }
 
     public function indexAction()
     {
@@ -402,7 +459,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
         $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json', true);
         $this->getResponse()->setBody(json_encode($connection));
-        }
+    }
 
     /**
      * Loading page block

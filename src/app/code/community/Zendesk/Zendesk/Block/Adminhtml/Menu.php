@@ -27,7 +27,11 @@ class Zendesk_Zendesk_Block_Adminhtml_Menu extends Mage_Adminhtml_Block_Template
     public function isAllowed($target)
     {
         try {
-            return Mage::getSingleton('admin/session')->isAllowed('admin/zendesk/zendesk_' . $target);
+            if ($target == 'settings') {
+                return Mage::getSingleton('admin/session')->isAllowed('admin/system/config/zendesk');
+            } else {
+                return Mage::getSingleton('admin/session')->isAllowed('admin/zendesk/zendesk_' . $target);
+            }
         } catch (Exception $e) {
             return false;
         }
