@@ -170,7 +170,7 @@ EOJS;
             }
             
             $lifetime_sale = Mage::helper('core')->currency($sum, true, false);
-            $average_sale = Mage::helper('core')->currency($sum / count($order_totals), true, false);
+            $average_sale = Mage::helper('core')->currency($sum / (count($order_totals) ?: 1), true, false);
         }
         
         $info['user'] = array(
