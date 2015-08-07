@@ -19,20 +19,24 @@
 class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_Email extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
 
     public function render(Varien_Object $row) {
-        $users = Mage::registry('zendesk_users') ? Mage::registry('zendesk_users') : array();
+        $users = Mage::registry('zendesk_users');
         $value = (int) $row->getData($this->getColumn()->getIndex());
-        
-        $found = array_filter($users, function($user) use($value) {
-            return (int) $user['id'] === $value;
-        });
-        
-        if( count($found) ) {
+
+        if ($users) {
+            $found = array_filter($users, function($user) use($value) {
+                return (int) $user['id'] === $value;
+            }); 
+        } else {
+            return ''; 
+        }   
+    
+        if( count($found) ) { 
             $user = array_shift($found);
-            
+    
             return $user['email'];
-        }
-        
-        return '';
-    }
+        }   
+    
+        return ''; 
+    } 
 
 }
