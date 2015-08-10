@@ -22,9 +22,10 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $protocol = 'https://';
         $domain = Mage::getStoreConfig('zendesk/general/domain');
-        $root = ($format === 'old') ? '' : '/agent/#';
+        $root = ($format === 'old') ? '' : '/agent';
 
         $base = $protocol . $domain . $root;
+        $hc = $protocol . $domain . '/hc';
        
         switch($object) {
             case '':
@@ -41,6 +42,10 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
             case 'raw':
                 return $protocol . $domain . '/' . $id;
+                break;
+            
+            case 'request':
+                return $hc . '/requests/' . $id;
                 break;
         }
     }
@@ -283,6 +288,19 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {   
         $path = Mage::getSingleton('admin/session')->getUser() ? 'adminhtml/zendesk/login' : '*/sso/login';
         $url = Mage::helper('adminhtml')->getUrl($path, array("return_url" => Mage::helper('core')->urlEncode(Mage::helper('zendesk')->getUrl('ticket', $row['id']))));
+        
+        if ($link)
+            return $url;
+        
+        $subject = $row['subject'] ? $row['subject'] : $this->__('No Subject');
+
+        return '<a href="' . $url . '" target="_blank">' .  Mage::helper('core')->escapeHtml($subject) . '</a>';
+    }
+    
+    public function getRequestUrl($row, $link = false)
+    {   
+        $path = Mage::getSingleton('admin/session')->getUser() ? 'adminhtml/zendesk/login' : '*/sso/login';
+        $url = Mage::helper('adminhtml')->getUrl($path, array("return_url" => Mage::helper('core')->urlEncode(Mage::helper('zendesk')->getUrl('request', $row['id']))));
         
         if ($link)
             return $url;
