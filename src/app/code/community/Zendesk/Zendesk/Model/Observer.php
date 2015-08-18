@@ -157,20 +157,22 @@ EOJS;
         
         if (is_object($order_totals)) {
             $order_totals
-            ->addFieldToSelect('*')
-            ->addFieldToFilter('customer_id', $customer->getId())
-            ->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_COMPLETE)
-            ->addAttributeToSelect('grand_total')
-            ->getColumnValues('grand_total');
+                ->addFieldToFilter('customer_id', $customer->getId())
+                ->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_COMPLETE)
+            ;
             
-            $sum = 0;
-            foreach ($order_totals as $total) {
-                if (isset($total['grand_total']))
-                    $sum += (float)$total['grand_total'];
-            }
+            $order_totals->getSelect()
+                ->reset(Zend_Db_Select::COLUMNS)
+                ->columns(new Zend_Db_Expr("SUM(grand_total) as total"))
+                ->columns(new Zend_Db_Expr("AVG(grand_total) as avg_total"))
+                ->group('customer_id')
+            ;
+            
+            $sum = (float) $order_totals->getFirstItem()->getTotal();
+            $avg = (float) $order_totals->getFirstItem()->getAvgTotal();
             
             $lifetime_sale = Mage::helper('core')->currency($sum, true, false);
-            $average_sale = Mage::helper('core')->currency($sum / (count($order_totals) ?: 1), true, false);
+            $average_sale = Mage::helper('core')->currency($avg, true, false);
         }
         
         $info['user'] = array(
