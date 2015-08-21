@@ -168,11 +168,13 @@ EOJS;
                 ->group('customer_id')
             ;
             
-            $sum = (float) $order_totals->getFirstItem()->getTotal();
-            $avg = (float) $order_totals->getFirstItem()->getAvgTotal();
+            if (count($order_totals) > 0) {
+                $sum = (float) $order_totals->getFirstItem()->getTotal();
+                $avg = (float) $order_totals->getFirstItem()->getAvgTotal();
             
-            $lifetime_sale = Mage::helper('core')->currency($sum, true, false);
-            $average_sale = Mage::helper('core')->currency($avg, true, false);
+                $lifetime_sale = Mage::helper('core')->currency($sum, true, false);
+                $average_sale = Mage::helper('core')->currency($avg, true, false);
+            }
         }
         
         $info['user'] = array(
