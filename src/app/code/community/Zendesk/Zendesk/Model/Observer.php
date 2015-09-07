@@ -158,15 +158,13 @@ EOJS;
         if (is_object($order_totals)) {
             $order_totals
                 ->addFieldToFilter('customer_id', $customer->getId())
-                ->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_COMPLETE)
-            ;
+                ->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_COMPLETE);
             
             $order_totals->getSelect()
                 ->reset(Zend_Db_Select::COLUMNS)
                 ->columns(new Zend_Db_Expr("SUM(grand_total) as total"))
                 ->columns(new Zend_Db_Expr("AVG(grand_total) as avg_total"))
-                ->group('customer_id')
-            ;
+                ->group('customer_id');
             
             if (count($order_totals) > 0) {
                 $sum = (float) $order_totals->getFirstItem()->getTotal();
