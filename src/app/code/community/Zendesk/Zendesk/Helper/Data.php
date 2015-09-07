@@ -229,16 +229,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getSupportEmail($store = null)
     {
-        // Serves as the dafault email
         $domain = Mage::getStoreConfig('zendesk/general/domain', $store);
         $email = 'support@' . $domain;
-
-        // Get the actual default email from the API, return the default if somehow none is found
-        $defaultRecipient = Mage::getModel('zendesk/api_supportAddresses')->getDefault();
-
-        if (!is_null($defaultRecipient)) {
-            $email = $defaultRecipient['email'];
-        }
 
         return $email;
     }
@@ -364,7 +356,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function getConnectionStatus() {
         try {
             $user = Mage::getModel('zendesk/api_users')->me();
-            
+
             if($user['id']) {
                 return array(
                     'success'   => true,
