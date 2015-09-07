@@ -22,9 +22,10 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $protocol = 'https://';
         $domain = Mage::getStoreConfig('zendesk/general/domain');
-        $root = ($format === 'old') ? '' : '/agent/#';
+        $root = ($format === 'old') ? '' : '/agent';
 
         $base = $protocol . $domain . $root;
+        $hc = $protocol . $domain . '/hc';
        
         switch($object) {
             case '':
@@ -41,6 +42,10 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
             case 'raw':
                 return $protocol . $domain . '/' . $id;
+                break;
+            
+            case 'request':
+                return $hc . '/requests/' . $id;
                 break;
         }
     }
@@ -280,9 +285,17 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     }
 
     public function getTicketUrl($row, $link = false)
-    {   
+    {
+        if ($this->isAdmin()) {
+            $path = 'adminhtml/zendesk/login';
+            $object = 'ticket';
+        } else {
+            $path = '*/sso/login';
+            $object = 'request';
+        }   
         $path = Mage::getSingleton('admin/session')->getUser() ? 'adminhtml/zendesk/login' : '*/sso/login';
-        $url = Mage::helper('adminhtml')->getUrl($path, array("return_url" => Mage::helper('core')->urlEncode(Mage::helper('zendesk')->getUrl('ticket', $row['id']))));
+        
+        $url = Mage::helper('adminhtml')->getUrl($path, array("return_url" => Mage::helper('core')->urlEncode(Mage::helper('zendesk')->getUrl($object, $row['id']))));
         
         if ($link)
             return $url;
@@ -291,7 +304,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
         return '<a href="' . $url . '" target="_blank">' .  Mage::helper('core')->escapeHtml($subject) . '</a>';
     }
-    
+        
     public function getStatusMap()
     {
         return array(
@@ -303,6 +316,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'hold'      =>  'Hold'
         );
     }
+    
         
     public function getPriorityMap()
     {
@@ -400,5 +414,18 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             $groups = unserialize( $cache->load('zendesk_groups') );
             Mage::register('zendesk_groups', $groups);
         }
+    }
+    
+    /**
+     * Checks whether the user is in an admin page.
+     *
+     * @return boolean
+     */
+    public function isAdmin()
+    {
+        return (
+            Mage::getSingleton('admin/session')->getUser() &&
+            (Mage::app()->getStore()->isAdmin() || Mage::getDesign()->getArea() == 'adminhtml')
+        );
     }
 }
