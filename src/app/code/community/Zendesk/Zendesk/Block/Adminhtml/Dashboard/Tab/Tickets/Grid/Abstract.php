@@ -171,10 +171,11 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
             'filter'    => $filter,
             'index'     => $index,
             'type'      => $this->getColumnType($index),
+            'users'     => $this->getCollection()->users,
         );
         
         $renderer = $this->getColumnRenderer($index);
-        
+
         if($renderer !== null) {
             $column['renderer'] = $renderer;
         }
@@ -241,5 +242,18 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
         
         return $js;
     }
-    
+
+    /**
+     * Override the parent method so that $this->_prepareCollection() is called first
+     *
+     * @return $this
+     */
+    protected function _prepareGrid()
+    {
+        $this->_prepareCollection();
+        $this->_prepareColumns();
+        $this->_prepareMassactionBlock();
+
+        return $this;
+    }
 }

@@ -23,15 +23,17 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
     protected $_viewColumns = array();
     protected static $_excludedColumns = array('score');
 
+    public $users = array();
+
     public function __construct() {
         $this->_search = new Zendesk_Zendesk_Model_Search( Zendesk_Zendesk_Model_Search::TYPE_TICKET );
     }
 
     public function addFieldToFilter($fieldName, $condition = null) {
         if(is_string($condition) OR is_array($condition)) {
-            
+
             $searchFields = array();
-            
+
             switch($fieldName) {
                 case 'subject':
                     $searchFields[] = array(
@@ -82,7 +84,7 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
                 case 'created_at':
                 case 'updated_at':
                     $fieldName  = substr($fieldName, 0, -3);
-                    
+
                     if( isset($condition['from']) AND Mage::helper('zendesk')->isValidDate($condition['from']) ) {
                         $value = Mage::helper('zendesk')->getFormatedDataForAPI( $condition['from'] );
                         $searchFields[] = array(
@@ -91,7 +93,7 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
                             'operator'  =>  '>'
                         );
                     }
-                    
+
                     if( isset($condition['to']) AND Mage::helper('zendesk')->isValidDate($condition['to']) ) {
                         $value = Mage::helper('zendesk')->getFormatedDataForAPI( $condition['to'] );
                         $searchFields[] = array(
@@ -111,14 +113,14 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
 
         return $this;
     }
-    
+
     public function getCollection(array $params = array()) {
         $searchQuery = array(
             'query' => $this->_search->getString(),
         );
-        
+
         $params = array_merge($searchQuery, $params);
-        
+
         $all = Mage::getModel('zendesk/api_tickets')->search($params);
 
         foreach ($all['results'] as $ticket) {
@@ -127,54 +129,61 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
             $this->addItem($obj);
         }
 
+        // Set the users for this collection
+        $this->users = $all['users'];
+
         $this->setPageSize($params['per_page']);
         $this->setCurPage($params['page']);
         $this->setOrder($params['sort_by'], $params['sort_order']);
         $this->_count = $all['count'];
-        
+
         Mage::unregister('zendesk_tickets_all');
         Mage::register('zendesk_tickets_all', $all['count']);
-        
+
         return $this;
     }
-    
+
     public function getCollectionFromView($viewId, array $params = array()) {
         $view = Mage::getModel('zendesk/api_views')->execute($viewId, $params);
+
         if (is_array($view['rows'])) {
             foreach ($view['rows'] as $row) {
                 $ticket = array_merge($row, $row['ticket']);
-                
+
                 $this->appendParamsWithoutIdPostfix($ticket, array('requester', 'assignee', 'group'));
-                
+
                 $obj = new Varien_Object();
                 $obj->setData($ticket);
                 $this->addItem($obj);
             }
         }
-        
+
+        // Set the users for this collection
+        $this->users = (isset($view['users'])) ? $view['users'] : array();
+
         $this->_viewColumns = $view['columns'] ? $view['columns'] : array();
 
         $this->setPageSize($params['per_page']);
         $this->setCurPage($params['page']);
         $this->setOrder($params['sort_by'], $params['sort_order']);
         $this->_count = $view['count'];
-            
+
         Mage::unregister('zendesk_tickets_view_'.$viewId);
         Mage::register('zendesk_tickets_view_'.$viewId, $view['count']);
-        
+
         return $this;
     }
-    
+
     protected function appendParamsWithoutIdPostfix(& $item, array $params = array()) {
         foreach($params as $param) {
             $name = $param . '_id';
-            
+
             if(isset($item[$name])) {
                 $item[$param] = $item[$name];
             }
         }
     }
-    
+
     public function getColumnsForView() {
         $excludedColumns = static::$_excludedColumns;
 
