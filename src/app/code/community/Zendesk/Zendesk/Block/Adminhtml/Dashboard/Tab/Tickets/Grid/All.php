@@ -55,6 +55,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_All extends Zen
             'renderer'  => 'zendesk/adminhtml_dashboard_tab_tickets_grid_renderer_email',
             'index'     => 'requester_id',
             'sortable'  => false,
+            'users'     => $this->getCollection()->users,
         ));
 
         $this->addColumn('type', array(
@@ -73,15 +74,6 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_All extends Zen
             'index'     => 'status',
             'type'      => 'options',
             'options'   => Mage::helper('zendesk')->getStatusMap(),
-        ));
-
-        $this->addColumn('priority', array(
-            'header'    => Mage::helper('zendesk')->__('Priority'),
-            'sortable'  => true,
-            'width'     => '100px',
-            'index'     => 'priority',
-            'type'      => 'options',
-            'options'   => Mage::helper('zendesk')->getPriorityMap(),
         ));
 
         $this->addColumn('created_at', array(

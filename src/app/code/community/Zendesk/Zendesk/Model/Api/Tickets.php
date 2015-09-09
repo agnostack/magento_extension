@@ -82,20 +82,21 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
 
     public function recent()
     {
-        $response = $this->_call('tickets/recent.json');
+        $response = $this->_call('tickets/recent.json', array('include' => 'users,groups'));
 
         return $response['tickets'];
     }
 
     public function all()
     {
-        $response = $this->_call('tickets.json');
+        $response = $this->_call('tickets.json', array('include' => 'users,groups'));
         return $response['tickets'];
     }
     
     public function search($data)
     {
-        return $this->_call('search.json', $data);
+        $data['include'] = 'users,groups';
+        return $this->_call('search/incremental', $data);
     }
         
     public function forOrder($orderIncrementId)

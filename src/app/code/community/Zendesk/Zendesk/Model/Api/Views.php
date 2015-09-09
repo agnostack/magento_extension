@@ -39,6 +39,7 @@ class Zendesk_Zendesk_Model_Api_Views extends Zendesk_Zendesk_Model_Api_Abstract
             throw new InvalidArgumentException('View ID not provided');
         }
 
+        $params['include'] = 'users,groups';
         $paramsString = count($params) ? '?' . http_build_query($params) : '';
 
         $response = $this->_call('views/' . $id . '/execute.json' . $paramsString);
