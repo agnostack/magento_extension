@@ -171,7 +171,6 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
             'filter'    => $filter,
             'index'     => $index,
             'type'      => $this->getColumnType($index),
-            'users'     => $this->getCollection()->users,
         );
         
         $renderer = $this->getColumnRenderer($index);
@@ -248,12 +247,12 @@ abstract class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Abstra
      *
      * @return $this
      */
-    protected function _prepareGrid()
+/*    protected function _prepareGrid()
     {
         $this->_prepareCollection();
         $this->_prepareColumns();
         $this->_prepareMassactionBlock();
 
         return $this;
-    }
+    }*/
 }
