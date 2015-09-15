@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 ?>
-<?php if( $this->isConnected() ): ?>
+<?php if( Mage::helper('zendesk')->isConnected() ): ?>
     <?php if ($this->getIsZendeskDashboard() || Mage::getStoreConfig('zendesk/backend_features/show_on_dashboard')): ?>
         <?php if ($this->getIsZendeskDashboard()): ?>
             <div class="content-header">

@@ -31,11 +31,6 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard extends Mage_Adminhtml_Block_Tem
         return 'Token token="' . Mage::helper('zendesk')->getApiToken(false) . '"';
     }
 
-    public function isConnected() {
-        $connection = Mage::helper('zendesk')->getConnectionStatus();
-        return $connection['success'];
-    }
-
     public function getTotals() {
         return Mage::helper("zendesk")->getTicketTotals();
     }
