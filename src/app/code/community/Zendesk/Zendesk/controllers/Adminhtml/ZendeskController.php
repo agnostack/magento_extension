@@ -340,11 +340,18 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             }
 
             try {
-                $admin = Mage::getModel('zendesk/api_users')->me();
+                $admin = Mage::getSingleton('admin/session')->getUser();
+                $submitter = Mage::getModel('zendesk/api_users')->find($admin->getEmail());
+
+                if (!$submitter) {
+                    // Default to the user set in the agent email field under Configuration
+                    $submitter = Mage::getModel('zendesk/api_users')->me();
+                }
+
                 $ticket = array(
                     'ticket' => array(
                         'requester_id' => $requesterId,
-                        'submitter_id' => $admin['id'],
+                        'submitter_id' => $submitter['id'],
                         'subject' => $data['subject'],
                         'status' => $data['status'],
                         'priority' => $data['priority'],
