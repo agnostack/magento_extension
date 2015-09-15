@@ -526,7 +526,9 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json',true);
         Mage::log('Synchronization started', null, 'zendesk.log');
         try {
-            $user = Mage::getModel('zendesk/api_users')->all();
+            $userFieldKeys = array_column(Mage::getModel('zendesk/api_users')->getUserFields(), 'key');
+            $user = Mage::getModel('zendesk/api_users')->me();
+
             if (is_null($user))
                 throw new Exception("Connection Failed");
 
@@ -593,7 +595,11 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             );
 
             foreach($data as $field) {
+                if (in_array($field['user_field']['key'], $userFieldKeys))
+                    continue;
+
                 $response = Mage::getModel('zendesk/api_users')->createUserField($field);
+
                 if (!isset($response['active']) || $response['active'] === false)
                     Mage::log('Unable to create User Field with key '.$field['user_field']['key'], null, 'zendesk.log');
             }
