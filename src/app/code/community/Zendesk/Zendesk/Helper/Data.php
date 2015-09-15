@@ -357,7 +357,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         try {
             $user = Mage::getModel('zendesk/api_users')->me();
 
-            if($user['id']) {
+            if(isset($user['id'])) {
                 return array(
                     'success'   => true,
                     'msg'       => Mage::helper('zendesk')->__('Connection to Zendesk API successful'),

@@ -33,7 +33,7 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             }
             $endpoint .= '?' . implode('&', $args);
         }
-        
+
         $url = $this->_getUrl($endpoint);
 
         $method = strtoupper($method);
@@ -68,7 +68,7 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
             null,
             'zendesk.log'
         );
-        
+
         try {
             $response = $client->request();
         } catch ( Zend_Http_Client_Exception $ex ) {
@@ -78,7 +78,7 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
 
             return array();
         }
-        
+
         $body = json_decode($response->getBody(), true);
 
         Mage::log(var_export($body, true), Zend_Log::DEBUG, 'zendesk.log');
