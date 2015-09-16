@@ -26,15 +26,15 @@ The API can be enabled in the Zendesk settings page in the Magento admin panel. 
 
 ### Single Sign-on (SSO)
 
-The extension only accepts one type of SSO implementation, either for administrators/agents or end-users. Verify that you have selected the correct user group to enable SSO, on your Zendesk account go to Settings > Security and select Single sign-on for which users to enable SSO via Magento.
+The extension only accepts **one** type of SSO implementation, either for administrators/agents or end-users. Verify that you have selected the correct user group to enable SSO, on your Zendesk account go to **Settings** > **Security** and select Single sign-on for which users to enable SSO via Magento.
 
 #### Administrators and agents
-* **Remote login URL** http://your_site_base_url/admin/zendesk/authenticate
-* **Remote logout URL** http://your_site_base_url/admin/zendesk/logout
+* **Remote login URL**: http://your_site_base_url/admin/zendesk/authenticate
+* **Remote logout URL**: http://your_site_base_url/admin/zendesk/logout
 
 #### End-users sign-in
-* **Remote login URL** http://your_site_base_url/zendesk/sso/login
-* **Remote logout URL** http://your_site_base_url/zendesk/sso/logout
+* **Remote login URL**: http://your_site_base_url/zendesk/sso/login
+* **Remote logout URL**: http://your_site_base_url/zendesk/sso/logout
 
 ### Responses
 
