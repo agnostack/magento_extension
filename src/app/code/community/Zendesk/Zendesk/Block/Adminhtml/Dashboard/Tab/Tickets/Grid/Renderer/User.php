@@ -19,7 +19,7 @@
 class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_Renderer_User extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract {
 
     public function render(Varien_Object $row) {
-        $users = $this->getColumn()->users;
+        $users = $row->users;
         $value = (int) $row->getData($this->getColumn()->getIndex());
 
         $found = array_filter($users, function($user) use($value) {

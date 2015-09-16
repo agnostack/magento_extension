@@ -52,10 +52,8 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Tab_Tickets_Grid_All extends Zen
         $this->addColumn('requester_id', array(
             'header'    => Mage::helper('zendesk')->__('Email'),
             'width'     => '60',
-            'renderer'  => 'zendesk/adminhtml_dashboard_tab_tickets_grid_renderer_email',
-            'index'     => 'requester_id',
+            'index'     => 'requester_email',
             'sortable'  => false,
-            'users'     => $this->getCollection()->users,
         ));
 
         $this->addColumn('type', array(

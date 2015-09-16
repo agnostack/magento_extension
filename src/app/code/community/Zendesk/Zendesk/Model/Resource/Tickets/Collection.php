@@ -123,14 +123,18 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
 
         $all = Mage::getModel('zendesk/api_tickets')->search($params);
 
+        // Set the users for this collection
+        $this->users = $all['users'];
+
+        $emails = array_column($this->users, 'email', 'id');
+
         foreach ($all['results'] as $ticket) {
+            $ticket['requester_email'] = (isset($emails[$ticket['requester_id']]) ? $emails[$ticket['requester_id']] : '');
+
             $obj = new Varien_Object();
             $obj->setData($ticket);
             $this->addItem($obj);
         }
-
-        // Set the users for this collection
-        $this->users = $all['users'];
 
         $this->setPageSize($params['per_page']);
         $this->setCurPage($params['page']);
@@ -146,9 +150,13 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
     public function getCollectionFromView($viewId, array $params = array()) {
         $view = Mage::getModel('zendesk/api_views')->execute($viewId, $params);
 
+        // Set the users for this collection
+        $this->users = (isset($view['users'])) ? $view['users'] : array();
+
         if (is_array($view['rows'])) {
             foreach ($view['rows'] as $row) {
                 $ticket = array_merge($row, $row['ticket']);
+                $ticket['users'] = $this->users;
 
                 $this->appendParamsWithoutIdPostfix($ticket, array('requester', 'assignee', 'group'));
 
@@ -157,9 +165,6 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
                 $this->addItem($obj);
             }
         }
-
-        // Set the users for this collection
-        $this->users = (isset($view['users'])) ? $view['users'] : array();
 
         $this->_viewColumns = $view['columns'] ? $view['columns'] : array();
 
