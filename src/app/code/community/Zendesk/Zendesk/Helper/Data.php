@@ -391,7 +391,17 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             );
         }
     }
-    
+
+    /**
+     * Checks if the current connection details are valid.
+     *
+     * @return boolean
+     */
+    public function isConnected() {
+        $connection = $this->getConnectionStatus();
+        return $connection['success'];
+    }
+
     public function storeDependenciesInCachedRegistry() {
         $cache = Mage::app()->getCache();
 

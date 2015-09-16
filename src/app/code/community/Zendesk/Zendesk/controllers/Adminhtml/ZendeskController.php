@@ -252,10 +252,11 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function launchAction()
     {
-        $domain = $this->_domainConfigured();
-        if (!$domain) {
+        if (!$this->_domainConfigured()) {
             return;
         }
+
+        $domain = Mage::getStoreConfig('zendesk/general/domain');
 
         $sso = Mage::getStoreConfig('zendesk/sso/enabled');
 
@@ -749,13 +750,12 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     private function _domainConfigured()
     {
-        $domain = Mage::getStoreConfig('zendesk/general/domain');
-        if(!$domain) {
-            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Please set up Zendesk connection.'));
+        if (!Mage::helper('zendesk')->isConnected()) {
+            Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Please set up a Zendesk connection.'));
             $this->_redirect('adminhtml/dashboard');
             return false;
         } else {
-            return $domain;
+            return true;
         }
     }
 
