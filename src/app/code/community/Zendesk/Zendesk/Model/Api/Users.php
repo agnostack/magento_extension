@@ -59,7 +59,7 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
         while($page && $response = $this->_call('users.json?page=' . $page)) {
             $users      = array_merge($users, $response['users']);
             $page       = is_null($response['next_page']) ? 0 : $page + 1;
-    }
+        }
     
         return $users;
     }
@@ -114,5 +114,22 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
         }
  
         return $response['user_field'];
+    }
+
+    /**
+     * Fetch all user fields
+     * 
+     * @return array $userFields
+     */
+    public function getUserFields()
+    {
+        $page = 1;
+        $userFields = array();
+        while($page && $response = $this->_call('user_fields.json?page=' . $page)) {
+            $userFields = array_merge($userFields, $response['user_fields']);
+            $page       = is_null($response['next_page']) ? 0 : $page + 1;
+        }
+    
+        return $userFields;
     }
 }
