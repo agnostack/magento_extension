@@ -224,12 +224,16 @@ parts:
   - translation:
         key: "text.integrations.magento.config.test_connection.tips"
         title: "Configuration message: suggestion to look at provided URL for troubleshooting"
-        value: "Click 'Save Config' and try again. If the issue persist, check if the entered Agent Email Address and Agent Token combination is correct."
+        value: 'Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>'
+        obsolete: "2015-09-17"
   - translation:
         key: "text.integrations.magento.config.test_connection.outbound.failure"
         title: "Configuration message: connection to the Zendesk API failed"
         value: "Connection to Zendesk API failed"
-
+  - translation:
+        key: "text.integrations.magento.config.test_connection.troubleshooting"
+        title: "Configuration message: suggestion to look at configured email and token for troubleshooting"
+        value: "Click 'Save Config' and try again. If the issue persist, check if the entered Agent Email Address and Agent Token combination is correct."
 
   # Tickets
   - translation:
