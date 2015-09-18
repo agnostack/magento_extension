@@ -364,16 +364,16 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function getConnectionStatus() {
         try {
             $user = Mage::getModel('zendesk/api_users')->me();
-            
-            if($user['id']) {
+
+            if(isset($user['id'])) {
                 return array(
                     'success'   => true,
                     'msg'       => Mage::helper('zendesk')->__('Connection to Zendesk API successful'),
                 );
             }
-            
+
             $error = Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
-                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href=%s>%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987');
+                '<br />' . Mage::helper('zendesk')->__("Click 'Save Config' and try again. If the issue persist, check if the entered Agent Email Address and Agent Token combination is correct.");
             
             return array(
                 'success'   => false,
@@ -383,7 +383,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         } catch (Exception $ex) {
             $error = Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
                 '<br />' . $ex->getCode() . ': ' . $ex->getMessage() .
-                '<br />' . Mage::helper('zendesk')->__('Troubleshooting tips can be found at <a href=%s>%s</a>', 'https://support.zendesk.com/entries/26579987', 'https://support.zendesk.com/entries/26579987');
+                '<br />' . Mage::helper('zendesk')->__("Click 'Save Config' and try again. If the issue persist, check if the entered Agent Email Address and Agent Token combination is correct.");
             
             return array(
                 'success'   => false,
