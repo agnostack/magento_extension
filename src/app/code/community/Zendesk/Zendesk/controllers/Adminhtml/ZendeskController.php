@@ -463,7 +463,13 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
     public function checkOutboundAction()
     {
-        $connection = Mage::helper('zendesk')->getConnectionStatus();
+        $request = Mage::app()->getRequest();
+
+        $connection = Mage::helper('zendesk')->getConnectionStatus(
+            $request->getParam('domain'),
+            $request->getParam('username'),
+            $request->getParam('password')
+        );
 
         $this->getResponse()->clearHeaders()->setHeader('Content-type','application/json', true);
         $this->getResponse()->setBody(json_encode($connection));
