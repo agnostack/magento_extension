@@ -17,9 +17,70 @@
 
 class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
 {
+    protected $username = null;
+    protected $password = null;
+    protected $domain = null;
+
+    /**
+     * Sets the domain to be used for this instance
+     * 
+     * @param string $username The user domain
+     */
+    public function setDomain($domain)
+    {
+        $this->domain = $domain;
+    }
+
+    /**
+     * Sets the email to be used for this instance
+     * 
+     * @param string $username The user email
+     */
+    public function setUsername($username)
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * Sets the API token for this instance
+     * 
+     * @param string $password The API token
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    public function getUsername()
+    {
+        if ($this->username === null) {
+            $this->username = Mage::getStoreConfig('zendesk/general/email');
+        }
+
+        return $this->username . '/token';
+    }
+
+    public function getPassword()
+    {
+        if ($this->password === null) {
+            $this->password = Mage::getStoreConfig('zendesk/general/password');
+        }
+
+        return $this->password; 
+    }
+
+    public function getDomain()
+    {
+        if ($this->domain === null) {
+            $this->domain = Mage::getStoreConfig('zendesk/general/domain');
+        }
+
+        return $this->domain; 
+    }
+
     protected function _getUrl($path)
     {
-        $base_url = 'https://' . Mage::getStoreConfig('zendesk/general/domain') . '/api/v2';
+        $base_url = 'https://' . $this->getDomain() . '/api/v2';
         $path = trim($path, '/');
         return $base_url . '/' . $path;
     }
@@ -48,8 +109,8 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
         );
 
         $client->setAuth(
-            Mage::getStoreConfig('zendesk/general/email'). '/token',
-            Mage::getStoreConfig('zendesk/general/password')
+            $this->getUsername(),
+            $this->getPassword()
         );
 
         if($method == 'POST' || $method == "PUT") {

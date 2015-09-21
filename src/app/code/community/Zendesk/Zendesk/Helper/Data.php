@@ -360,10 +360,24 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function getFormatedDateTime($dateToFormat) {
         return Mage::helper('core')->formatDate($dateToFormat, 'medium', true);
     }
-    
-    public function getConnectionStatus() {
+
+    /**
+     * Tests if the provided username and password is correct. If either is empty the database values will be used.
+     *
+     * @param  string $domain
+     * @param  string $username
+     * @param  string $password
+     * @return array
+     */
+    public function getConnectionStatus($domain = null, $username = null, $password = null) {
         try {
-            $user = Mage::getModel('zendesk/api_users')->me();
+            $usersApi = Mage::getModel('zendesk/api_users');
+
+            $usersApi->setUsername($username);
+            $usersApi->setPassword($password);
+            $usersApi->setDomain($domain);
+
+            $user = $usersApi->me();
 
             if(isset($user['id'])) {
                 return array(

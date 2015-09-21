@@ -22,6 +22,11 @@
     function checkZendApiConnection() {
         var request = new Ajax.Request('<?php echo $this->getUrl('adminhtml/zendesk/checkOutbound'); ?>', {
             method: 'get',
+            parameters: {
+                domain: document.getElementById('zendesk_general_domain').value,
+                username: document.getElementById('zendesk_general_email').value,
+                password: document.getElementById('zendesk_general_password').value
+            },
             onCreate: function() {
                 document.getElementById('zendesk-api-connection-results').innerHTML = '';
             },
