@@ -115,6 +115,8 @@ class Zendesk_Zendesk_Model_Resource_Tickets_Collection extends Varien_Data_Coll
     }
 
     public function getCollection(array $params = array()) {
+        require_once (Mage::getModuleDir('', 'Zendesk_Zendesk') . DS . 'lib' . DS .'functions.php');
+
         $searchQuery = array(
             'query' => $this->_search->getString(),
         );
