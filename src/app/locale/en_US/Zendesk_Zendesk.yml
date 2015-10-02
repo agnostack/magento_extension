@@ -232,7 +232,7 @@ parts:
         value: "Connection to Zendesk API failed"
   - translation:
         key: "text.integrations.magento.config.test_connection.troubleshooting"
-        title: "Configuration message: suggestion to look at configured email and token for troubleshooting"
+        title: "Configuration message: suggestion to look at configured email and token for troubleshooting. See txt.integrations.magento.config.save, txt.integrations.magento.config.general.email and txt.integrations.magento.config.general.token for consistency"
         value: "Click 'Save Config' and try again. If the issue persist, check if the entered Agent Email Address and Agent Token combination is correct."
 
   # Tickets
