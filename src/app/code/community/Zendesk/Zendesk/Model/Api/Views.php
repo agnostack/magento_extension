@@ -20,7 +20,7 @@ class Zendesk_Zendesk_Model_Api_Views extends Zendesk_Zendesk_Model_Api_Abstract
     public function active()
     {
         $response = $this->_call('views/active.json');
-        return $response['views'];
+        return (isset($response['views']) ? $response['views'] : null);
     }
 
     public function get($id)
@@ -30,7 +30,7 @@ class Zendesk_Zendesk_Model_Api_Views extends Zendesk_Zendesk_Model_Api_Abstract
         }
 
         $response = $this->_call('views/' . $id . '.json');
-        return $response['view'];
+        return (isset($response['view']) ? $response['view'] : null);
     }
 
     public function execute($id, array $params = array())

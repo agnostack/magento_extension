@@ -84,13 +84,13 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
     {
         $response = $this->_call('tickets/recent.json', array('include' => 'users,groups'));
 
-        return $response['tickets'];
+        return (isset($response['tickets']) ? $response['tickets'] : null);
     }
 
     public function all()
     {
         $response = $this->_call('tickets.json', array('include' => 'users,groups'));
-        return $response['tickets'];
+        return (isset($response['tickets']) ? $response['tickets'] : null);
     }
     
     public function search($data)
@@ -189,7 +189,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
     {
         $response = $this->_call('tickets.json', null, 'POST', $data);
         
-        return $response['ticket'];
+        return (isset($response['ticket']) ? $response['ticket'] : null);
     }
 
 }
