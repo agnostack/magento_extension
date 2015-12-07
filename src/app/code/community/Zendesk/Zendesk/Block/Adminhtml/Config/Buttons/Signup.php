@@ -51,6 +51,8 @@ class Zendesk_Zendesk_Block_Adminhtml_Config_Buttons_Signup extends Mage_Adminht
 
     public function getPostInfo()
     {
+        $stores = Mage::app()->getWebsites();
+
         $info = array(
             'magento_domain' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB),
             'magento_current_user_id' => Mage::getSingleton('admin/session')->getUser()->getUserId(),
@@ -59,6 +61,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Config_Buttons_Signup extends Mage_Adminht
             'magento_callback' => Mage::helper('adminhtml')->getUrl('adminhtml/zendesk/redirect', array('type' => 'settings', 'id' => 'zendesk')),
             'magento_locale' => Mage::getStoreConfig('general/locale/code'),
             'magento_timezone' => Mage::getStoreConfig('general/locale/timezone'),
+            'magento_api_url' => Mage::getUrl('zendesk/api', array('_store' => $stores[1]->getDefaultStore()->getCode()))
         );
 
         $storeName = Mage::getStoreConfig('general/store_information/name');
