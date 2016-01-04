@@ -36,6 +36,6 @@ class Zendesk_Zendesk_Model_Api_Requesters extends Zendesk_Zendesk_Model_Api_Use
         );
         $response = $this->_call('users.json', null, 'POST', $data);
 
-        return $response['user'];
+        return (isset($response['user']) ? $response['user'] : null);
     }
 }
