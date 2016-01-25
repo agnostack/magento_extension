@@ -63,6 +63,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             case 'configuration':
             case 'generate':
             case 'sync':
+            case 'log':
                 $aclAction = 'settings';
                 break;
             default:
