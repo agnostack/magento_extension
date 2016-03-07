@@ -120,6 +120,7 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard_Grids extends Mage_Adminhtml_Blo
     }
     
     public function getIsZendeskDashboard() {
-        return Mage::app()->getFrontController()->getRequest()->getControllerName() === 'zendesk';
+        $request = Mage::app()->getFrontController()->getRequest();
+        return $request && $request->getControllerName() === 'zendesk';
     }
 }

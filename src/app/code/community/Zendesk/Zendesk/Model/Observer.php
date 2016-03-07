@@ -18,38 +18,6 @@
 
 class Zendesk_Zendesk_Model_Observer
 {
-    public function setHook(Varien_Event_Observer $observer)
-    {
-        if (Mage::app()->getFrontController()->getAction()->getFullActionName() === 'adminhtml_dashboard_index')
-        {
-            $block = $observer->getBlock();
-            if ($block->getNameInLayout() === 'dashboard')
-            {
-                $block->getChild('totals')->setUseAsDashboardHook(true);
-            }
-        }
-    }
-
-    public function insertBlock(Varien_Event_Observer $observer)
-    {
-        if (Mage::app()->getFrontController()->getAction()->getFullActionName() === 'adminhtml_dashboard_index')
-        {
-            if ($observer->getBlock()->getUseAsDashboardHook())
-            {
-                $html = $observer->getTransport()->getHtml();
-                $zendeskDash = $observer->getBlock()->getLayout()
-                    ->createBlock('zendesk/adminhtml_dashboard')
-                    ->setName('zendesk_dashboard');
-                $zendeskGrid = $zendeskDash->getLayout()
-                    ->createBlock('zendesk/adminhtml_dashboard_grids')
-                    ->setName('zendesk_dashboard_grids');
-                $zendeskDash->setChild('zendesk_dashboard_grids', $zendeskGrid);
-                $html .= $zendeskDash->toHtml();
-                $observer->getTransport()->setHtml($html);
-            }
-        }
-    }
-
     public function saveConfig(Varien_Event_Observer $observer)
     {
         // Defaults for "global" scope
