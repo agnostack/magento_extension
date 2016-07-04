@@ -66,7 +66,7 @@ class Zendesk_Zendesk_Model_Observer
         }
 
         if($storeCode) {
-            $scope = 'store';
+            $scope = 'stores';
             $store = Mage::getModel('core/store')->load($storeCode);
             $scopeId = $store->getId();
         }
