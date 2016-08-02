@@ -32,49 +32,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         $ticket = $response['ticket'];
 
         if($sideload) {
-            // Sideload user information
-            if(isset($response['users'])) {
-                // Generate the list of user IDs from the users provided
-                $users = array();
-                foreach($response['users'] as $user) {
-                    $users[$user['id']] = $user;
-                }
-
-                // Use the list of generated users to attach additional details to the ticket
-                if(isset($ticket['requester_id'])) {
-                    if(isset($users[$ticket['requester_id']])) {
-                        $ticket['requester'] = $users[$ticket['requester_id']];
-                    }
-                }
-
-                if(isset($ticket['submitter_id'])) {
-                    if(isset($users[$ticket['submitter_id']])) {
-                        $ticket['submitter'] = $users[$ticket['submitter_id']];
-                    }
-                }
-
-                if(isset($ticket['assignee_id'])) {
-                    if(isset($users[$ticket['assignee_id']])) {
-                        $ticket['assignee'] = $users[$ticket['assignee_id']];
-                    }
-                }
-            }
-
-            // Sideload group information
-            if(isset($response['groups'])) {
-                // Generate the list of group IDs from the users provided
-                $groups = array();
-                foreach($response['groups'] as $group) {
-                    $groups[$group['id']] = $group;
-                }
-
-                // Use the list of generated groups to attach additional details to the ticket
-                if(isset($ticket['group_id'])) {
-                    if(isset($groups[$ticket['group_id']])) {
-                        $ticket['group'] = $groups[$ticket['group_id']];
-                    }
-                }
-            }
+            $this->formatSideloaded($response, $ticket);
         }
 
         return $ticket;
@@ -146,8 +104,19 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
     {
         $user = Mage::getModel('zendesk/api_users')->find($customerEmail);
         if(isset($user['id'])) {
-            $response = $this->_call('users/' . $user['id'] . '/requests.json', null, 'GET', null, false);
-            return $response['requests'];
+            $response = $this->_call(
+                'users/' . $user['id'] . '/tickets/requested.json',
+                array('include' => 'users,groups', 'sort_by' => 'updated_at', 'sort_order' => 'desc'),
+                'GET',
+                null,
+                false
+            );
+
+            foreach ($response['tickets'] as &$request) {
+                $request = $this->formatSideloaded($response, $request);
+            }
+
+            return $response['tickets'];
         } else {
             return array();
         }
@@ -192,4 +161,52 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         return (isset($response['ticket']) ? $response['ticket'] : null);
     }
 
+    private function formatSideloaded($response, $ticket)
+    {
+        // Sideload user information
+        if(isset($response['users'])) {
+            // Generate the list of user IDs from the users provided
+            $users = array();
+            foreach($response['users'] as $user) {
+                $users[$user['id']] = $user;
+            }
+
+            // Use the list of generated users to attach additional details to the ticket
+            if(isset($ticket['requester_id'])) {
+                if(isset($users[$ticket['requester_id']])) {
+                    $ticket['requester'] = $users[$ticket['requester_id']];
+                }
+            }
+
+            if(isset($ticket['submitter_id'])) {
+                if(isset($users[$ticket['submitter_id']])) {
+                    $ticket['submitter'] = $users[$ticket['submitter_id']];
+                }
+            }
+
+            if(isset($ticket['assignee_id'])) {
+                if(isset($users[$ticket['assignee_id']])) {
+                    $ticket['assignee'] = $users[$ticket['assignee_id']];
+                }
+            }
+        }
+
+        // Sideload group information
+        if(isset($response['groups'])) {
+            // Generate the list of group IDs from the users provided
+            $groups = array();
+            foreach($response['groups'] as $group) {
+                $groups[$group['id']] = $group;
+            }
+
+            // Use the list of generated groups to attach additional details to the ticket
+            if(isset($ticket['group_id'])) {
+                if(isset($groups[$ticket['group_id']])) {
+                    $ticket['group'] = $groups[$ticket['group_id']];
+                }
+            }
+        }
+
+        return $ticket;
+    }
 }
