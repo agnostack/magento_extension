@@ -17,21 +17,24 @@
 ?>
 <?php
 
-if(!Mage::getStoreConfig('zendesk/backend_features/show_on_customer')) {
+if (!Mage::getStoreConfig('zendesk/backend_features/show_on_customer')) {
     return;
 }
 
 $tickets = null;
-if($customer = Mage::registry('current_customer')) {
+if ($customer = Mage::registry('current_customer')) {
     try {
         $tickets = Mage::getModel('zendesk/api_tickets')->forRequester($customer->getEmail());
-    } catch(Exception $e) {
-        // Don't do anything, just don't show the tickets
+    } catch (Exception $e) {
+        Mage::log("Customer {$customer->getEmail()} ticket fetch resulted in: {$e->getMessage()}", null, 'zendesk.log');
     }
+} else {
+    Mage::log('Magento failed to return current customer.', null, 'zendesk.log');
 
+    return;
 }
 ?>
-<?php if($tickets): ?>
+<?php if ($tickets): ?>
     <div class="clear"></div>
     <br/>
     <div class="entry-edit">
@@ -53,7 +56,7 @@ if($customer = Mage::registry('current_customer')) {
                         </tr>
                     </thead>
                     <tbody class="odd">
-                        <?php foreach($tickets as $ticket):?>
+                        <?php foreach ($tickets as $ticket):?>
                             <tr class="border">
                                 <td><?php echo ucwords($ticket['priority']); ?></td>
                                 <td><?php echo Mage::helper('zendesk')->getTicketUrl($ticket); ?></td>
