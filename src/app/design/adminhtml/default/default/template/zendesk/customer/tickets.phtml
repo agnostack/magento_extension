@@ -30,6 +30,8 @@ if ($customer = Mage::registry('current_customer')) {
     }
 } else {
     Mage::log('Magento failed to return current customer.', null, 'zendesk.log');
+
+    return;
 }
 ?>
 <?php if ($tickets): ?>
