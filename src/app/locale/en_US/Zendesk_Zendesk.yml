@@ -16,6 +16,10 @@ parts:
       title: "Configuration form: description for the general section"
       value: "General settings that are required to connect Zendesk and Magento."
   - translation:
+      key: "golion.txt.integrations.magento.config.general.description"
+      title: "Configuration form: description for the general section"
+      value: "General settings that are required to connect Zendesk Support and Magento."
+  - translation:
       key: "txt.integrations.magento.config.general.domain"
       title: "Configuration form: label for their Zendesk Domain"
       value: "Zendesk Domain"
@@ -100,6 +104,10 @@ parts:
       title: "Configuration form: link to let them toggle the display of a link to Zendesk in the footer"
       value: "Display link to Zendesk in Magento footer"
   - translation:
+      key: "golion.txt.integrations.magento.config.features.display_link_to_zendesk"
+      title: "Configuration form: link to let them toggle the display of a link to Zendesk in the footer"
+      value: "Display link to Zendesk Support in Magento footer"
+  - translation:
       key: "txt.integrations.magento.config.features.order_field_id"
       title: "Configuration form: label asking for their Zendesk order number custom field ID"
       value: "Zendesk Order Number field ID"
@@ -108,6 +116,10 @@ parts:
       title: "Configuration form: hint text describing why the field is required"
       value: "Used to link order in Magento with tickets in Zendesk"
   - translation:
+      key: "golion.txt.integrations.magento.config.features.order_field_id_hint"
+      title: "Configuration form: hint text describing why the field is required"
+      value: "Used to link order in Magento with tickets in Zendesk Support"
+  - translation:
       key: "txt.integrations.magento.config.api_details.title"
       title: "Configuration form: title for API Details section"
       value: "API Details"
@@ -115,6 +127,10 @@ parts:
       key: "txt.integrations.magento.config.api_details.description"
       title: "Configuration form: description for the API details section"
       value: "Required for Magento App inside Zendesk to work."
+  - translation:
+      key: "golion.txt.integrations.magento.config.api_details.description"
+      title: "Configuration form: description for the API details section"
+      value: "Required for Magento app to work in Zendesk Support."
   - translation:
       key: "txt.integrations.magento.config.api_details.enabled"
       title: "Configuration form: label asking if they would like the API to be enabled"
@@ -181,6 +197,10 @@ parts:
         key: "txt.integrations.magento.config.setup.description"
         title: "Configuration form: description for the setup section"
         value: "Haven't setup Zendesk yet? Follow our easy setup guide to start using Zendesk to support your customers."
+  - translation:
+        key: "golion.txt.integrations.magento.config.setup.description"
+        title: "Configuration form: description for the setup section"
+        value: "Haven't set up Zendesk Support yet? Follow our easy setup guide to get started."
   - translation:
         key: "txt.integrations.magento.config.setup.guide"
         title: "Configuration form: button linking to the setup guide"
