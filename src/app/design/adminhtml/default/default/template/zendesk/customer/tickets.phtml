@@ -21,6 +21,7 @@ if (!Mage::getStoreConfig('zendesk/backend_features/show_on_customer')) {
     return;
 }
 
+Mage::log('z3n magento trace: [A] Customer view rendered with show_on_customer value: ' . Mage::getStoreConfig('zendesk/backend_features/show_on_customer'), null, 'zendesk-debug.log');
 $tickets = null;
 if ($customer = Mage::registry('current_customer')) {
     try {

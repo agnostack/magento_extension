@@ -25,6 +25,7 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
 
         $response = $this->_call('users/search.json', array('query' => $email, 'per_page' => 30));
 
+        Mage::log("z3n magento trace: [C] Fetched data for email {$email}: " . json_encode($response), null, 'zendesk-debug.log');
         if($response['count'] > 0) {
             $user = array_shift($response['users']);
             return $user;

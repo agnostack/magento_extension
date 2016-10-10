@@ -104,6 +104,7 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
     {
         $user = Mage::getModel('zendesk/api_users')->find($customerEmail);
         if(isset($user['id'])) {
+            Mage::log("z3n magento trace: [D] Fetching tickets for customer {$customerEmail} ", null, 'zendesk-debug.log');
             $response = $this->_call(
                 'users/' . $user['id'] . '/tickets/requested.json',
                 array('include' => 'users,groups', 'sort_by' => 'updated_at', 'sort_order' => 'desc'),

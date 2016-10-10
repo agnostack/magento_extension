@@ -87,6 +87,18 @@ class Zendesk_Zendesk_Model_Api_Abstract extends Mage_Core_Model_Abstract
 
     protected function _call($endpoint, $params = null, $method = 'GET', $data = null, $silent = false, $global = false)
     {
+        if ($endpoint == 'users/search.json') {
+            Mage::log(
+                "z3n magento trace: [B] Calling zendesk API " . json_encode(array(
+                    'endpoint' => $endpoint,
+                    'params' => $params,
+                    'method' => $method,
+                    'username' => $this->getUsername(),
+                )),
+                null,
+                'zendesk-debug.log'
+            );
+        }
         if($params && is_array($params) && count($params) > 0) {
             $args = array();
             foreach($params as $arg => $val) {
