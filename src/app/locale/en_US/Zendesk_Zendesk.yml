@@ -417,6 +417,10 @@ parts:
         title: "Open Zendesk"
         value: "Launch Zendesk"
   - translation:
+        key: "golion.txt.integrations.magento.general.launch"
+        title: "Open Zendesk"
+        value: "Launch Zendesk Support"
+  - translation:
         key: "txt.integrations.magento.general.sso_token_not_set"
         title: "Zendesk SSO token has not been set. Please add this to the settings page"
         value: "Zendesk SSO token not been set. Please add this to the settings page."
@@ -429,10 +433,14 @@ parts:
         title: "View the ticket in Zendesk"
         value: "View ticket in Zendesk"
   - translation:
+        key: "golion.txt.integrations.magento.general.view_ticket_in_zendesk"
+        title: "View the ticket in Zendesk"
+        value: "View ticket in Zendesk Support"
+  - translation:
         key: "txt.integrations.magento.general.view_all_tickets"
         title: "View all the tickets"
         value: "View All Tickets"
   - translation:
         key: "txt.integrations.magento.general.support_tickets"
         title: "Title for a section display support tickets"
-        value: "Support Tickets"
+        value: "Tickets"
