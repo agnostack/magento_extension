@@ -198,7 +198,7 @@
                         <sort_order>2</sort_order>
                     </zendesk_create>
                     <zendesk_launch module="zendesk">
-                        <title>Launch Zendesk</title>
+                        <title>Launch Zendesk Support</title>
                         <action>adminhtml/zendesk/launch</action>
                         <sort_order>3</sort_order>
                     </zendesk_launch>
@@ -238,7 +238,7 @@
                                     <sort_order>2</sort_order>
                                 </zendesk_create>
                                 <zendesk_launch translate="title" module="zendesk">
-                                    <title>Launch Zendesk</title>
+                                    <title>Launch Zendesk Support</title>
                                     <sort_order>3</sort_order>
                                 </zendesk_launch>
                                 <zendesk_log>
