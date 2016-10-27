@@ -378,7 +378,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
 
                 $text = Mage::helper('zendesk')->__('Ticket #%s Created', $response['id']);
                 $text .= ' <a href="' . Mage::helper('zendesk')->getTicketUrl($response, true) . '" target="_blank">';
-                $text .= Mage::helper('zendesk')->__('View ticket in Zendesk');
+                $text .= Mage::helper('zendesk')->__('View ticket in Zendesk Support');
                 $text .= '</a>';
 
                 Mage::getSingleton('adminhtml/session')->addSuccess($text);
