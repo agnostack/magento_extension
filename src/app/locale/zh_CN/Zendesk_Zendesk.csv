@@ -1,97 +1,107 @@
-API Details,API 详情
-API Enabled,启用 API
-API Token,API 密钥
-API test connection failed,API 测试连接失败
-API test connection successful,API 测试连接成功
-API,API
-Agent Email Address,代理电邮地址
-Agent Token,代理密钥
-Are you sure you want to clear the entire Zendesk log?,您确定要清除整个 Zendesk 日志吗？
-Assignee,受托人
-Chat,交谈
-Code to display Feedback Tab,显示反馈标签的代码
-Connection to Zendesk API failed,连接到 Zendesk API 失败
-Connection to Zendesk API successful,连接到 Zendesk API 成功
-Create Ticket,创建工单
-Create tickets from Contact Us form,从“联系我们”窗体创建工单
-Customize Feedback Tab,自定义反馈标签
-Dashboard,面板
-Decide which features you would like turned on in your Magento store.,决定您希望在 Magento 商店中打开的功能。
-Description,描述
-Display link to Zendesk in Magento footer,在 Magento 页脚中显示前往 Zendesk 的链接
-Email,电邮
-Facebook,Facebook
-Features,功能
-Feedback Tab,反馈标签
-File size too large - only showing the last %s lines. Click Download to retrieve the entire file.,文件太大 —— 仅显示最后 %s 行。单击“下载”检索整个文件。
-General settings that are required to connect Zendesk and Magento.,用于连接 Zendesk 和 Magento 的通用设置。
-General,通用
-Generate,生成
-Group,组
-Haven't setup Zendesk yet? Follow our easy setup guide to start using Zendesk to support your customers.,尚未设置 Zendesk？跟着我们的简易设置指南，开始使用 Zendesk 支持客户。
-High,高
-Incident,事件
-Launch Zendesk,启动 Zendesk
-Low,低
-New Support Ticket,新建支持工单
-New,新建
-No tickets found,未找到工单
-No views selected. Please select one or more from the settings page.,未选择视图。请从设置页面选择一个或多个。
-Normal,正常
-On-hold,暂停
-Open,已开启
-Order number,订单号
-Pending,未决
-Priority,优先级
-Problem,事故
-Question,问题
-Remote Authentication Token,远程身份验证密钥
-Remote Authentication Token,远程身份验证密钥
-Requested,请求日期
-Requester Email,请求者电邮
-Requester Name,请求者名称
-Requester Website,请求者网站
-Requester,请求者
-Required for Magento App inside Zendesk to work.,供 Zendesk 内部的 Magento App 运作所需。
-Save Config,保存配置
-Settings,设置
-Setup guide,设置指南
-Setup,设置
-Show support tickets on admin dashboard,在管理员面板中显示支持工单。
-Show support tickets on customer view,在客户视图中显示支持工单
-Show support tickets on order view,在订单视图中显示支持工单
-Single Sign-on - Admins and Agents,单一登录 —— 管理员和代理
-Single Sign-on - End-users,单一登录 —— 终端用户
-Single Sign-on Enabled,单一登录已启用
-Single Sign-on Enabled,单一登录已启用
-Solved,已解决
-Status,状态
-Subject,标题
-Successfully generated a new API token,已成功生成新的 API 密钥
-Support Channels,支持渠道
-Support Tickets,支持工单
-Task,任务
-Test Connection,测试连接
-The Zendesk log file has not been created. Check to see if logging has been enabled.,Zendesk 日志文件尚未创建。检查日志是否已启用。
-Ticket #%s Created,工单 #%s 已创建
-To generate a token, log in to Zendesk then select Manage > Channels > API > Token,要生成密钥，登录 Zendesk 然后选择管理 > 渠道 > API > 密钥
-Troubleshooting tips can be found at <a href="%s">%s</a>,故障排除提示可在 <a href="%s">%s</a> 查看
-Twitter,Twitter
-Type,类型
-Updated,更新于
-Urgent,紧急
-Use Magento to manage admin and agent authentication.,使用 Magento 管理管理员和代理的身份验证。
-Use Magento to manage end-user authentication.,使用 Magento 管理终端用户的身份验证。
-Use Magento to manage user authentication.,使用 Magento 管理用户身份验证。
-Used to link order in Magento with tickets in Zendesk,用于链接 Magento 订单与 Zendesk 工单
-View All Tickets,查看所有工单
-View ticket in Zendesk,在 Zendesk 中查看工单
-Views to show on dashboards,在面板上显示的视图
-Voice,Voice
-Web Portal,Web 门户
-Zendesk Domain,Zendesk 域名
-Zendesk Log Viewer,Zendesk 日志查看器
-Zendesk Order Number field ID,Zendesk 订单号字段 ID
-Zendesk SSO token not been set. Please add this to the settings page.,Zendesk SSO 密钥尚未设置。请将此添加至设置页面。
-Zendesk allows your customers to contact you using the methods they prefer. Use the links below to configure the channels you would like to use.,Zendesk 允许您的客户用其偏好的方式联系您。使用下面的链接配置您希望使用的渠道。
-Zendesk domain not set. Please add this to the settings page.,Zendesk 域名尚未设置。请将此添加至设置页面。
+"English","简体中文 (Simplified Chinese)"
+"API Details","API 详情"
+"API Enabled","启用 API"
+"API Token","API 密钥"
+"API test connection failed","API 测试连接失败"
+"API test connection successful","API 测试连接成功"
+"API","API"
+"Agent Email Address","专员电邮地址"
+"Agent Token","专员密钥"
+"Are you sure you want to clear the entire Zendesk log?","您确定要清除整个 Zendesk 日志吗？"
+"Assignee","受托人"
+"Chat","在线交谈"
+"Click 'Save Config' and try again. If the issue persist, check if the entered Agent Email Address and Agent Token combination is correct.","单击“保存配置”并重试。如果继续出现问题，检查输入的专员电邮地址和专员密钥组合是否正确。"
+"Code to display Feedback Tab","显示反馈标签的代码"
+"Connection to Zendesk API failed","连接到 Zendesk API 失败"
+"Connection to Zendesk API successful","连接到 Zendesk API 成功"
+"Create Ticket","创建工单"
+"Create tickets from Contact Us form","从“联系我们”表格创建工单"
+"Customize Feedback Tab","自定义反馈标签"
+"Customize Web Widget","自定义 Web Widget"
+"Dashboard","面板"
+"Decide which features you would like turned on in your Magento store.","决定您希望在 Magento 商店中打开的功能。"
+"Description","描述"
+"Display link to Zendesk Support in Magento footer","在 Magento 页脚中显示前往 Zendesk Support 的链接"
+"Display link to Zendesk in Magento footer","在 Magento 页脚中显示前往 Zendesk 的链接"
+"Email","电邮"
+"Facebook","Facebook"
+"Features","功能"
+"Feedback Tab","反馈标签"
+"File size too large - only showing the last %s lines. Click Download to retrieve the entire file.","文件太大 —— 仅显示最后 %s 行。单击“下载”检索整个文件。"
+"General settings that are required to connect Zendesk Support and Magento.","用于连接 Zendesk Support 和 Magento 的一般设置。"
+"General settings that are required to connect Zendesk and Magento.","用于连接 Zendesk 和 Magento 的一般设置。"
+"General","通用"
+"Generate","生成"
+"Group","组"
+"Haven't set up Zendesk Support yet? Follow our easy setup guide to get started.","尚未设置 Zendesk Support？跟着我们的简易设置指南开始。"
+"Haven't setup Zendesk yet? Follow our easy setup guide to start using Zendesk to support your customers.","尚未设置 Zendesk？跟着我们的简易设置指南，开始使用 Zendesk 支持客户。"
+"High","高"
+"Incident","事务"
+"Include Web Widget","包括 Web Widget"
+"Launch Zendesk Support","启动 Zendesk Support"
+"Launch Zendesk","启动 Zendesk"
+"Low","低"
+"New Support Ticket","新建支持工单"
+"New","新建"
+"No tickets found","未找到工单"
+"No views selected. Please select one or more from the settings page.","未选择视图。请从设置页面选择一个或多个。"
+"Normal","正常"
+"On-hold","暂停"
+"Open","已开启"
+"Order number","订单号"
+"Pending","待回应"
+"Priority","优先级"
+"Problem","故障"
+"Question","问题"
+"Remote Authentication Token","远程身份验证密钥"
+"Remote Authentication Token","远程身份验证密钥"
+"Requested","请求于"
+"Requester Email","请求者电邮"
+"Requester Name","请求者名称"
+"Requester Website","请求者网站"
+"Requester","请求者"
+"Required for Magento App inside Zendesk to work.","供 Zendesk 内部的 Magento 应用运作所需。"
+"Required for Magento app to work in Zendesk Support.","供 Magento 应用在 Zendesk Support 内运作所需。"
+"Save Config","保存配置"
+"Settings","设置"
+"Setup guide","设置指南"
+"Setup","设置"
+"Show support tickets on admin dashboard","在管理员面板中显示支持工单。"
+"Show support tickets on customer view","在客户视图中显示支持工单"
+"Show support tickets on order view","在订单视图中显示支持工单"
+"Single Sign-on - Admins and Agents","单点登录 —— 管理员和专员"
+"Single Sign-on - End-users","单点登录 —— 终端用户"
+"Single Sign-on Enabled","单点登录已启用"
+"Single Sign-on Enabled","单点登录已启用"
+"Solved","已解决"
+"Status","状态"
+"Subject","标题"
+"Successfully generated a new API token","已成功生成新的 API 密钥"
+"Support Channels","支持渠道"
+"Task","任务"
+"Test Connection","测试连接"
+"The Zendesk log file has not been created. Check to see if logging has been enabled.","Zendesk 日志文件尚未创建。检查日志是否已启用。"
+"Ticket #%s Created","工单 #%s 已创建"
+"Tickets","工单"
+"To generate a token, sign in to Zendesk then select Manage > Channels > API > Token","要生成密钥，登录 Zendesk 然后选择管理 > 渠道 > API > 密钥"
+"Twitter","Twitter"
+"Type","类型"
+"Updated","更新于"
+"Urgent","紧急"
+"Use Magento to manage admin and agent authentication.","使用 Magento 管理管理员和专员的身份验证。"
+"Use Magento to manage end-user authentication.","使用 Magento 管理终端用户的身份验证。"
+"Use Magento to manage user authentication.","使用 Magento 管理用户身份验证。"
+"Used to link order in Magento with tickets in Zendesk Support","用于链接 Magento 订单与 Zendesk Support 工单"
+"Used to link order in Magento with tickets in Zendesk","用于链接 Magento 订单与 Zendesk 工单"
+"View All Tickets","查看所有工单"
+"View ticket in Zendesk Support","在 Zendesk Support 中查看工单"
+"View ticket in Zendesk","在 Zendesk 中查看工单"
+"Views to show on dashboards","在面板上显示的视图"
+"Voice","Voice"
+"Web Portal","网络门户"
+"Zendesk Domain","Zendesk 域名"
+"Zendesk Log Viewer","Zendesk 日志查看器"
+"Zendesk Order Number field ID","Zendesk 订单号字段 ID"
+"Zendesk SSO token not been set. Please add this to the settings page.","Zendesk SSO 密钥尚未设置。请将此添加至设置页面。"
+"Zendesk allows your customers to contact you using the methods they prefer. Use the links below to configure the channels you would like to use.","Zendesk 允许您的客户用其偏好的方式联系您。使用下面的链接配置您希望使用的渠道。"
+"Zendesk domain not set. Please add this to the settings page.","Zendesk 域名尚未设置。请将此添加至设置页面。"
