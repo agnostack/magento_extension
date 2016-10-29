@@ -12,11 +12,11 @@ parts:
       title: "Configuration form: title for the group of general configuration options"
       value: "General"
   - translation:
-      key: "txt.integrations.magento.config.general.description"
+      key: "pregolion.txt.integrations.magento.config.general.description"
       title: "Configuration form: description for the general section"
       value: "General settings that are required to connect Zendesk and Magento."
   - translation:
-      key: "golion.txt.integrations.magento.config.general.description"
+      key: "txt.integrations.magento.config.general.description"
       title: "Configuration form: description for the general section"
       value: "General settings that are required to connect Zendesk Support and Magento."
   - translation:
@@ -100,11 +100,11 @@ parts:
       title: "Configuration form: link to let them customize their web widget"
       value: "Customize Web Widget"
   - translation:
-      key: "txt.integrations.magento.config.features.display_link_to_zendesk"
+      key: "pregolion.txt.integrations.magento.config.features.display_link_to_zendesk"
       title: "Configuration form: link to let them toggle the display of a link to Zendesk in the footer"
       value: "Display link to Zendesk in Magento footer"
   - translation:
-      key: "golion.txt.integrations.magento.config.features.display_link_to_zendesk"
+      key: "txt.integrations.magento.config.features.display_link_to_zendesk"
       title: "Configuration form: link to let them toggle the display of a link to Zendesk in the footer"
       value: "Display link to Zendesk Support in Magento footer"
   - translation:
@@ -112,11 +112,11 @@ parts:
       title: "Configuration form: label asking for their Zendesk order number custom field ID"
       value: "Zendesk Order Number field ID"
   - translation:
-      key: "txt.integrations.magento.config.features.order_field_id_hint"
+      key: "pregolion.txt.integrations.magento.config.features.order_field_id_hint"
       title: "Configuration form: hint text describing why the field is required"
       value: "Used to link order in Magento with tickets in Zendesk"
   - translation:
-      key: "golion.txt.integrations.magento.config.features.order_field_id_hint"
+      key: "txt.integrations.magento.config.features.order_field_id_hint"
       title: "Configuration form: hint text describing why the field is required"
       value: "Used to link order in Magento with tickets in Zendesk Support"
   - translation:
@@ -124,11 +124,11 @@ parts:
       title: "Configuration form: title for API Details section"
       value: "API Details"
   - translation:
-      key: "txt.integrations.magento.config.api_details.description"
+      key: "pregolion.txt.integrations.magento.config.api_details.description"
       title: "Configuration form: description for the API details section"
       value: "Required for Magento App inside Zendesk to work."
   - translation:
-      key: "golion.txt.integrations.magento.config.api_details.description"
+      key: "txt.integrations.magento.config.api_details.description"
       title: "Configuration form: description for the API details section"
       value: "Required for Magento app to work in Zendesk Support."
   - translation:
@@ -194,11 +194,11 @@ parts:
         title: "Configuration form: title for the setup section"
         value: "Setup"
   - translation:
-        key: "txt.integrations.magento.config.setup.description"
+        key: "pregolion.txt.integrations.magento.config.setup.description"
         title: "Configuration form: description for the setup section"
         value: "Haven't setup Zendesk yet? Follow our easy setup guide to start using Zendesk to support your customers."
   - translation:
-        key: "golion.txt.integrations.magento.config.setup.description"
+        key: "txt.integrations.magento.config.setup.description"
         title: "Configuration form: description for the setup section"
         value: "Haven't set up Zendesk Support yet? Follow our easy setup guide to get started."
   - translation:
@@ -413,11 +413,11 @@ parts:
         title: "No views have been selected to display. Please select one or more from the settings page."
         value: "No views selected. Please select one or more from the settings page."
   - translation:
-        key: "txt.integrations.magento.general.launch"
+        key: "pregolion.txt.integrations.magento.general.launch"
         title: "Open Zendesk"
         value: "Launch Zendesk"
   - translation:
-        key: "golion.txt.integrations.magento.general.launch"
+        key: "txt.integrations.magento.general.launch"
         title: "Open Zendesk"
         value: "Launch Zendesk Support"
   - translation:
@@ -429,11 +429,11 @@ parts:
         title: "Zendesk domain has not set. Please add this to the settings page"
         value: "Zendesk domain not set. Please add this to the settings page."
   - translation:
-        key: "txt.integrations.magento.general.view_ticket_in_zendesk"
+        key: "pregolion.txt.integrations.magento.general.view_ticket_in_zendesk"
         title: "View the ticket in Zendesk"
         value: "View ticket in Zendesk"
   - translation:
-        key: "golion.txt.integrations.magento.general.view_ticket_in_zendesk"
+        key: "txt.integrations.magento.general.view_ticket_in_zendesk"
         title: "View the ticket in Zendesk"
         value: "View ticket in Zendesk Support"
   - translation:
