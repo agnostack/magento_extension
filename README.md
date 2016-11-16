@@ -304,6 +304,10 @@ During development you may wish to clear out the configuration for the Magento e
 
     DELETE FROM `core_config_data` WHERE `path` LIKE 'zendesk/%';
 
+## Internationalization
+
+Magento localizes string by reading through the CSV translation dictionaries within the extension. If you wish to update the strings used by the extension make sure to update these CSV files in the `src/app/locale` directory. To regenerate the CSV files from Zendesk's translation service refer to this [confluence page](https://zendesk.atlassian.net/wiki/display/ENG/Magento+Integration#MagentoIntegration-Internationalization).
+
 ## Contribution
 
 Improvements to the extension are always welcome. To contribute, please submit detailed Pull Requests.
