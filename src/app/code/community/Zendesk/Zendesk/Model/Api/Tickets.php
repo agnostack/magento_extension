@@ -56,45 +56,34 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
         $data['include'] = 'users,groups';
         return $this->_call('search/incremental', $data);
     }
-        
+
+    /**
+     * Retrieves a Zendesk Support ticket associated to an order with a custom ticket field
+     *
+     * @param int $orderIncrementId
+     * @return array|boolean
+     */
     public function forOrder($orderIncrementId)
     {
+        $fieldId = Mage::getStoreConfig('zendesk/frontend_features/order_field_id');
+        if(!$fieldId) {
+            return false;
+        }
+
         if(!$orderIncrementId) {
             throw new InvalidArgumentException('Order Increment ID not valid');
         }
 
         $response = $this->_call('search.json',
             array(
-                 'query' => 'type:ticket ' . $orderIncrementId,
+                 'query' => "type:ticket fieldValue:{$orderIncrementId}",
                  'sort_order' => 'desc',
                  'sort_by' => 'updated_at',
             )
         );
 
-        // Now check through the tickets to make sure the appropriate field has been filled out with the order number
-        $tickets = array();
-        $fieldId = Mage::getStoreConfig('zendesk/frontend_features/order_field_id');
-
-        if(!$fieldId) {
-            return false;
-        }
-
-        foreach($response['results'] as $ticket) {
-            foreach($ticket['fields'] as $field) {
-                if($field['id'] == $fieldId) {
-                    // Check if the value matches our order number
-                    if($field['value'] == $orderIncrementId) {
-                        $tickets[] = $ticket;
-                    }
-
-                    // Regardless of whether the value matches, this is the correct field, so move to the next ticket
-                    continue;
-                }
-            }
-        }
-
-        if(count($tickets)) {
-            return $tickets;
+        if(count($response['results'])) {
+            return $response['results'];
         } else {
             return false;
         }
