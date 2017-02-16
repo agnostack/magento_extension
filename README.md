@@ -304,6 +304,10 @@ During development you may wish to clear out the configuration for the Magento e
 
     DELETE FROM `core_config_data` WHERE `path` LIKE 'zendesk/%';
 
+## Internationalization
+
+Magento localizes string by reading through the CSV translation dictionaries within the extension. To keep up to date with the most recent string updates from the i18n team, fetch the strings from rosetta and regenerate the CSV files by running this [ruby script](i18n.rb). Ensure that the CSV files are generated within the `src/app/locale` directory of this extension before repackaging.
+
 ## Contribution
 
 Improvements to the extension are always welcome. To contribute, please submit detailed Pull Requests.
