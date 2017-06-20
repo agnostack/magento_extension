@@ -51,7 +51,21 @@ class Zendesk_Zendesk_Block_Adminhtml_Config_Buttons_Signup extends Mage_Adminht
 
     public function getPostInfo()
     {
-        $stores = Mage::app()->getWebsites();
+        $websiteCode = Mage::app()->getRequest()->getParam('website');
+        if ($websiteCode) {
+            $website = Mage::getModel('core/website')->load($websiteCode);
+        } else {
+            $website = Mage::getModel('core/website')->getCollection()
+                     ->addFieldToFilter('is_default', 1)
+                     ->getFirstItem();
+        }
+
+        $storeCode = Mage::app()->getRequest()->getParam('store');
+        if ($storeCode) {
+            $store = Mage::getModel('core/store')->load($storeCode);
+        } else {
+            $store = $website->getDefaultStore();
+        }
 
         $info = array(
             'magento_domain' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB),
@@ -61,22 +75,9 @@ class Zendesk_Zendesk_Block_Adminhtml_Config_Buttons_Signup extends Mage_Adminht
             'magento_callback' => Mage::helper('adminhtml')->getUrl('adminhtml/zendesk/redirect', array('type' => 'settings', 'id' => 'zendesk')),
             'magento_locale' => Mage::getStoreConfig('general/locale/code'),
             'magento_timezone' => Mage::getStoreConfig('general/locale/timezone'),
-            'magento_api_url' => Mage::getUrl('zendesk/api', array('_store' => $stores[1]->getDefaultStore()->getCode()))
+            'magento_api_url' => Mage::getUrl('zendesk/api', array('_store' => $store->getCode())),
+            'magento_store_name' => $website->getName(),
         );
-
-        $storeName = Mage::getStoreConfig('general/store_information/name');
-
-        if(!$storeName) {
-            $websites = Mage::getModel('core/website')->getCollection();
-            foreach($websites as $website) {
-                // Skip admin website
-                if($website->getName() == 'Admin' || $website->getName() == 'Main Website') continue;
-
-                $storeName = $website->getName();
-            }
-        }
-
-        $info['magento_store_name'] = (string)$storeName;
 
         return $info;
     }
