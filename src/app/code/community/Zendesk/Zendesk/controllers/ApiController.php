@@ -102,7 +102,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         return true;
     }
 
-    public function ordersAction($orderId)
+    public function ordersAction()
     {
         if(!$this->_authorise()) {
             return $this;
