@@ -23,7 +23,7 @@
         </Zendesk_Zendesk>
     </modules>
     <zendesk>
-        <provision_url>https://signup.zendesk.com/provisioning/magento/welcome</provision_url>
+        <provision_url>https://signup.zendesk-staging.com/provisioning/magento/welcome</provision_url>
     </zendesk>
     <global>
         <models>
