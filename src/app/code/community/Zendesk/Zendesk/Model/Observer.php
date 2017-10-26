@@ -80,7 +80,7 @@ class Zendesk_Zendesk_Model_Observer
             // If the email is already set, then do nothing
             if($currentEmail !== $zendeskEmail) {
                 // Ensure the email address value exists and is valid
-                if(Zend_Validate::is($zendeskEmail, 'EmailAddress')) {
+                if(Zend_Validate::is($zendeskEmail, 'EmailAddress', array('domain' => false))) {
                     Mage::getModel('core/config')->saveConfig('zendesk/hidden/contact_email_old', $currentEmail, $scope, $scopeId);
                     Mage::getModel('core/config')->saveConfig('contacts/email/recipient_email', $zendeskEmail, $scope, $scopeId);
                 }
