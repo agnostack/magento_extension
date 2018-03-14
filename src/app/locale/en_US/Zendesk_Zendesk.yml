@@ -222,11 +222,6 @@ parts:
         title: "Configuration message: connection to the Magento API failed"
         value: "API test connection failed"
   - translation:
-        key: "text.integrations.magento.config.test_connection.tips"
-        title: "Configuration message: suggestion to look at provided URL for troubleshooting"
-        value: 'Troubleshooting tips can be found at <a href="%s" target="_blank">%s</a>'
-        obsolete: "2015-09-17"
-  - translation:
         key: "text.integrations.magento.config.test_connection.outbound.failure"
         title: "Configuration message: connection to the Zendesk API failed"
         value: "Connection to Zendesk API failed"
