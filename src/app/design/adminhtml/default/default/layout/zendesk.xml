@@ -17,6 +17,14 @@
 */
 -->
 <layout>
+    <adminhtml_dashboard_index>
+        <reference name="content">
+            <block type="zendesk/adminhtml_dashboard" name="zendesk_dashboard">
+                <block type="zendesk/adminhtml_dashboard_grids" name="zendesk_dashboard_grids" />
+            </block>
+        </reference>
+    </adminhtml_dashboard_index>
+    
     <adminhtml_system_config_edit>
         <reference name="head">
             <action method="addCss">

@@ -24,7 +24,8 @@ class Zendesk_Zendesk_Block_Adminhtml_Dashboard extends Mage_Adminhtml_Block_Tem
     }
 
     public function getIsZendeskDashboard() {
-        return Mage::app()->getFrontController()->getRequest()->getControllerName() === 'zendesk';
+        $request = Mage::app()->getFrontController()->getRequest();
+        return $request && $request->getControllerName() === 'zendesk';
     }
 
     public function getAuthHeader() {

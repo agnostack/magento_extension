@@ -149,22 +149,6 @@
                     </zendesk>
                 </observers>
             </core_block_abstract_prepare_layout_before>
-            <core_block_abstract_prepare_layout_after>
-                <observers>
-                    <zendesk>
-                        <class>zendesk/observer</class>
-                        <method>setHook</method>
-                    </zendesk>
-                </observers>
-            </core_block_abstract_prepare_layout_after>
-            <core_block_abstract_to_html_after>
-                <observers>
-                    <zendesk>
-                        <class>zendesk/observer</class>
-                        <method>insertBlock</method>
-                    </zendesk>
-                </observers>
-            </core_block_abstract_to_html_after>
             <admin_system_config_changed_section_zendesk>
                 <observers>
                     <zendesk>
