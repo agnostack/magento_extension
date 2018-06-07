@@ -23,7 +23,7 @@ $installer->startSetup();
 $installer->addAttribute("customer", "zendesk_id",  array(
     "type"     => "varchar",
     "backend"  => "",
-    "label"    => "zendesk_id",
+    "label"    => "Zendesk Id",
     "input"    => "text",
     "source"   => "",
     "visible"  => true,
