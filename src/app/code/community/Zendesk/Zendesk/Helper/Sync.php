@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: o5k4r1n
- * Date: 29-05-18
- * Time: 10:44 AM
- */
+
 class Zendesk_Zendesk_Helper_Sync extends Mage_Core_Helper_Abstract {
 
     public function getCustomerData($customer){
@@ -12,44 +7,42 @@ class Zendesk_Zendesk_Helper_Sync extends Mage_Core_Helper_Abstract {
             return;
 
         $user = null;
-        //$customer = $event->getCustomer();
         $email = $customer->getEmail();
-        $orig_email = $customer->getOrigData();
-        $orig_email = $orig_email['email'];
-        echo "correo: ".$email;
+        $origEmail = $customer->getOrigData();
+        $origEmail = $origEmail['email'];
         //Get Customer Group
-        $group_id = $customer->getGroupId();
-        $group = Mage::getModel('customer/group')->load($group_id);
+        $groupId = $customer->getGroupId();
+        $group = Mage::getModel('customer/group')->load($groupId);
 
         //Get Customer Last Login Date
-        $log_customer = Mage::getModel('log/customer')->loadByCustomer($customer);
-        if ($log_customer->getLoginAt())
-            $logged_in = date("Y-m-d\TH:i:s\Z",strtotime($log_customer->getLoginAt()));
+        $logCustomer = Mage::getModel('log/customer')->loadByCustomer($customer);
+        if ($logCustomer->getLoginAt())
+            $loggedIn = date("Y-m-d\TH:i:s\Z",strtotime($logCustomer->getLoginAt()));
         else
-            $logged_in = "";
+            $loggedIn = "";
 
         //Get Customer Sales Statistics
-        $order_totals = Mage::getResourceModel('sales/order_collection');
-        $lifetime_sale = 0;
-        $average_sale = 0;
+        $orderTotals = Mage::getResourceModel('sales/order_collection');
+        $lifetimeSale = 0;
+        $averageSale = 0;
 
-        if (is_object($order_totals)) {
-            $order_totals
+        if (is_object($orderTotals)) {
+            $orderTotals
                 ->addFieldToFilter('customer_id', $customer->getId())
                 ->addFieldToFilter('status', Mage_Sales_Model_Order::STATE_COMPLETE);
 
-            $order_totals->getSelect()
+            $orderTotals->getSelect()
                 ->reset(Zend_Db_Select::COLUMNS)
                 ->columns(new Zend_Db_Expr("SUM(grand_total) as total"))
                 ->columns(new Zend_Db_Expr("AVG(grand_total) as avg_total"))
                 ->group('customer_id');
 
-            if (count($order_totals) > 0) {
-                $sum = (float) $order_totals->getFirstItem()->getTotal();
-                $avg = (float) $order_totals->getFirstItem()->getAvgTotal();
+            if (count($orderTotals) > 0) {
+                $sum = (float) $orderTotals->getFirstItem()->getTotal();
+                $avg = (float) $orderTotals->getFirstItem()->getAvgTotal();
 
-                $lifetime_sale = Mage::helper('core')->currency($sum, true, false);
-                $average_sale = Mage::helper('core')->currency($avg, true, false);
+                $lifetimeSale = Mage::helper('core')->currency($sum, true, false);
+                $averageSale = Mage::helper('core')->currency($avg, true, false);
             }
         }
 
@@ -60,14 +53,14 @@ class Zendesk_Zendesk_Helper_Sync extends Mage_Core_Helper_Abstract {
                 "group"         =>  $group->getCode(),
                 "name"          =>  $customer->getFirstname() . " " . $customer->getLastname(),
                 "id"            =>  $customer->getId(),
-                "logged_in"     =>  $logged_in,
-                "average_sale"  =>  $average_sale,
-                "lifetime_sale" =>  $lifetime_sale
+                "logged_in"     =>  $loggedIn,
+                "average_sale"  =>  $averageSale,
+                "lifetime_sale" =>  $lifetimeSale
             )
         );
 
-        if($orig_email && $orig_email !== $email) {
-            $user = Mage::getModel('zendesk/api_users')->find($orig_email);
+        if($origEmail && $origEmail !== $email) {
+            $user = Mage::getModel('zendesk/api_users')->find($origEmail);
 
             if(isset($user['id'])) {
                 $data['identity'] = array(
@@ -93,7 +86,7 @@ class Zendesk_Zendesk_Helper_Sync extends Mage_Core_Helper_Abstract {
         }
         return $user;
     }
-    public function syncData($info)
+    private function syncData($info)
     {
         Mage::getModel('zendesk/api_users')->create($info);
     }
