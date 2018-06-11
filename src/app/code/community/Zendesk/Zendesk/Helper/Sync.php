@@ -86,6 +86,7 @@ class Zendesk_Zendesk_Helper_Sync extends Mage_Core_Helper_Abstract {
         }
         return $user;
     }
+
     private function syncData($info)
     {
         Mage::getModel('zendesk/api_users')->create($info);
