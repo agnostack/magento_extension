@@ -108,6 +108,19 @@
             </customer_login>
         </events>
     </frontend>
+    <crontab>
+        <jobs>
+            <zendesk_customer_sync>
+                <schedule>
+                    <cron_expr>*/13 * * * * </cron_expr>
+                </schedule>
+
+                <run>
+                    <model>zendesk/customer::syncronize</model>
+                </run>
+            </zendesk_customer_sync>
+        </jobs>
+    </crontab>
     <admin>
         <routers>
             <adminhtml>
