@@ -419,7 +419,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function storeDependenciesInCachedRegistry() {
         $cache = Mage::app()->getCache();
 
-        if (null == Mage::registry('zendesk_groups')) {
+        if (null === Mage::registry('zendesk_groups')) {
             if( $cache->load('zendesk_groups') === false) {
                 $groups = serialize( Mage::getModel('zendesk/api_groups')->all() );
                 $cache->save($groups, 'zendesk_groups', array('zendesk', 'zendesk_groups'), 1200);
