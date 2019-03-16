@@ -196,7 +196,7 @@ parts:
   - translation:
         key: "text.integrations.magento.config.sso_frontend.title"
         title: "Configuration form: title for frontend SSO settings"
-        value: "Single Sign-on - End-users"
+        value: "Single Sign-on - End users"
   - translation:
         key: "text.integrations.magento.config.sso_frontend.comment"
         title: "Configuration form: description of frontend SSO"
