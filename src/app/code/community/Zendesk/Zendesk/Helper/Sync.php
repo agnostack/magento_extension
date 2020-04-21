@@ -2,14 +2,14 @@
 
 class Zendesk_Zendesk_Helper_Sync extends Mage_Core_Helper_Abstract {
 
-    public function getCustomerData($customer){
+    public function syncCustomer($customer){
         if(!Mage::getStoreConfig('zendesk/general/customer_sync'))
             return;
 
         $user = null;
-        $email = $customer->getEmail();
-        $origEmail = $customer->getOrigData();
-        $origEmail = $origEmail['email'];
+        $currentEmail = $customer->getEmail();
+        $previousCustomerData = $customer->getOrigData();
+        $previousEmail = $previousCustomerData['email'];
         //Get Customer Group
         $groupId = $customer->getGroupId();
         $group = Mage::getModel('customer/group')->load($groupId);
@@ -48,7 +48,7 @@ class Zendesk_Zendesk_Helper_Sync extends Mage_Core_Helper_Abstract {
 
         $info['user'] = array(
             "name"          =>  $customer->getFirstname() . " " . $customer->getLastname(),
-            "email"         =>  $email,
+            "email"         =>  $currentEmail,
             "user_fields"       =>  array(
                 "group"         =>  $group->getCode(),
                 "name"          =>  $customer->getFirstname() . " " . $customer->getLastname(),
@@ -59,36 +59,20 @@ class Zendesk_Zendesk_Helper_Sync extends Mage_Core_Helper_Abstract {
             )
         );
 
-        if($origEmail && $origEmail !== $email) {
-            $user = Mage::getModel('zendesk/api_users')->find($origEmail);
-
-            if(isset($user['id'])) {
-                $data['identity'] = array(
-                    'type'      =>  'email',
-                    'value'     =>  $email,
-                    'verified'  =>  true
-                );
-                $identity = Mage::getModel('zendesk/api_users')->addIdentity($user['id'],$data);
-                if(isset($identity['id'])) {
-                    Mage::getModel('zendesk/api_users')->setPrimaryIdentity($user['id'], $identity['id']);
-                }
+        $user = Mage::getModel('zendesk/api_users')->find($currentEmail);
+        if($previousEmail !== $currentEmail) {
+            if(!isset($user['id'])) {
+                $user = $this->createAccount($info);
             }
         }
-        if(!$user) {
-            $user = Mage::getModel('zendesk/api_users')->find($email);
-        }
 
-        if(isset($user['id'])) {
-            $this->syncData($info);
-        } else {
-            $info['user']['verified'] = true;
-            $user = Mage::getModel('zendesk/api_users')->create($info);
-        }
         return $user;
     }
 
-    private function syncData($info)
+    private function createAccount($data)
     {
-        Mage::getModel('zendesk/api_users')->create($info);
+        $data['user']['verified'] = false;
+        $user = Mage::getModel('zendesk/api_users')->create($data);
+        return $user;
     }
 }

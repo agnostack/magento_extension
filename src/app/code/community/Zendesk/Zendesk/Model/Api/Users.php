@@ -55,56 +55,50 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
     {
         $page = 1;
         $users = array();
-        
+
         while($page && $response = $this->_call('users.json?page=' . $page)) {
             $users      = array_merge($users, $response['users']);
             $page       = is_null($response['next_page']) ? 0 : $page + 1;
         }
-    
+
         return $users;
     }
-    
+
     public function end($id)
     {
         if(!Zend_Validate::is($id, 'NotEmpty')) {
             throw new InvalidArgumentException('No ID value provided');
         }
-        
+
         $response = $this->_call('end_users/'. $id .'.json');
-        
+
         return (isset($response['user']) ? $response['user'] : null);
     }
-    
+
     public function getIdentities($id)
     {
         $response = $this->_call('users/' . $id . '/identities.json');
         return (isset($response['identities']) ? $response['identities'] : null);
     }
-    
-    public function setPrimaryIdentity($user_id, $identity_id)
-    {
-        $response = $this->_call('users/' . $user_id . '/identities/'.$identity_id.'/make_primary.json', null, 'PUT', null, true);
-        return (isset($response['identities']) ? $response['identities'] : null);
-    }
-    
+
     public function addIdentity($user_id, $data)
     {
         $response = $this->_call('users/' . $user_id . '/identities.json', null, 'POST', $data, true);
         return (isset($response['identity']) ? $response['identity'] : null);
     }
-    
+
     public function update($user_id, $user)
     {
         $response = $this->_call('users/' . $user_id . '.json', null, 'PUT', $user, true);
         return (isset($response['user']) ? $response['user'] : null);
     }
-    
+
     public function create($user)
     {
         $response = $this->_call('users.json', null, 'POST', $user, true);
         return (isset($response['user']) ? $response['user'] : null);
     }
-    
+
     public function createUserField($field)
     {
         $response = $this->_call('user_fields.json', null, 'POST', $field, true);
@@ -112,13 +106,13 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
         if(!isset($response['user_field'])) {
             throw new Exception('No User Field specified.');
         }
- 
+
         return $response['user_field'];
     }
 
     /**
      * Fetch all user fields
-     * 
+     *
      * @return array $userFields
      */
     public function getUserFields()
@@ -129,7 +123,7 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
             $userFields = array_merge($userFields, $response['user_fields']);
             $page       = is_null($response['next_page']) ? 0 : $page + 1;
         }
-    
+
         return $userFields;
     }
 }
