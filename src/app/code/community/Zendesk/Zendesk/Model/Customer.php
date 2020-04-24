@@ -14,7 +14,7 @@ class Zendesk_Zendesk_Model_Customer extends Mage_Core_Model_Abstract{
             Mage::log('Synchronization started', null, 'zendesk.log');
             try {
                 Mage::log('Synchronizing customer with id '.$customer->getId(), null, 'zendesk.log');
-                $customerData = Mage::helper('zendesk/sync')->getCustomerData($customer);
+                $customerData = Mage::helper('zendesk/sync')->syncCustomer($customer);
                 $zendeskId = $customerData['id'];
                 $customer->setZendeskId($zendeskId);
                 $customer->save();
@@ -25,8 +25,6 @@ class Zendesk_Zendesk_Model_Customer extends Mage_Core_Model_Abstract{
                 return;
             }
             Mage::log('Synchronization completed successfully', null, 'zendesk.log');
-
-
         }
     }
 }
