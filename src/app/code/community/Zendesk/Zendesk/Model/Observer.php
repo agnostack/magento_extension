@@ -72,9 +72,9 @@ class Zendesk_Zendesk_Model_Observer
 
         if (! empty($zDomain)) {
             if ((bool) Mage::getStoreConfig('zendesk/frontend_features/web_widget_code_active')) {
-                $embeds = Mage::getModel('zendesk/api_configsets')->find();
+                $embeds = Mage::getModel('zendesk/api_configSets')->find();
                 if (! isset($embeds['launcher'])) {
-                    Mage::getModel('zendesk/api_configsets')->initialize();
+                    Mage::getModel('zendesk/api_configSets')->initialize();
                 }
             }
 
