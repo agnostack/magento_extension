@@ -26,7 +26,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
         $base = $protocol . $domain . $root;
         $hc = $protocol . $domain . '/hc';
-       
+
         switch($object) {
             case '':
                 return $base;
@@ -43,7 +43,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             case 'raw':
                 return $protocol . $domain . '/' . $id;
                 break;
-            
+
             case 'request':
                 return $hc . '/requests/' . $id;
                 break;
@@ -60,8 +60,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         return Mage::getStoreConfig('zendesk/general/domain');
     }
-    
-    
+
+
     /**
      * Returns if SSO is enabled for EndUsers
      * @return integer
@@ -131,11 +131,11 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
         return $protocol . $domain . $route;
     }
-    
+
     public function getApiToken($generate = true)
     {
         // Grab any existing token from the admin scope
-        $token = Mage::getStoreConfig('zendesk/api/token', 0);
+        $token = Mage::getStoreConfig('zendesk/api/token_v2', 0);
 
         if( (!$token || strlen(trim($token)) == 0) && $generate) {
             $token = $this->setApiToken();
@@ -147,9 +147,9 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function setApiToken($token = null)
     {
         if(!$token) {
-            $token = md5(time());
+            $token = hash('sha256', rand());
         }
-        Mage::getModel('core/config')->saveConfig('zendesk/api/token', $token, 'default');
+        Mage::getModel('core/config')->saveConfig('zendesk/api/token_v2', $token, 'default');
 
         return $token;
     }
@@ -173,7 +173,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getProvisionToken($generate = false)
     {
-        $token = Mage::getStoreConfig('zendesk/hidden/provision_token', 0);
+        $token = Mage::getStoreConfig('zendesk/hidden/provision_token_v2', 0);
 
         if( (!$token || strlen(trim($token)) == 0) && $generate) {
             $token = $this->setProvisionToken();
@@ -185,10 +185,10 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function setProvisionToken($token = null)
     {
         if(!$token) {
-            $token = md5(time());
+            $token = hash('sha256', rand());
         }
 
-        Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', $token, 'default');
+        Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token_v2', $token, 'default');
         Mage::getConfig()->removeCache();
 
         return $token;
@@ -292,19 +292,19 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         } else {
             $path = '*/sso/login';
             $object = 'request';
-        }   
+        }
         $path = Mage::getSingleton('admin/session')->getUser() ? 'adminhtml/zendesk/login' : '*/sso/login';
-        
+
         $url = Mage::helper('adminhtml')->getUrl($path, array("return_url" => Mage::helper('core')->urlEncode(Mage::helper('zendesk')->getUrl($object, $row['id']))));
-        
+
         if ($link)
             return $url;
-        
+
         $subject = $row['subject'] ? $row['subject'] : $this->__('No Subject');
 
         return '<a href="' . $url . '" target="_blank">' .  Mage::helper('core')->escapeHtml($subject) . '</a>';
     }
-        
+
     public function getStatusMap()
     {
         return array(
@@ -316,8 +316,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'hold'      =>  'Hold'
         );
     }
-    
-        
+
+
     public function getPriorityMap()
     {
         return array(
@@ -327,7 +327,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'urgent'    =>  'Urgent'
         );
     }
-    
+
     public function getTypeMap()
     {
         return array(
@@ -337,26 +337,26 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'task'      =>  'Task'
         );
     }
-    
+
     public function getChosenViews() {
         $list = trim(trim(Mage::getStoreConfig('zendesk/backend_features/show_views')), ',');
         return explode(',', $list);
     }
-    
+
     public function getFormatedDataForAPI($dateToFormat) {
         $myDateTime = DateTime::createFromFormat('d/m/Y', $dateToFormat);
         return $myDateTime->format('Y-m-d');
     }
-    
+
     public function isValidDate($date) {
         if(is_string($date)) {
             $d = DateTime::createFromFormat('d/m/Y', $date);
             return $d && $d->format('d/m/Y') == $date;
         }
-        
+
         return false;
     }
-    
+
     public function getFormatedDateTime($dateToFormat) {
         return Mage::helper('core')->formatDate($dateToFormat, 'medium', true);
     }
@@ -388,17 +388,17 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
             $error = Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
                 '<br />' . Mage::helper('zendesk')->__("Click 'Save Config' and try again. If the issue persist, check if the entered Agent Email Address and Agent Token combination is correct.");
-            
+
             return array(
                 'success'   => false,
                 'msg'       => $error,
             );
-            
+
         } catch (Exception $ex) {
             $error = Mage::helper('zendesk')->__('Connection to Zendesk API failed') .
                 '<br />' . $ex->getCode() . ': ' . $ex->getMessage() .
                 '<br />' . Mage::helper('zendesk')->__("Click 'Save Config' and try again. If the issue persist, check if the entered Agent Email Address and Agent Token combination is correct.");
-            
+
             return array(
                 'success'   => false,
                 'msg'       => $error,
@@ -424,12 +424,12 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                 $groups = serialize( Mage::getModel('zendesk/api_groups')->all() );
                 $cache->save($groups, 'zendesk_groups', array('zendesk', 'zendesk_groups'), 1200);
             }
-            
+
             $groups = unserialize( $cache->load('zendesk_groups') );
             Mage::register('zendesk_groups', $groups);
         }
     }
-    
+
     /**
      * Checks whether the user is in an admin page.
      *
