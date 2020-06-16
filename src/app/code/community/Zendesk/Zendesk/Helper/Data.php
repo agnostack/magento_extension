@@ -135,7 +135,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function getApiToken($generate = true)
     {
         // Grab any existing token from the admin scope
-        $token = Mage::getStoreConfig('zendesk/api/token_v2', 0);
+        $token = Mage::getStoreConfig('zendesk/api/token', 0);
 
         if( (!$token || strlen(trim($token)) == 0) && $generate) {
             $token = $this->setApiToken();
@@ -149,7 +149,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         if(!$token) {
             $token = hash('sha256', rand());
         }
-        Mage::getModel('core/config')->saveConfig('zendesk/api/token_v2', $token, 'default');
+        Mage::getModel('core/config')->saveConfig('zendesk/api/token', $token, 'default');
 
         return $token;
     }
@@ -173,7 +173,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
     public function getProvisionToken($generate = false)
     {
-        $token = Mage::getStoreConfig('zendesk/hidden/provision_token_v2', 0);
+        $token = Mage::getStoreConfig('zendesk/hidden/provision_token', 0);
 
         if( (!$token || strlen(trim($token)) == 0) && $generate) {
             $token = $this->setProvisionToken();
@@ -188,7 +188,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             $token = hash('sha256', rand());
         }
 
-        Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token_v2', $token, 'default');
+        Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', $token, 'default');
         Mage::getConfig()->removeCache();
 
         return $token;
