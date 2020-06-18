@@ -147,7 +147,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function setApiToken($token = null)
     {
         if(!$token) {
-            $token = hash('sha256', rand());
+            $token = hash('sha256', Mage::helper('oauth')->generateToken());
         }
         Mage::getModel('core/config')->saveConfig('zendesk/api/token', $token, 'default');
 
@@ -185,7 +185,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     public function setProvisionToken($token = null)
     {
         if(!$token) {
-            $token = hash('sha256', rand());
+            $token = hash('sha256', Mage::helper('oauth')->generateToken());
         }
 
         Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', $token, 'default');
