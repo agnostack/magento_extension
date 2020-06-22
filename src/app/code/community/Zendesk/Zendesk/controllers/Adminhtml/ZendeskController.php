@@ -417,9 +417,9 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         $output = '<ul>';
         if($customers->getSize()) {
             foreach($customers as $customer) {
-                $id = $customer->getId();
-                $name = $customer->getName();
-                $email = $customer->getEmail();
+                $id = htmlspecialchars($customer->getId(), ENT_COMPAT, 'UTF-8');
+                $name = htmlspecialchars($customer->getName(), ENT_COMPAT, 'UTF-8');
+                $email = htmlspecialchars($customer->getEmail(), ENT_COMPAT, 'UTF-8');
                 $output .= '<li id="customer-' . $id . '" data-email="' . $email . '" data-name="' . $name . '">' . $name . ' &lt;' . $email . '&gt;</li>';
             }
         }
