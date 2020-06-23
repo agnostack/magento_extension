@@ -75,7 +75,10 @@ class Zendesk_Zendesk_SsoController extends Mage_Core_Controller_Front_Action
             $payload['external_id'] = $user->getId();
         }
 
-        Mage::log('End-user JWT: ' . var_export($payload, true), null, 'zendesk.log');
+        // Redact token then log the rest of the payload
+        $jti_redacted_payload = $payload; // arrays are copied by value in php, not just a ref being passed around
+        $jti_redacted_payload["jti"] = "REDACTED";
+        Mage::log('End-user JWT: ' . var_export($jti_redacted_payload, true), null, 'zendesk.log');
 
         $jwt = JWT::encode($payload, $token);
         $return_url = $return_url ? "&return_to=".$return_url : "";
