@@ -172,11 +172,6 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             $payload['external_id'] = $user->getId();
         }
 
-        // Redact token then log the rest of the payload
-        $jti_redacted_payload = $payload; // arrays are copied by value in php, not just a ref being passed around
-        $jti_redacted_payload["jti"] = "REDACTED";
-        Mage::log('Admin JWT: ' . var_export($jti_redacted_payload, true), null, 'zendesk.log');
-
         $jwt = JWT::encode($payload, $token);
         $return = $return_url ? "&return_to=".$return_url : "";
 
