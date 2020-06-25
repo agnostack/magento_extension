@@ -172,8 +172,6 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
             $payload['external_id'] = $user->getId();
         }
 
-        Mage::log('Admin JWT: ' . var_export($payload, true), null, 'zendesk.log');
-
         $jwt = JWT::encode($payload, $token);
         $return = $return_url ? "&return_to=".$return_url : "";
 
