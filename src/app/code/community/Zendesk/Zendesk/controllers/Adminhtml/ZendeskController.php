@@ -135,6 +135,7 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         if(!Mage::getStoreConfig('zendesk/sso/enabled')) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Single sign-on disabled.'));
             $this->_redirect(Mage::getSingleton('admin/session')->getUser()->getStartupPageUrl());
+            return $this;
         }
 
         $domain = Mage::getStoreConfig('zendesk/general/domain');
@@ -144,11 +145,13 @@ class Zendesk_Zendesk_Adminhtml_ZendeskController extends Mage_Adminhtml_Control
         if(!Zend_Validate::is($domain, 'NotEmpty')) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Zendesk domain not set. Please add this to the settings page.'));
             $this->_redirect(Mage::getSingleton('admin/session')->getUser()->getStartupPageUrl());
+            return $this;
         }
 
         if(!Zend_Validate::is($token, 'NotEmpty')) {
             Mage::getSingleton('adminhtml/session')->addError(Mage::helper('zendesk')->__('Zendesk SSO token not set. Please add this to the settings page.'));
             $this->_redirect(Mage::getSingleton('admin/session')->getUser()->getStartupPageUrl());
+            return $this;
         }
 
         $now = time();
