@@ -1,0 +1,8 @@
+name: test
+
+on: 
+  push:
+    branches:
+      - '**'
+    tags-ignore:
+      - '**'
