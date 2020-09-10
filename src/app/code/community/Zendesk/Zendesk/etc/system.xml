@@ -24,6 +24,7 @@
         </zendesk_extensions>
     </tabs>
     <sections>
+        <!-- TODO: display config version here in UI -->
         <zendesk translate="label" module="zendesk">
             <label>Zendesk</label>
             <class>zendesk-section</class>

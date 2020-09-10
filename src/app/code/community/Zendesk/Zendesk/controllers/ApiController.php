@@ -18,6 +18,15 @@
 class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
 {
 
+    public function preDispatch() {
+        parent::preDispatch();
+        // TODO!!!!!!!: read version from config.xml
+        // $configSettings = Mage::getSingleton('Zendesk_Zendesk/config');
+        // Mage::log(json_encode($configSettings), null, 'zendesk.log');
+        $this->getResponse()->setHeader('X-Extension-Version', '3.0.0');
+        return $this;
+    }
+
     public function _authorise()
     {
         // Perform some basic checks before running any of the API methods
@@ -129,7 +138,6 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
             ->setHeader('Content-type', 'application/json', true);
         return $this;
     }
-
 
     public function customersAction()
     {
@@ -392,4 +400,226 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
             ->setHeader('Content-type', 'application/json', true);
         return $this;
     }
+
+    #region V2
+
+    // TODO: rename to searchOrdersAction?
+    public function searchOrdersAction()
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $req = $this->getRequest();
+        $isPost = $req->isPost();
+
+        if (!$isPost) {
+            $this->getResponse()
+                ->setHttpResponseCode(405)
+                ->setHeader('Content-type', 'application/json', true);
+            return $this;
+        }
+
+        $productKey = 'product';
+        $customerKey = 'customer';
+
+        $filters = json_decode($req->getRawBody());
+        $generalFilters = array();
+
+        foreach($filters as $key => $val) {
+            if($key == $productKey) {
+                $productFilters = $val;
+            } else if($key == $customerKey) {
+                $customerFilters = $val;
+            } else {
+                $generalFilters[$key] = $val;
+            }
+        }
+
+        if($productFilters) {
+            $orders = Mage::helper('zendesk')->getFilteredOrdersByProduct($customerFilters, $productFilters);
+        } else {
+            $orders = Mage::helper('zendesk')->getFilteredOrders($customerFilters, $generalFilters);
+        }
+
+        $this->getResponse()
+            ->setBody(json_encode($orders))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+        return $this;
+    }
+
+    public function orderAction()
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
+        $orderId = $sections[3];
+
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+
+        if(!$order && !$order->getId()) {
+            $this->getResponse()
+                ->setBody(json_encode(array('success' => false, 'message' => 'Order does not exist')))
+                ->setHttpResponseCode(404)
+                ->setHeader('Content-type', 'application/json', true);
+            return $this;
+        }
+
+        // TODO!!: implement this method
+        $info = Mage::helper('zendesk')->getOrderDetailExtended($order);
+
+        $this->getResponse()
+            ->setBody(json_encode($info))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+        return $this;
+    }
+
+    public function shippingAction()
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
+        $orderId = $sections[3];
+
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+
+        if(!$order && !$order->getId()) {
+            $this->getResponse()
+                ->setBody(json_encode(array('success' => false, 'message' => 'Order does not exist')))
+                ->setHttpResponseCode(404)
+                ->setHeader('Content-type', 'application/json', true);
+            return $this;
+        }
+
+        $shipments = Mage::helper('zendesk')->getShipments($order);
+
+        $this->getResponse()
+            ->setBody(json_encode($shipments))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+        return $this;
+    }
+
+    public function notesAction()
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
+        $orderId = $sections[3];
+
+        $order = Mage::getModel('sales/order')->loadByIncrementId($orderId);
+
+        if(!$order && !$order->getId()) {
+            $this->getResponse()
+                ->setBody(json_encode(array('success' => false, 'message' => 'Order does not exist')))
+                ->setHttpResponseCode(404)
+                ->setHeader('Content-type', 'application/json', true);
+            return $this;
+        }
+
+        $info = Mage::helper('zendesk')->getOrderNotes($order);
+
+        $this->getResponse()
+            ->setBody(json_encode($info))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+        return $this;
+    }
+
+    public function customerAction()
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
+        $customerId = $sections[3];
+
+        $customer = Mage::getModel('customer/customer')->load($customerId);
+
+        if(!$customer->getEntityId()) {
+            $this->getResponse()
+                ->setBody(json_encode(null))
+                ->setHttpResponseCode(200)
+                ->setHeader('Content-type', 'application/json', true);
+            return $this;
+        }
+
+        $customerData = Mage::helper('zendesk')->getCustomer($customer);
+
+        $this->getResponse()
+            ->setBody(json_encode($customerData))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+        return $this;
+    }
+
+    public function searchCustomersAction()
+    {
+        if(!$this->_authorise()) {
+            return $this;
+        }
+
+        $req = $this->getRequest();
+        $isPost = $req->isPost();
+
+        if (!$isPost) {
+            $this->getResponse()
+                ->setHttpResponseCode(405)
+                ->setHeader('Content-type', 'application/json', true);
+            return $this;
+        }
+
+        $customerKey = 'customer';
+
+        $filters = json_decode($req->getRawBody());
+        $generalFilters = array();
+
+        foreach($filters as $key => $val) {
+            if($key == $customerKey) {
+                $customerFilters = $val;
+            } else {
+                $generalFilters[$key] = $val;
+            }
+        }
+
+        $customerCollection = Mage::getModel('customer/customer')->getCollection();
+
+        // TODO does this bring back guest cutsomers
+        foreach($customerFilters as $customerKey => $customerValue) {
+            $customerCollection->addFieldToFilter($customerKey, $customerValue);
+        }
+
+        foreach($generalFilters as $generalKey => $generalValue) {
+            $customerCollection->addFieldToFilter($generalKey, $generalValue);
+        }
+
+        $customerCollection->load();
+
+        $urlModel = Mage::getModel('adminhtml/url')->setStore('admin');
+
+        $customers = array();
+
+        foreach($customerCollection as $customer) {
+            $id = $customer->getId();
+            $customerDetails = Mage::getModel('customer/customer')->load($id);
+            $customers[] = Mage::helper('zendesk')->getCustomer($customerDetails);
+        }
+
+        $this->getResponse()
+            ->setBody(json_encode($customers))
+            ->setHttpResponseCode(200)
+            ->setHeader('Content-type', 'application/json', true);
+        return $this;
+    }
+
+    #endregion V2
 }
