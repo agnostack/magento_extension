@@ -456,7 +456,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     protected function formatCustomer($order)
     {
         $isGuest = (bool)$order->getCustomerIsGuest();
-        $id = $order->getCustomerId();
+        $id = $order->getCustomerId(); // TODO: should this be customerId or entity id??
         $email = $order->getCustomerEmail();
         $customer = array();
 
@@ -752,7 +752,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         );
     }
 
-    public function getFilteredOrders($customerFilters, $generalFilters)
+    public function getFilteredOrders($customerFilters, $genericFilters)
     {
         // Get a list of all orders for the given email address
         // This is used to determine if a missing customer is a guest or if they really aren't a customer at all
@@ -762,8 +762,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             $orderCollection->addFieldToFilter('customer_'.$customerKey, $customerValue);
         }
 
-        foreach($generalFilters as $generalKey => $generalValue) {
-            $orderCollection->addFieldToFilter($generalKey, $generalValue);
+        foreach($genericFilters as $genericKey => $genericValue) {
+            $orderCollection->addFieldToFilter($genericKey, $genericValue);
         }
         
         $orders = array();
