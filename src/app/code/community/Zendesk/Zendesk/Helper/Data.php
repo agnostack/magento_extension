@@ -552,6 +552,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         $currency = $order->getOrderCurrencyCode();
         $shippingAddress = $order->getShippingAddress();
         $shippingWithTax = $order->getShippingInclTax();
+        $shippingMethod = $order->getShippingMethod();
 
         $orderInfo = array(
             'id' => $order->getIncrementId(),
@@ -610,14 +611,14 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             );
         }
 
-        if ($shippingWithTax) {
+        if ($shippingWithTax && $shippingMethod) {
             $shippingTax = $order->getShippingTaxAmount();
             $shippingItem = array(
                 'type' => 'custom_item',
                 'id' => 'shipping--'.$order->getEntityId(),
                 'product_id' => $order->getEntityId(),
                 'name' => 'shipping--'.$order->getShippingDescription(),
-                'sku' => $order->getShippingMethod(),
+                'sku' => $shippingMethod,
                 'quantity' => 1,
                 'refunded' => 0,
                 'meta' => array(
