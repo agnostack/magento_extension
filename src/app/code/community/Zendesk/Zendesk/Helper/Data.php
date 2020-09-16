@@ -740,7 +740,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         $urlModel = Mage::getModel('adminhtml/url')->setStore('admin');
         $adminUrl = $urlModel->getUrl('adminhtml/zendesk/redirect', array('id' => $customerId, 'type' => 'customer'));
 
-        return array(
+        $info = array(
             'id' => $customerId,
             'type' => 'customer',
             'url' => $adminUrl,
@@ -749,7 +749,14 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             'last_name' => $customer->getLastname(),
             'created_at' => $customer->getCreatedAt(),
             'updated_at' => $customer->getUpdatedAt(),
+            'addresses' => array()
         );
+
+        foreach($customer->getAddressesCollection() as $address) {
+            $info['addresses'][] = $this->formatAddress($address);
+        }
+
+        return $info;
     }
 
     public function getFilteredOrders($customerFilters, $generalFilters)
