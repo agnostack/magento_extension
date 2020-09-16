@@ -539,6 +539,11 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                     'order_status' => $orderStatus,
                 );
             }
+        } else {
+            $shippingAddress = $order->getShippingAddress();
+            $shipments[] = array(
+                'shipping_address' => $this->formatAddress($shippingAddress),
+            );
         }
 
         return $shipments;
