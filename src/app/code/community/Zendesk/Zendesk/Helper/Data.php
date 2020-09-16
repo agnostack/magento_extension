@@ -589,12 +589,19 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         foreach($order->getItemsCollection(array(), true) as $item) {
             $itemWithTax = $item->getRowTotal();
             $itemTax = $item->getTaxAmount();
+
+            $productId = $item->getProductId();
+            $product = Mage::getModel('catalog/product')->load($productId);
+
+            $adminUrl = $urlModel->getUrl('adminhtml/zendesk/redirect', array('id' => $productId, 'type' => 'product'));
+
             $orderInfo['relationships']['items']['data'][] = array(
                 'type' => 'order_item',
                 'id' => $item->getItemId(),
                 'product_id' => $item->getProductId(),
                 'name' => $item->getName(),
                 'sku' => $item->getSku(),
+                'url' => $adminUrl,
                 'quantity' => intval($item->getQtyOrdered()),
                 'refunded' => intval($item->getQtyRefunded()),
                 'meta' => array(
@@ -606,6 +613,13 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                     'timestamps' => array(
                         'created_at' => $item->getCreatedAt(),
                         'updated_at' => $item->getUpdatedAt(),
+                    ),
+                    'product' => array(
+                        'status' => $product->getStatus(),
+                        'type' => $product->getTypeId(),
+                        'url' => $product->getUrlPath(),
+                        'image' => $product->getThumbnail(),
+                        'description' => $product->getDescription(),
                     )
                 )
             );
