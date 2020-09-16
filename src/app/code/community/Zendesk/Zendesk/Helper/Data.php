@@ -606,7 +606,6 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                 'product_id' => $item->getProductId(),
                 'name' => $item->getName(),
                 'sku' => $item->getSku(),
-                'url' => $adminUrl,
                 'quantity' => intval($item->getQtyOrdered()),
                 'refunded' => intval($item->getQtyRefunded()),
                 'meta' => array(
@@ -622,7 +621,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                     'product' => array(
                         'status' => $product->getStatus(),
                         'type' => $product->getTypeId(),
-                        'url' => $product->getUrlPath(),
+                        'path' => $product->getUrlPath(),
                         'image' => $product->getThumbnail(),
                         'description' => $product->getDescription(),
                     )
