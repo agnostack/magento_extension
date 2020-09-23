@@ -442,4 +442,406 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             (Mage::app()->getStore()->isAdmin() || Mage::getDesign()->getArea() == 'adminhtml')
         );
     }
+
+    #region version 3.0 or later
+
+    protected function formatPrice($price, $currency)
+    {
+        return array(
+            'amount' => $price * 100,
+            'currency' => $currency
+        );
+    }
+
+    protected function formatCustomer($order)
+    {
+        $isGuest = (bool)$order->getCustomerIsGuest();
+        $id = $order->getCustomerId(); // TODO: should this be customerId or entity id??
+        $email = $order->getCustomerEmail();
+        $customer = array();
+
+        if ($isGuest){
+            $customer['type'] = 'guest';
+        } else {
+            $customer['type'] = 'customer';
+        }
+        
+        if (!empty($id)) {
+            $customer['id'] = $id;
+        }
+        if (!empty($email)) {
+            $customer['email'] = $email;
+        }
+        // TODO: can we get customer URL or timestamps??
+
+        return $customer;
+    }
+
+    protected function formatAddress($address)
+    {
+        $addressData = array(
+            'type' => 'address',
+            'first_name' => $address->getFirstname(),
+            'last_name' => $address->getLastname(),
+            'city' => $address->getCity(),
+            'county' => $address->getRegion(),
+            'postcode' => $address->getPostcode(),
+            'country' => $address->getCountryId(),
+            'phone' => $address->getTelephone()
+        );
+
+        $entityId = $address->getEntityId();
+        $addressId = $address->getCustomerAddressId();
+        $addressData['id'] = $addressId ?: $entityId;
+
+        $street = $address->getStreet();
+        $addressData['line_1'] = $street[0] ?: '';
+        $addressData['line_2'] = $street[1] ?: '';
+
+        return $addressData;
+    }
+
+    public function getShipments($order)
+    {
+        $shipments = array();
+        $orderStatus = $order->getStatus();
+
+        foreach($order->getShipmentsCollection() as $shipment) {
+            $shipmentId = $shipment->getEntityId();
+            $shippingAddress = $shipment->getShippingAddress();
+            $serviceCode = $order->getShippingDescription();
+        }
+
+        if ($shipmentId) {
+            $tracks = $order->getTracksCollection();
+            if (count($tracks) > 0) {
+                foreach($tracks as $track) {
+                    if ($shipmentId == $track->getParentId()) {
+                        $shipments[] = array(
+                            'id' => $track->getEntityId(),
+                            'carrier' => $track->getTitle(),
+                            'carrier_code' => $track->getCarrierCode(),
+                            'service_code' => $serviceCode,
+                            'shipping_description' => $track->getDescription() ?: '',
+                            'created_at' => $track->getCreatedAt(),
+                            'updated_at' => $track->getUpdatedAt(),
+                            'tracking_number' => $track->getTrackNumber(),
+                            'shipping_address' => $this->formatAddress($shippingAddress),
+                            'order_status' => $orderStatus,
+                        );
+                    }
+                }
+            } else {
+                $shipments[] = array(
+                    'service_code' => $serviceCode,
+                    'carrier_code' => $order->getShippingMethod(),
+                    'shipping_address' => $this->formatAddress($shippingAddress),
+                    'order_status' => $orderStatus,
+                );
+            }
+        } else {
+            $shippingAddress = $order->getShippingAddress();
+            $shipments[] = array(
+                'shipping_address' => $this->formatAddress($shippingAddress),
+            );
+        }
+
+        return $shipments;
+    }
+
+    public function getOrderDetailBasic($order)
+    {
+        // if the admin site has a custom URL, use it
+        $urlModel = Mage::getModel('adminhtml/url')->setStore('admin');
+
+        $currency = $order->getOrderCurrencyCode();
+        $shippingAddress = $order->getShippingAddress();
+        $shippingWithTax = $order->getShippingInclTax();
+        $shippingMethod = $order->getShippingMethod();
+
+        $orderInfo = array(
+            'id' => $order->getIncrementId(),
+            'url' => $urlModel->getUrl('adminhtml/sales_order/view', array('order_id' => $order->getId())),
+            'transaction_id' => $order->getIncrementId(),
+            'status' => $order->getStatus(),
+            'billing_address' => $this->formatAddress($order->getBillingAddress()),
+            'meta' => array(
+                'store_info' => array(
+                    'type' => 'store_info',
+                    'name' => $order->getStoreName()
+                ),
+                'display_price' => array(
+                    'with_tax' => $this->formatPrice($order->getGrandTotal(), $currency),
+                    'without_tax' => $this->formatPrice($order->getGrandTotal() - $order->getTaxAmount(), $currency), // TODO: get without tax
+                    'tax' => $this->formatPrice($order->getTaxAmount(), $currency) // TODO: get tax
+                ),
+                'timestamps' => array(
+                    'created_at' => $order->getCreatedAt(),
+                    'updated_at' => $order->getUpdatedAt(),
+                )
+            ),
+            'relationships' => array(
+                'customer' => array(
+                    'data' => $this->formatCustomer($order)
+                ),
+                'items' => array(
+                    'data' => array()
+                ),
+            ),
+            'shipments' => array(),
+        );
+
+        foreach($order->getItemsCollection(array(), true) as $item) {
+            $itemWithTax = $item->getRowTotal();
+            $itemTax = $item->getTaxAmount();
+
+            $productId = $item->getProductId();
+            $product = Mage::getModel('catalog/product')->load($productId);
+
+            $adminUrl = $urlModel->getUrl('adminhtml/zendesk/redirect', array('id' => $productId, 'type' => 'product'));
+
+            $orderInfo['relationships']['items']['data'][] = array(
+                'type' => 'order_item',
+                'id' => $item->getItemId(),
+                'product_id' => $item->getProductId(),
+                'name' => $item->getName(),
+                'sku' => $item->getSku(),
+                'quantity' => intval($item->getQtyOrdered()),
+                'refunded' => intval($item->getQtyRefunded()),
+                'meta' => array(
+                    'display_price' => array(
+                        'with_tax' => $this->formatPrice($itemWithTax, $currency),
+                        'without_tax' => $this->formatPrice($itemWithTax - $itemTax, $currency),
+                        'tax' => $this->formatPrice($iitemTax, $currency)
+                    ),
+                    'timestamps' => array(
+                        'created_at' => $item->getCreatedAt(),
+                        'updated_at' => $item->getUpdatedAt(),
+                    ),
+                    'product' => array(
+                        'status' => $product->getStatus(),
+                        'type' => $product->getTypeId(),
+                        'path' => $product->getUrlPath(),
+                        'image' => $product->getThumbnail(),
+                        'description' => $product->getDescription(),
+                    )
+                )
+            );
+        }
+
+        if ($shippingWithTax && $shippingMethod) {
+            $shippingTax = $order->getShippingTaxAmount();
+            $shippingItem = array(
+                'type' => 'custom_item',
+                'id' => 'shipping--'.$order->getEntityId(),
+                'product_id' => $order->getEntityId(),
+                'name' => 'shipping--'.$order->getShippingDescription(),
+                'sku' => $shippingMethod,
+                'quantity' => 1,
+                'refunded' => 0,
+                'meta' => array(
+                    'display_price' => array(
+                        'with_tax' => $this->formatPrice($shippingWithTax, $currency),
+                        'without_tax' => $this->formatPrice($shippingWithTax - $shippingTax, $currency),
+                        'tax' => $this->formatPrice($shippingTax, $currency)
+                    ),
+                    'timestamps' => array(
+                        'created_at' => $order->getCreatedAt(),
+                        'updated_at' => $order->getUpdatedAt(),
+                    )
+                )
+            );
+            array_push($orderInfo['relationships']['items']['data'], $shippingItem);
+        }
+
+        $orderInfo['shipments'] = $this->getShipments($order);
+
+        return $orderInfo;
+    }
+
+    public function getOrderDetailExtended($order)
+    {
+        // if the admin site has a custom URL, use it
+        $urlModel = Mage::getModel('adminhtml/url')->setStore('admin');
+
+        $currency = $order->getOrderCurrencyCode();
+
+        $orderInfo = $this->getOrderDetailBasic($order);
+
+        foreach($order->getPaymentsCollection() as $payment) {
+            $transactionAmount = $payment->getAmountAuthorized() ?: $payment->getAmountOrdered();
+            $gateway = $payment->getMethod();
+
+            $lastTransId = $payment->getLastTransId();
+
+            if (!$lastTransId && $gateway == 'authorizenet') {
+                $additionalInformation = $payment->getAdditionalInformation();
+                $authorizeCards = $additionalInformation['authorize_cards'];
+                $authorizeCardKeys = array_keys($authorizeCards);
+                $authorizeCard = $authorizeCards[$authorizeCardKeys[0]];
+                $lastTransId = $authorizeCard['last_trans_id'];
+            }
+
+            if (null != $lastTransId) {
+                $transaction = $payment->lookupTransaction($lastTransId, 'capture'); // TODO grab authorization as well
+            }
+
+            if (!empty($transaction)) {
+                $transactionData = $transaction->getData();
+            }
+
+            $orderInfo['relationships']['transactions']['data'][] = array(
+                // 'DATA' => $payment->getData(), // TEMP
+                // 'METHODS' => get_class_methods($payment), // TEMP
+                'id' => $transactionData['transaction_id'], //TODO validate this is the correct value
+                'type' => $transactionData['txn_type'], //TODO is this only always payment?  or can this be refund?
+                'reference' => $transactionData['txn_id'], //TODO validate this is the correct value
+                'gateway' => $gateway, //TODO validate this is the correct value
+                'status' => $payment->getCcCidStatus(), //TODO validate this is the correct value
+                'meta' => array(
+                    'display_price' => $this->formatPrice($transactionAmount, $currency),
+                    'timestamps' => array(
+                        'created_at' => $order->getCreatedAt(),
+                        'updated_at' => $order->getUpdatedAt(),
+                    )
+                ),
+                'relationships' => array(
+                    'charges' => array(
+                        'data' => []
+                    )
+                )
+            );
+        }
+        
+        // NOTE this is invoices
+        // $orderInfo['invoices'] = array();
+        // foreach($order->getInvoiceCollection() as $invoice) {
+        //     $orderInfo['invoices'][] = $invoice->getData();
+        // }
+            
+        // NOTE this is refunds
+        // $orderInfo['creditmemos'] = array();
+        // foreach($order->getCreditmemosCollection() as $creditmemo) {
+        //     $orderInfo['creditmemos'][] = $creditmemo->getData();
+        // }
+
+        return $orderInfo;
+    }
+
+    public function getOrderNotes($order)
+    {
+        $notesInfo = array();
+
+        foreach($order->getStatusHistoryCollection() as $note) {
+            $noteInfo = array(
+                'id' => $note->getEntityId(),
+                'type' => 'order_note',
+                'source' => 'magento',
+                'status' => $note->getStatus() ?: '',
+                'created_at' => $note->getCreatedAt(),
+                'entity_name' => $note->getEntityName()
+            );
+
+            $comment = $note->getComment();
+            if ($comment) {
+                $noteInfo['messages'][] = $comment;
+            }
+
+            $notesInfo[] = $noteInfo;
+        }
+
+        return $notesInfo;
+    }
+
+    public function getCustomer($customer)
+    {
+        $customerId = $customer->getEntityId();
+        $urlModel = Mage::getModel('adminhtml/url')->setStore('admin');
+        $adminUrl = $urlModel->getUrl('adminhtml/zendesk/redirect', array('id' => $customerId, 'type' => 'customer'));
+
+        $info = array(
+            'id' => $customerId,
+            'type' => 'customer',
+            'url' => $adminUrl,
+            'email' => $customer->getEmail(),
+            'first_name' => $customer->getFirstname(),
+            'last_name' => $customer->getLastname(),
+            'created_at' => $customer->getCreatedAt(),
+            'updated_at' => $customer->getUpdatedAt(),
+            'addresses' => array()
+        );
+
+        foreach($customer->getAddressesCollection() as $address) {
+            $info['addresses'][] = $this->formatAddress($address);
+        }
+
+        return $info;
+    }
+
+    public function getFilteredOrders($customerFilters, $genericFilters)
+    {
+        // Get a list of all orders for the given email address
+        // This is used to determine if a missing customer is a guest or if they really aren't a customer at all
+        $orderCollection = Mage::getModel('sales/order')->getCollection();
+
+        foreach($customerFilters as $customerKey => $customerValue) {
+            $orderCollection->addFieldToFilter('customer_'.$customerKey, $customerValue);
+        }
+
+        foreach($genericFilters as $genericKey => $genericValue) {
+            $orderCollection->addFieldToFilter($genericKey, $genericValue);
+        }
+        
+        $orders = array();
+        
+        if($orderCollection->getSize()) {
+            foreach($orderCollection as $order) {
+                $orders[] = $this->getOrderDetailBasic($order);
+            }
+        }
+
+        return $orders;
+    }
+
+    public function getFilteredOrdersByProduct($customerFilters, $productFilters)
+    {
+        $emailKey = 'email';
+        $email = $customerFilters->$emailKey;
+
+        $orderItemCollection = Mage::getResourceModel('sales/order_item_collection');
+
+        foreach($productFilters as $key => $value) {
+            $orderItemCollection->addAttributeToFilter($key, $value);
+        }   
+        $orderItemCollection->load();
+
+        $ordersData = array();
+
+        foreach($orderItemCollection as $orderItem) {
+            $orderId = $orderItem->getOrderId();
+            $ordersData[$orderId] = array(
+                'email' => $orderItem->getOrder()->getCustomerEmail(),
+                'order' => $orderItem->getOrder()
+            );
+        }
+
+        if($email) {
+            $filteredOrdersData = array_filter(array_values($ordersData), function ($orderData) use ($email) {
+                return ($orderData['email'] == $email);
+            });
+        } else {
+            $filteredOrdersData = $ordersData;
+        }
+
+        $orders = array();
+
+        foreach($filteredOrdersData as $filteredData) {
+            $orders[] = $this->getOrderDetailBasic($filteredData['order']);
+        }
+
+        return $orders;
+    }
+
+    #endregion version 3.0 or later
 }
+ 
