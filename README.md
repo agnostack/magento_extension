@@ -1,6 +1,6 @@
 # ANNOUNCING VERSION 3.0 :mega:
 
-The new 3.0 version of the Extension provides all new endpoints, with the ability to retrieve additional information about customers and orders within your Magento store.
+The new 3.0 version fixes several core issues (incorrect/missing order address, sporadic missing customer data, lack of order item quantities, etc.) and provides all new v2 endpoints, with the ability to retrieve additional information about customers and orders within your Magento store.
 
 * Perform advanced Customer Search
 * View real-time Shipping Status
