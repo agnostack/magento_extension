@@ -11,7 +11,8 @@ The new 3.0 version fixes several core issues (incorrect/missing order address, 
 
 # Zendesk Extension for Magento
 
-This extension makes Zendesk work seamlessly with Magento to enable stores to deliver great customer support. **Features include:**
+This Extension makes Zendesk work seamlessly with Magento 1 to enable stores to deliver great customer support. It was originally develop by [Zendesk](https://www.zendesk.com) and is now supported and maintained by [agnoStack](https://agnostack.com).
+**Features include:**
 
 - Enable Single Sign-on with Zendesk
 - Create support tickets without leaving Magento
