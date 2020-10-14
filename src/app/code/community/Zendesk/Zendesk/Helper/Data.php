@@ -154,23 +154,6 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         return $token;
     }
 
-    /**
-     * Returns the provisioning endpoint for new setups.
-     *
-     * This uses the config/zendesk/provision_url XML path to retrieve the setting, with a default value set in
-     * the extension config.xml file. This can be overridden in your website's local.xml file.
-     * @return null|string URL or null on failure
-     */
-    public function getProvisionUrl()
-    {
-        $config = Mage::getConfig();
-        $data = $config->getNode('zendesk/provision_url');
-        if(!$data) {
-            return null;
-        }
-        return (string)$data;
-    }
-
     public function getProvisionToken($generate = false)
     {
         $token = Mage::getStoreConfig('zendesk/hidden/provision_token', 0);

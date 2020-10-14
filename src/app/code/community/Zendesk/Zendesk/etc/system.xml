@@ -471,11 +471,12 @@
                     <show_in_default>1</show_in_default>
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
-                    <comment><![CDATA[Haven't set up Zendesk Support yet? Follow our easy setup guide to get started.]]></comment>
+                    <comment><![CDATA[<p>Need to set up the agnoStack Zendesk plugin?<br/>Learn More at <a href="https://agnostack.com/faqs/setup-onboarding/configure-manage-your-account" target="_blank">https://agnostack.com/faqs/setup-onboarding/configure-manage-your-account</a>.</p><p>Haven't set up Zendesk Support yet? Click below to get started.</p>]]></comment>
                     <fields>
                         <sign_up translate="button_label">
                             <label></label>
-                            <button_label>Setup Guide</button_label>
+                            <button_label>Get Started</button_label>
+                            <button_url>https://agnostack.com/book-a-meeting</button_url>
                             <frontend_model>zendesk/adminhtml_config_buttons_signup</frontend_model>
                             <sort_order>1</sort_order>
                             <show_in_default>1</show_in_default>

@@ -15,16 +15,6 @@
  * limitations under the License.
  */
 ?>
-<script type="text/javascript">
-    function postToZendesk() {
-        var form = new Element('form', {method: 'post', action: '<?php echo $this->getPostUrl(); ?>'});
-        <?php foreach($this->getPostInfo() as $name => $value): ?>
-            form.insert(new Element('input', {type: 'hidden', name: '<?php echo $name; ?>', value: '<?php echo $value; ?>'}));
-        <?php endforeach; ?>
-        $(document.body).insert(form);
-        form.submit();
-    }
-</script>
-<button style="" onclick="javascript:postToZendesk(); return false;" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
+<button style="" onclick="window.location.href='<?php echo $this->escapeHtml($this->getButtonUrl()); ?>'" class="scalable" type="button" id="<?php echo $this->getHtmlId() ?>">
     <span><?php echo $this->escapeHtml($this->getButtonLabel()) ?></span>
 </button>

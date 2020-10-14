@@ -37,48 +37,11 @@ class Zendesk_Zendesk_Block_Adminhtml_Config_Buttons_Signup extends Mage_Adminht
         $originalData = $element->getOriginalData();
         $this->addData(array(
             'button_label' => Mage::helper('zendesk')->__($originalData['button_label']),
+            'button_url' => Mage::helper('zendesk')->__($originalData['button_url']),
             'html_id' => $element->getHtmlId(),
             'url' => Mage::getSingleton('adminhtml/url')->getUrl('*/setup/start')
         ));
 
         return $this->_toHtml();
-    }
-
-    public function getPostUrl()
-    {
-        return Mage::helper('zendesk')->getProvisionUrl();
-    }
-
-    public function getPostInfo()
-    {
-        $websiteCode = Mage::app()->getRequest()->getParam('website');
-        if ($websiteCode) {
-            $website = Mage::getModel('core/website')->load($websiteCode);
-        } else {
-            $website = Mage::getModel('core/website')->getCollection()
-                     ->addFieldToFilter('is_default', 1)
-                     ->getFirstItem();
-        }
-
-        $storeCode = Mage::app()->getRequest()->getParam('store');
-        if ($storeCode) {
-            $store = Mage::getModel('core/store')->load($storeCode);
-        } else {
-            $store = $website->getDefaultStore();
-        }
-
-        $info = array(
-            'magento_domain' => Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_WEB),
-            'magento_current_user_id' => Mage::getSingleton('admin/session')->getUser()->getUserId(),
-            'magento_user_count' => Mage::getModel('admin/user')->getCollection()->getSize(),
-            'magento_auth_token' => Mage::helper('zendesk')->getProvisionToken(true),
-            'magento_callback' => Mage::helper('adminhtml')->getUrl('adminhtml/zendesk/redirect', array('type' => 'settings', 'id' => 'zendesk')),
-            'magento_locale' => Mage::getStoreConfig('general/locale/code'),
-            'magento_timezone' => Mage::getStoreConfig('general/locale/timezone'),
-            'magento_api_url' => Mage::getUrl('zendesk/api', array('_store' => $store->getCode())),
-            'magento_store_name' => $website->getName(),
-        );
-
-        return $info;
     }
 }
