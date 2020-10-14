@@ -23,7 +23,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         // TODO!!!!!!!: read version from config.xml
         // $configSettings = Mage::getSingleton('Zendesk_Zendesk/config');
         // Mage::log(json_encode($configSettings), null, 'zendesk.log');
-        $this->getResponse()->setHeader('X-Extension-Version', '3.0.0');
+        $this->getResponse()->setHeader('X-Extension-Version', '3.0.1');
         return $this;
     }
 

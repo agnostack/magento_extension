@@ -479,24 +479,26 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
     protected function formatAddress($address)
     {
-        $addressData = array(
-            'type' => 'address',
-            'first_name' => $address->getFirstname(),
-            'last_name' => $address->getLastname(),
-            'city' => $address->getCity(),
-            'county' => $address->getRegion(),
-            'postcode' => $address->getPostcode(),
-            'country' => $address->getCountryId(),
-            'phone' => $address->getTelephone()
-        );
-
-        $entityId = $address->getEntityId();
-        $addressId = $address->getCustomerAddressId();
-        $addressData['id'] = $addressId ?: $entityId;
-
-        $street = $address->getStreet();
-        $addressData['line_1'] = $street[0] ?: '';
-        $addressData['line_2'] = $street[1] ?: '';
+        if ($address) {
+            $addressData = array(
+                'type' => 'address',
+                'first_name' => $address->getFirstname(),
+                'last_name' => $address->getLastname(),
+                'city' => $address->getCity(),
+                'county' => $address->getRegion(),
+                'postcode' => $address->getPostcode(),
+                'country' => $address->getCountryId(),
+                'phone' => $address->getTelephone()
+            );
+    
+            $entityId = $address->getEntityId();
+            $addressId = $address->getCustomerAddressId();
+            $addressData['id'] = $addressId ?: $entityId;
+    
+            $street = $address->getStreet();
+            $addressData['line_1'] = $street[0] ?: '';
+            $addressData['line_2'] = $street[1] ?: '';
+        }
 
         return $addressData;
     }
@@ -517,7 +519,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             if (count($tracks) > 0) {
                 foreach($tracks as $track) {
                     if ($shipmentId == $track->getParentId()) {
-                        $shipments[] = array(
+                        $shipment = array(
                             'id' => $track->getEntityId(),
                             'carrier' => $track->getTitle(),
                             'carrier_code' => $track->getCarrierCode(),
@@ -526,24 +528,32 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                             'created_at' => $track->getCreatedAt(),
                             'updated_at' => $track->getUpdatedAt(),
                             'tracking_number' => $track->getTrackNumber(),
-                            'shipping_address' => $this->formatAddress($shippingAddress),
                             'order_status' => $orderStatus,
                         );
-                    }
+                        if ($shippingAddress) {
+                            $shipment['shipping_address'] = $this->formatAddress($shippingAddress);
+                        }
+                        $shipments[] = $shipment;
+                     }
                 }
             } else {
-                $shipments[] = array(
+                $shipment = array(
                     'service_code' => $serviceCode,
                     'carrier_code' => $order->getShippingMethod(),
-                    'shipping_address' => $this->formatAddress($shippingAddress),
                     'order_status' => $orderStatus,
                 );
+                if ($shippingAddress) {
+                    $shipment['shipping_address'] = $this->formatAddress($shippingAddress);
+                }
+                $shipments[] = $shipment;
             }
         } else {
             $shippingAddress = $order->getShippingAddress();
-            $shipments[] = array(
-                'shipping_address' => $this->formatAddress($shippingAddress),
-            );
+            if ($shippingAddress) {
+                $shipments[] = array(
+                    'shipping_address' => $this->formatAddress($shippingAddress),
+                );
+            }
         }
 
         return $shipments;
@@ -558,13 +568,13 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         $shippingAddress = $order->getShippingAddress();
         $shippingWithTax = $order->getShippingInclTax();
         $shippingMethod = $order->getShippingMethod();
+        $billingAddress = $order->getBillingAddress();
 
         $orderInfo = array(
             'id' => $order->getIncrementId(),
             'url' => $urlModel->getUrl('adminhtml/sales_order/view', array('order_id' => $order->getId())),
             'transaction_id' => $order->getIncrementId(),
             'status' => $order->getStatus(),
-            'billing_address' => $this->formatAddress($order->getBillingAddress()),
             'meta' => array(
                 'store_info' => array(
                     'type' => 'store_info',
@@ -590,6 +600,9 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             ),
             'shipments' => array(),
         );
+        if ($billingAddress) {
+            $orderInfo['billing_address'] = $this->formatAddress($billingAddress);
+        }
 
         foreach($order->getItemsCollection(array(), true) as $item) {
             $itemWithTax = $item->getRowTotal();
@@ -772,7 +785,9 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         );
 
         foreach($customer->getAddressesCollection() as $address) {
-            $info['addresses'][] = $this->formatAddress($address);
+            if ($address) {
+                $info['addresses'][] = $this->formatAddress($address);
+            }
         }
 
         return $info;
@@ -825,7 +840,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             );
         }
 
-        if($email) {
+        if ($email) {
             $filteredOrdersData = array_filter(array_values($ordersData), function ($orderData) use ($email) {
                 return ($orderData['email'] == $email);
             });

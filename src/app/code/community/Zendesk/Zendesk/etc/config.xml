@@ -19,7 +19,7 @@
 <config>
     <modules>
         <Zendesk_Zendesk>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
         </Zendesk_Zendesk>
     </modules>
     <zendesk>
