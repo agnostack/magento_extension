@@ -490,52 +490,52 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $shipments = array();
         $orderStatus = $order->getStatus();
+        $serviceCode = $order->getShippingDescription();
+        $tracks = $order->getTracksCollection();
+        $shippingMethod = $order->getShippingMethod();
+        $orderShippingAddress = $order->getShippingAddress();
 
         foreach($order->getShipmentsCollection() as $shipment) {
             $shipmentId = $shipment->getEntityId();
             $shippingAddress = $shipment->getShippingAddress();
-            $serviceCode = $order->getShippingDescription();
-        }
-
-        if ($shipmentId) {
-            $tracks = $order->getTracksCollection();
-            if (count($tracks) > 0) {
-                foreach($tracks as $track) {
-                    if ($shipmentId == $track->getParentId()) {
-                        $shipment = array(
-                            'id' => $track->getEntityId(),
-                            'carrier' => $track->getTitle(),
-                            'carrier_code' => $track->getCarrierCode(),
-                            'service_code' => $serviceCode,
-                            'shipping_description' => $track->getDescription() ?: '',
-                            'created_at' => $track->getCreatedAt(),
-                            'updated_at' => $track->getUpdatedAt(),
-                            'tracking_number' => $track->getTrackNumber(),
-                            'order_status' => $orderStatus,
-                        );
-                        if ($shippingAddress) {
-                            $shipment['shipping_address'] = $this->formatAddress($shippingAddress);
-                        }
-                        $shipments[] = $shipment;
-                     }
+            if ($shipmentId) {
+                if (count($tracks) > 0) {
+                    foreach($tracks as $track) {
+                        if ($shipmentId == $track->getParentId()) {
+                            $shipment = array(
+                                'id' => $track->getEntityId(),
+                                'carrier' => $track->getTitle(),
+                                'carrier_code' => $track->getCarrierCode(),
+                                'service_code' => $serviceCode,
+                                'shipping_description' => $track->getDescription() ?: '',
+                                'created_at' => $track->getCreatedAt(),
+                                'updated_at' => $track->getUpdatedAt(),
+                                'tracking_number' => $track->getTrackNumber(),
+                                'order_status' => $orderStatus,
+                            );
+                            if ($shippingAddress) {
+                                $shipment['shipping_address'] = $this->formatAddress($shippingAddress);
+                            }
+                            $shipments[] = $shipment;
+                         }
+                    }
+                } else {
+                    $shipment = array(
+                        'service_code' => $serviceCode,
+                        'carrier_code' => $shippingMethod,
+                        'order_status' => $orderStatus,
+                    );
+                    if ($shippingAddress) {
+                        $shipment['shipping_address'] = $this->formatAddress($shippingAddress);
+                    }
+                    $shipments[] = $shipment;
                 }
             } else {
-                $shipment = array(
-                    'service_code' => $serviceCode,
-                    'carrier_code' => $order->getShippingMethod(),
-                    'order_status' => $orderStatus,
-                );
-                if ($shippingAddress) {
-                    $shipment['shipping_address'] = $this->formatAddress($shippingAddress);
+                if ($orderShippingAddress) {
+                    $shipments[] = array(
+                        'shipping_address' => $this->formatAddress($orderShippingAddress),
+                    );
                 }
-                $shipments[] = $shipment;
-            }
-        } else {
-            $shippingAddress = $order->getShippingAddress();
-            if ($shippingAddress) {
-                $shipments[] = array(
-                    'shipping_address' => $this->formatAddress($shippingAddress),
-                );
             }
         }
 
