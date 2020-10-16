@@ -154,29 +154,6 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         return $token;
     }
 
-    public function getProvisionToken($generate = false)
-    {
-        $token = Mage::getStoreConfig('zendesk/hidden/provision_token', 0);
-
-        if( (!$token || strlen(trim($token)) == 0) && $generate) {
-            $token = $this->setProvisionToken();
-        }
-
-        return $token;
-    }
-
-    public function setProvisionToken($token = null)
-    {
-        if(!$token) {
-            $token = hash('sha256', Mage::helper('oauth')->generateToken());
-        }
-
-        Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', $token, 'default');
-        Mage::getConfig()->removeCache();
-
-        return $token;
-    }
-
     public function getOrderDetail($order)
     {
         // if the admin site has a custom URL, use it
