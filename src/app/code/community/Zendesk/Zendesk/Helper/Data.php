@@ -507,13 +507,13 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                     }
                     $shipments[] = $shipment;
                 }
-            } else {
-                if ($orderShippingAddress) {
-                    $shipments[] = array(
-                        'shipping_address' => $this->formatAddress($orderShippingAddress),
-                    );
-                }
             }
+        }
+
+        if (empty($shipments) && $orderShippingAddress) {
+            $shipments[] = array(
+                'shipping_address' => $this->formatAddress($orderShippingAddress),
+            );
         }
 
         return $shipments;
