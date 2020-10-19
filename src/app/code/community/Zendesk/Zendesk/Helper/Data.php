@@ -541,9 +541,9 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                     'name' => $order->getStoreName()
                 ),
                 'display_price' => array(
-                    'with_tax' => $this->formatPrice($order->getGrandTotal(), $currency),
-                    'without_tax' => $this->formatPrice($order->getGrandTotal() - $order->getTaxAmount(), $currency), // TODO: get without tax
-                    'tax' => $this->formatPrice($order->getTaxAmount(), $currency) // TODO: get tax
+                    'with_tax' => $this->formatPrice($order->getGrandTotal() + $order->getTaxAmount(), $currency),
+                    'without_tax' => $this->formatPrice($order->getGrandTotal(), $currency),
+                    'tax' => $this->formatPrice($order->getTaxAmount(), $currency)
                 ),
                 'timestamps' => array(
                     'created_at' => $order->getCreatedAt(),
@@ -565,7 +565,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         }
 
         foreach($order->getItemsCollection(array(), true) as $item) {
-            $itemWithTax = $item->getRowTotal();
+            $itemWithoutTax = $item->getRowTotal();
             $itemTax = $item->getTaxAmount();
 
             $productId = $item->getProductId();
@@ -583,8 +583,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                 'refunded' => intval($item->getQtyRefunded()),
                 'meta' => array(
                     'display_price' => array(
-                        'with_tax' => $this->formatPrice($itemWithTax, $currency),
-                        'without_tax' => $this->formatPrice($itemWithTax - $itemTax, $currency),
+                        'with_tax' => $this->formatPrice($itemWithoutTax + $itemTax, $currency),
+                        'without_tax' => $this->formatPrice($itemWithoutTax, $currency),
                         'tax' => $this->formatPrice($iitemTax, $currency)
                     ),
                     'timestamps' => array(
