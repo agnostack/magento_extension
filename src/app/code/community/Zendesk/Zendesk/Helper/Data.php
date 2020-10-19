@@ -541,8 +541,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                     'name' => $order->getStoreName()
                 ),
                 'display_price' => array(
-                    'with_tax' => $this->formatPrice($order->getGrandTotal() + $order->getTaxAmount(), $currency),
-                    'without_tax' => $this->formatPrice($order->getGrandTotal(), $currency),
+                    'with_tax' => $this->formatPrice($order->getGrandTotal(), $currency),
+                    'without_tax' => $this->formatPrice($order->getGrandTotal() - $order->getTaxAmount(), $currency),
                     'tax' => $this->formatPrice($order->getTaxAmount(), $currency)
                 ),
                 'timestamps' => array(
