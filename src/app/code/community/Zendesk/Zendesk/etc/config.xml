@@ -19,12 +19,9 @@
 <config>
     <modules>
         <Zendesk_Zendesk>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
         </Zendesk_Zendesk>
     </modules>
-    <zendesk>
-        <provision_url>https://signup.zendesk.com/provisioning/magento/welcome</provision_url>
-    </zendesk>
     <global>
         <models>
             <zendesk>

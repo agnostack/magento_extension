@@ -23,7 +23,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         // TODO!!!!!!!: read version from config.xml
         // $configSettings = Mage::getSingleton('Zendesk_Zendesk/config');
         // Mage::log(json_encode($configSettings), null, 'zendesk.log');
-        $this->getResponse()->setHeader('X-Extension-Version', '3.0.0');
+        $this->getResponse()->setHeader('X-Extension-Version', '3.0.1');
         return $this;
     }
 
@@ -67,45 +67,39 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
         }
 
         $apiToken = Mage::helper('zendesk')->getApiToken(false);
-        $provisionToken = Mage::helper('zendesk')->getProvisionToken(false);
+        
+        if(!Mage::getStoreConfig('zendesk/api/enabled')) {
+            $this->getResponse()
+                ->setBody(json_encode(array('success' => false, 'message' => 'API access disabled')))
+                ->setHttpResponseCode(403)
+                ->setHeader('Content-type', 'application/json', true);
 
-        // Provisioning tokens are always accepted, hence why they are deleted after the initial process
-        if(!$provisionToken || $token != $provisionToken) {
-            // Use of the provisioning token "overrides" the configuration for the API, so we check this after
-            // confirming the provisioning token has not been sent
-            if(!Mage::getStoreConfig('zendesk/api/enabled')) {
-                $this->getResponse()
-                    ->setBody(json_encode(array('success' => false, 'message' => 'API access disabled')))
-                    ->setHttpResponseCode(403)
-                    ->setHeader('Content-type', 'application/json', true);
+            Mage::log('API access disabled.', null, 'zendesk.log');
 
-                Mage::log('API access disabled.', null, 'zendesk.log');
+            return false;
+        }
 
-                return false;
-            }
+        // If the API is enabled then check the token
+        if(!$token) {
+            $this->getResponse()
+                ->setBody(json_encode(array('success' => false, 'message' => 'No authorisation token provided')))
+                ->setHttpResponseCode(401)
+                ->setHeader('Content-type', 'application/json', true);
 
-            // If the API is enabled then check the token
-            if(!$token) {
-                $this->getResponse()
-                    ->setBody(json_encode(array('success' => false, 'message' => 'No authorisation token provided')))
-                    ->setHttpResponseCode(401)
-                    ->setHeader('Content-type', 'application/json', true);
+            Mage::log('No authorisation token provided.', null, 'zendesk.log');
 
-                Mage::log('No authorisation token provided.', null, 'zendesk.log');
+            return false;
+        }
 
-                return false;
-            }
+        if($token != $apiToken) {
+            $this->getResponse()
+                ->setBody(json_encode(array('success' => false, 'message' => 'Not authorised')))
+                ->setHttpResponseCode(401)
+                ->setHeader('Content-type', 'application/json', true);
 
-            if($token != $apiToken) {
-                $this->getResponse()
-                    ->setBody(json_encode(array('success' => false, 'message' => 'Not authorised')))
-                    ->setHttpResponseCode(401)
-                    ->setHeader('Content-type', 'application/json', true);
+            Mage::log('Not authorised.', null, 'zendesk.log');
 
-                Mage::log('Not authorised.', null, 'zendesk.log');
-
-                return false;
-            }
+            return false;
         }
 
         return true;

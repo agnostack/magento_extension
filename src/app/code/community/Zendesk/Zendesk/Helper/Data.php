@@ -154,46 +154,6 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         return $token;
     }
 
-    /**
-     * Returns the provisioning endpoint for new setups.
-     *
-     * This uses the config/zendesk/provision_url XML path to retrieve the setting, with a default value set in
-     * the extension config.xml file. This can be overridden in your website's local.xml file.
-     * @return null|string URL or null on failure
-     */
-    public function getProvisionUrl()
-    {
-        $config = Mage::getConfig();
-        $data = $config->getNode('zendesk/provision_url');
-        if(!$data) {
-            return null;
-        }
-        return (string)$data;
-    }
-
-    public function getProvisionToken($generate = false)
-    {
-        $token = Mage::getStoreConfig('zendesk/hidden/provision_token', 0);
-
-        if( (!$token || strlen(trim($token)) == 0) && $generate) {
-            $token = $this->setProvisionToken();
-        }
-
-        return $token;
-    }
-
-    public function setProvisionToken($token = null)
-    {
-        if(!$token) {
-            $token = hash('sha256', Mage::helper('oauth')->generateToken());
-        }
-
-        Mage::getModel('core/config')->saveConfig('zendesk/hidden/provision_token', $token, 'default');
-        Mage::getConfig()->removeCache();
-
-        return $token;
-    }
-
     public function getOrderDetail($order)
     {
         // if the admin site has a custom URL, use it
@@ -479,24 +439,26 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
 
     protected function formatAddress($address)
     {
-        $addressData = array(
-            'type' => 'address',
-            'first_name' => $address->getFirstname(),
-            'last_name' => $address->getLastname(),
-            'city' => $address->getCity(),
-            'county' => $address->getRegion(),
-            'postcode' => $address->getPostcode(),
-            'country' => $address->getCountryId(),
-            'phone' => $address->getTelephone()
-        );
-
-        $entityId = $address->getEntityId();
-        $addressId = $address->getCustomerAddressId();
-        $addressData['id'] = $addressId ?: $entityId;
-
-        $street = $address->getStreet();
-        $addressData['line_1'] = $street[0] ?: '';
-        $addressData['line_2'] = $street[1] ?: '';
+        if ($address) {
+            $addressData = array(
+                'type' => 'address',
+                'first_name' => $address->getFirstname(),
+                'last_name' => $address->getLastname(),
+                'city' => $address->getCity(),
+                'county' => $address->getRegion(),
+                'postcode' => $address->getPostcode(),
+                'country' => $address->getCountryId(),
+                'phone' => $address->getTelephone()
+            );
+    
+            $entityId = $address->getEntityId();
+            $addressId = $address->getCustomerAddressId();
+            $addressData['id'] = $addressId ?: $entityId;
+    
+            $street = $address->getStreet();
+            $addressData['line_1'] = $street[0] ?: '';
+            $addressData['line_2'] = $street[1] ?: '';
+        }
 
         return $addressData;
     }
@@ -505,44 +467,52 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     {
         $shipments = array();
         $orderStatus = $order->getStatus();
+        $serviceCode = $order->getShippingDescription();
+        $tracks = $order->getTracksCollection();
+        $shippingMethod = $order->getShippingMethod();
+        $orderShippingAddress = $order->getShippingAddress();
 
         foreach($order->getShipmentsCollection() as $shipment) {
             $shipmentId = $shipment->getEntityId();
             $shippingAddress = $shipment->getShippingAddress();
-            $serviceCode = $order->getShippingDescription();
+            if ($shipmentId) {
+                if (count($tracks) > 0) {
+                    foreach($tracks as $track) {
+                        if ($shipmentId == $track->getParentId()) {
+                            $shipment = array(
+                                'id' => $track->getEntityId(),
+                                'carrier' => $track->getTitle(),
+                                'carrier_code' => $track->getCarrierCode(),
+                                'service_code' => $serviceCode,
+                                'shipping_description' => $track->getDescription() ?: '',
+                                'created_at' => $track->getCreatedAt(),
+                                'updated_at' => $track->getUpdatedAt(),
+                                'tracking_number' => $track->getTrackNumber(),
+                                'order_status' => $orderStatus,
+                            );
+                            if ($shippingAddress) {
+                                $shipment['shipping_address'] = $this->formatAddress($shippingAddress);
+                            }
+                            $shipments[] = $shipment;
+                         }
+                    }
+                } else {
+                    $shipment = array(
+                        'service_code' => $serviceCode,
+                        'carrier_code' => $shippingMethod,
+                        'order_status' => $orderStatus,
+                    );
+                    if ($shippingAddress) {
+                        $shipment['shipping_address'] = $this->formatAddress($shippingAddress);
+                    }
+                    $shipments[] = $shipment;
+                }
+            }
         }
 
-        if ($shipmentId) {
-            $tracks = $order->getTracksCollection();
-            if (count($tracks) > 0) {
-                foreach($tracks as $track) {
-                    if ($shipmentId == $track->getParentId()) {
-                        $shipments[] = array(
-                            'id' => $track->getEntityId(),
-                            'carrier' => $track->getTitle(),
-                            'carrier_code' => $track->getCarrierCode(),
-                            'service_code' => $serviceCode,
-                            'shipping_description' => $track->getDescription() ?: '',
-                            'created_at' => $track->getCreatedAt(),
-                            'updated_at' => $track->getUpdatedAt(),
-                            'tracking_number' => $track->getTrackNumber(),
-                            'shipping_address' => $this->formatAddress($shippingAddress),
-                            'order_status' => $orderStatus,
-                        );
-                    }
-                }
-            } else {
-                $shipments[] = array(
-                    'service_code' => $serviceCode,
-                    'carrier_code' => $order->getShippingMethod(),
-                    'shipping_address' => $this->formatAddress($shippingAddress),
-                    'order_status' => $orderStatus,
-                );
-            }
-        } else {
-            $shippingAddress = $order->getShippingAddress();
+        if (empty($shipments) && $orderShippingAddress) {
             $shipments[] = array(
-                'shipping_address' => $this->formatAddress($shippingAddress),
+                'shipping_address' => $this->formatAddress($orderShippingAddress),
             );
         }
 
@@ -558,13 +528,13 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         $shippingAddress = $order->getShippingAddress();
         $shippingWithTax = $order->getShippingInclTax();
         $shippingMethod = $order->getShippingMethod();
+        $billingAddress = $order->getBillingAddress();
 
         $orderInfo = array(
             'id' => $order->getIncrementId(),
             'url' => $urlModel->getUrl('adminhtml/sales_order/view', array('order_id' => $order->getId())),
             'transaction_id' => $order->getIncrementId(),
             'status' => $order->getStatus(),
-            'billing_address' => $this->formatAddress($order->getBillingAddress()),
             'meta' => array(
                 'store_info' => array(
                     'type' => 'store_info',
@@ -572,8 +542,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                 ),
                 'display_price' => array(
                     'with_tax' => $this->formatPrice($order->getGrandTotal(), $currency),
-                    'without_tax' => $this->formatPrice($order->getGrandTotal() - $order->getTaxAmount(), $currency), // TODO: get without tax
-                    'tax' => $this->formatPrice($order->getTaxAmount(), $currency) // TODO: get tax
+                    'without_tax' => $this->formatPrice($order->getGrandTotal() - $order->getTaxAmount(), $currency),
+                    'tax' => $this->formatPrice($order->getTaxAmount(), $currency)
                 ),
                 'timestamps' => array(
                     'created_at' => $order->getCreatedAt(),
@@ -590,9 +560,12 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             ),
             'shipments' => array(),
         );
+        if ($billingAddress) {
+            $orderInfo['billing_address'] = $this->formatAddress($billingAddress);
+        }
 
         foreach($order->getItemsCollection(array(), true) as $item) {
-            $itemWithTax = $item->getRowTotal();
+            $itemWithoutTax = $item->getRowTotal();
             $itemTax = $item->getTaxAmount();
 
             $productId = $item->getProductId();
@@ -610,8 +583,8 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                 'refunded' => intval($item->getQtyRefunded()),
                 'meta' => array(
                     'display_price' => array(
-                        'with_tax' => $this->formatPrice($itemWithTax, $currency),
-                        'without_tax' => $this->formatPrice($itemWithTax - $itemTax, $currency),
+                        'with_tax' => $this->formatPrice($itemWithoutTax + $itemTax, $currency),
+                        'without_tax' => $this->formatPrice($itemWithoutTax, $currency),
                         'tax' => $this->formatPrice($iitemTax, $currency)
                     ),
                     'timestamps' => array(
@@ -772,7 +745,9 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
         );
 
         foreach($customer->getAddressesCollection() as $address) {
-            $info['addresses'][] = $this->formatAddress($address);
+            if ($address) {
+                $info['addresses'][] = $this->formatAddress($address);
+            }
         }
 
         return $info;
@@ -825,7 +800,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
             );
         }
 
-        if($email) {
+        if ($email) {
             $filteredOrdersData = array_filter(array_values($ordersData), function ($orderData) use ($email) {
                 return ($orderData['email'] == $email);
             });
