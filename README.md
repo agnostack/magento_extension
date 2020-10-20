@@ -8,7 +8,7 @@ The new 3.0 version fixes several core issues (incorrect/missing order address, 
 * Enable direct Order Search by ID
 * Access Order Messages and Notes
 
-Dowload the latest version of the extension at: https://github.com/agnostack/magento_extension/releases/tag/v3.0.0.
+Dowload the latest version of the extension at: https://github.com/agnostack/magento_extension/releases/tag/v3.0.1.
 
 Additional detailed instructions on configuring agnoStack for the new version can be found at: https://agnostack.com/faqs/setup-onboarding/configuring-magento-1.
 
