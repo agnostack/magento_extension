@@ -12,6 +12,7 @@ Dowload the latest version of the extension at: https://github.com/agnostack/mag
 
 Additional detailed instructions on configuring agnoStack for the new version can be found at: https://agnostack.com/faqs/setup-onboarding/configuring-magento-1.
 
+> As of September 7th, 2020 agnoStack has now officially taken over support and maintenance of this Extension from Zendesk. Learn more at: https://agnostack.com/press-releases/agno-stack-takes-over-zendesk-magento-1-extension
 
 # Zendesk Extension for Magento
 
