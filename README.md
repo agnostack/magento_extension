@@ -30,7 +30,7 @@ This Extension makes Zendesk work seamlessly with Magento 1 to enable stores to 
 
 ### General Notes
 
-The extension provides its own custom RESTful API, which is intended to be used by the [agnoStack app](https://www.zendesk.com/apps/support/agnostack-commerce---by-particular/). The custom API allows for a consistent interface across all Magento versions, regardless of whether they support XML-RPC, SOAP or REST interfaces, and provides exactly the data that the app requires.
+The extension provides its own custom RESTful API, which is intended to be used by the [agnoStack app](https://www.zendesk.com/apps/support/agnostack-commerce/). The custom API allows for a consistent interface across all Magento versions, regardless of whether they support XML-RPC, SOAP or REST interfaces, and provides exactly the data that the app requires.
 
 The base URL of the API is `http://your_site_base_url/zendesk/api/`.
 
