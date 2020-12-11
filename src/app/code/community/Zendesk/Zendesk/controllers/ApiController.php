@@ -141,25 +141,26 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
 
         $sections = explode('/', trim($this->getRequest()->getPathInfo(), '/'));
         $email = $sections[3];
-
-        // Get a list of all orders for the given email address
-        // This is used to determine if a missing customer is a guest or if they really aren't a customer at all
-        $orderCollection = Mage::getModel('sales/order')->getCollection()
-            ->addFieldToFilter('customer_email', array('eq' => array($email)));
-        $orders = array();
-        if($orderCollection->getSize()) {
-            foreach($orderCollection as $order) {
-                $orders[] = Mage::helper('zendesk')->getOrderDetail($order);
-            }
-        }
+        $websiteId = Mage::app()->getWebsite()->getId();
 
         // Try to load a corresponding customer object for the provided email address
-        $customer = Mage::helper('zendesk')->loadCustomer($email);
-
-        // if the admin site has a custom URL, use it
-        $urlModel = Mage::getModel('adminhtml/url')->setStore('admin');
+        $customer = Mage::helper('zendesk')->loadCustomer($email, $websiteId);
 
         if($customer && $customer->getId()) {
+            // Get a list of all orders for the given customer ID
+            $orderCollection = Mage::getModel('sales/order')->getCollection()
+                ->addFieldToFilter('customer_id', array('eq' => array($customer->getId())));
+            $orders = array();
+
+            // if the admin site has a custom URL, use it
+            $urlModel = Mage::getModel('adminhtml/url')->setStore('admin');
+
+            if($orderCollection->getSize()) {
+                foreach($orderCollection as $order) {
+                    $orders[] = Mage::helper('zendesk')->getOrderDetail($order);
+                }
+            }
+
             $info = array(
                 'guest' => false,
                 'id' => $customer->getId(),
@@ -182,6 +183,17 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
             }
 
         } else {
+            // Get a list of all orders for the given email address
+            $orderCollection = Mage::getModel('sales/order')->getCollection()
+                ->addFieldToFilter('customer_email', array('eq' => array($email)));
+            $orders = array();
+
+            if($orderCollection->getSize()) {
+                foreach($orderCollection as $order) {
+                    $orders[] = Mage::helper('zendesk')->getOrderDetail($order);
+                }
+            }
+
             if(count($orders) == 0) {
                 // The email address doesn't even correspond with a guest customer
                 $this->getResponse()
