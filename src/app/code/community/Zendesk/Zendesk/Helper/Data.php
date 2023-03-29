@@ -457,7 +457,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
     
             $street = $address->getStreet();
             $addressData['line_1'] = $street[0] ?: '';
-            $addressData['line_2'] = $street[1] ?: '';
+            $addressData['line_2'] = isset($street[1]) ? $street[1] : '';
         }
 
         return $addressData;
