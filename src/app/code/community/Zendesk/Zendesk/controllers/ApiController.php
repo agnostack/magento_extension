@@ -445,6 +445,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
 
         $filters = json_decode($req->getRawBody());
         $genericFilters = array();
+        $productFilters = null;
 
         foreach($filters as $key => $val) {
             if($key == $customerKey) {
