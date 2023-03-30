@@ -585,7 +585,7 @@ class Zendesk_Zendesk_Helper_Data extends Mage_Core_Helper_Abstract
                     'display_price' => array(
                         'with_tax' => $this->formatPrice($itemWithoutTax + $itemTax, $currency),
                         'without_tax' => $this->formatPrice($itemWithoutTax, $currency),
-                        'tax' => $this->formatPrice($iitemTax, $currency)
+                        'tax' => $this->formatPrice($itemTax, $currency)
                     ),
                     'timestamps' => array(
                         'created_at' => $item->getCreatedAt(),
