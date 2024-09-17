@@ -1,3 +1,7 @@
+Looking to integrate [Magento 2 with Zendesk](https://www.zendesk.com/marketplace/apps/support/952955/magento-2-by-agnostack/)?
+
+Learn more about "How to Choose The Best Magento Zendesk Connector" at: https://agnostack.com/zendesk-magento-connector
+
 # ANNOUNCING VERSION 3.0 :mega:
 
 The new 3.0 version fixes several core issues (incorrect/missing order address, sporadic missing customer data, lack of order item quantities, etc.) and provides all new v2 endpoints, with the ability to retrieve additional information about customers and orders within your Magento store.
