@@ -82,7 +82,8 @@ class Zendesk_Zendesk_Model_Api_Tickets extends Zendesk_Zendesk_Model_Api_Abstra
             )
         );
 
-        if(count($response['results'])) {
+        // Check if $response['results'] is set and is an array before calling count()
+        if (isset($response['results']) && is_array($response['results']) && count($response['results'])) {
             return $response['results'];
         } else {
             return false;
