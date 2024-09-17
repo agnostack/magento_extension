@@ -19,7 +19,7 @@ class Zendesk_Zendesk_Model_Api_Users extends Zendesk_Zendesk_Model_Api_Abstract
 {
     public function find($email)
     {
-        if(!Zend_Validate::is($email, 'EmailAddress')) {
+        if(!Zend_Validate::is($email, 'EmailAddress', array('domain' => false))) {
             throw new InvalidArgumentException('Invalid email address provided');
         }
 
