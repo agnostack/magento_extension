@@ -247,6 +247,7 @@ class Zendesk_Zendesk_ApiController extends Mage_Core_Controller_Front_Action
                 case 'given_name':
                 case 'givenname':
                 case 'first_name':
+                default:
                     $sort = 'firstname';
                     break;
 
