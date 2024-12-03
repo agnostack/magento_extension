@@ -84,7 +84,7 @@ class Zendesk_Zendesk_Helper_Log extends Mage_Core_Helper_Abstract
     {
         $size = $this->getLogSize();
 
-        if($size !== FALSE && $size > self::MAX_LOG_SIZE) {
+        if($size !== false && $size > self::MAX_LOG_SIZE) {
             return true;
         }
 
